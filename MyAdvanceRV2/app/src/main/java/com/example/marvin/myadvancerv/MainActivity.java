@@ -108,14 +108,13 @@ button.setOnClickListener(new View.OnClickListener() {
                                  // Let the view holder know that this item is being moved or dragged
                                  ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;
                                  itemViewHolder.onItemSelected();
-                                 editText2 = (EditText) findViewById(R.id.fl_tv_id);
-                                 editText2.setFocusable(false);
+                                /* editText2 = (EditText) findViewById(R.id.fl_tv_id);
+                                 editText2.setFocusable(false);*/
                              }
                          }
                          super.onSelectedChanged(viewHolder, actionState);
 
                      }
-
                      @Override
                      public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                          super.clearView(recyclerView, viewHolder);
@@ -127,7 +126,7 @@ button.setOnClickListener(new View.OnClickListener() {
                              ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;
                              itemViewHolder.onItemClear();
 //                             editText2 = (EditText) findViewById(R.id.fl_tv_id);
-                             editText2.setFocusable(true);
+//                             editText2.setFocusable(true);
                          }
                      }
         };

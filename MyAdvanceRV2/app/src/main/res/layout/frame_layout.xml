@@ -15,6 +15,7 @@
         <!--android:clickable="true"-->
 
         <EditText
+            android:clickable="true"
             android:id="@+id/fl_tv_id"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"

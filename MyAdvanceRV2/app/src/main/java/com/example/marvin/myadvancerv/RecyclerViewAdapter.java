@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<MyList> myData;
     private ItemClickCallback itemClickCallback;
     private boolean onBind;
+    int positionPlacer;
     public interface ItemClickCallback{
         void onItemClick(int p);
         void onSecondaryIconClick(int p);
@@ -42,6 +44,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         LayoutInflater  inflater = LayoutInflater.from(con);
         view = inflater.inflate(R.layout.frame_layout,parent,false);
         textView = (EditText)view.findViewById(R.id.fl_tv_id);
+//        textView.setTag(positionPlacer);
+
+
         textView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -53,16 +58,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 for ( String ss : arr) {
                     myData.add (new MyList(ss));
                 }*/
-
                 if (!onBind) {
                     List<String> arr = Arrays.asList(charSequence.toString().split("\n\n"));
-
-                    Log.d("TAG", "split array: " + arr.size());
                     if (arr.size() > 1) {
+//                        int position = myData.get().Item;
                         for (String a : arr.subList(1, arr.size())) {
-                            myData.add(new MyList(a));
+                            myData.add(positionPlacer +1, new MyList(a));
                             notifyDataSetChanged();
-
                         }
                     }
                 }
@@ -82,16 +84,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             }
         });
-//        view = inflater.inflate(R.id.frame_clickable_id,parent,false);
+
         return new MyViewHolder(view);
 
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         onBind = true;
         holder.tv.setText(myData.get(position).getItem());
+        holder.tv.setTag(position);
         onBind = false;
+
+        holder.tv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                positionPlacer = position;
+                Log.d("POSTION", String.valueOf(positionPlacer));
+//                holder.tv.setTag(position);
+                return false;
+            }
+        });
     }
 
 
@@ -108,6 +121,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tv = (TextView) itemView.findViewById(R.id.fl_tv_id);
             frameLayout = (FrameLayout) itemView.findViewById(R.id.frame_clickable_id);
             frameLayout.setOnClickListener(this);
+
         }
 
         @Override
@@ -131,6 +145,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         @Override
         public void onItemClear() {
 //            tv.setFocusable(true);
+
             itemView.setBackgroundColor(0);
         }
     }

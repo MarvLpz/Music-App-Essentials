@@ -1,7 +1,7 @@
 package com.example.marvin.myadvancerv;
 
 public class MyList {
-    private String Item;
+    public String Item;
 
     public void setItem(String item) {
         Item = item;
