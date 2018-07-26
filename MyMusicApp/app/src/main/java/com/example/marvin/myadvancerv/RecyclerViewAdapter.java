@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import java.text.BreakIterator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Handler;
 
@@ -34,6 +35,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private long lastTouchTime = 0;
     private long currentTouchTime = 0;
     ArrayList<MyList> lstMyList;
+    private boolean onBind;
     int j =0;
     public static boolean textChanged = false;
 
@@ -56,11 +58,48 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
+    TextView textView;
+
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view;
         LayoutInflater  inflater = LayoutInflater.from(con);
         view = inflater.inflate(R.layout.frame_layout,parent,false);
+        int itemPosition = parent.indexOfChild(view);
+        textView = (TextView)view.findViewById(R.id.fl_tv_id);
+        textView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!onBind) {
+                    List<String> arr = Arrays.asList(editable.toString().split("\n\n"));
+
+                    Log.d("TAG", "split array: " + arr.size());
+                    if (arr.size() > 1) {
+                        for (String a : arr.subList(1, arr.size())) {
+                            myData.add(new MyList(a));
+                            notifyDataSetChanged();
+                        }
+                    }
+                    else{
+                        int a = parent.indexOfChild(textView);
+                        if(a>-1 && a<=myData.size()) {
+                            Log.d("TAG", "index is: " + a);
+                            myData.get(a).setItem(editable.toString());
+                        }
+                    }
+                }
+            }
+        });
 //        view = inflater.inflate(R.id.frame_clickable_id,parent,false);
         return new MyViewHolder(view);
     }
@@ -68,6 +107,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
+        onBind = true;
         holder.tv.setText(myData.get(position).getItem());
 //        holder.tv.setTag(position);
         holder.dragText.setOnTouchListener(new View.OnTouchListener() {
@@ -81,6 +121,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         }
         );
+        onBind = false;
     }
 //notifyDataSetChanged();
         /*holder.tv.setOnTouchListener(new View.OnTouchListener() {
@@ -153,8 +194,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             dragText = (TextView) itemView.findViewById(R.id.frame_clickable_id);
             frameLayout = (FrameLayout) itemView.findViewById(R.id.frame_id);
 //            tv.addTextChangedListener(this);
-            MyTextWatcher textWatcher = new MyTextWatcher(tv);
-            tv.addTextChangedListener(textWatcher);
+//            MyTextWatcher textWatcher = new MyTextWatcher(tv);
+//
 
 //            tv.setCursorVisible(false);
 //            tv.setFocusable(false);
@@ -327,7 +368,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         @Override
         public void afterTextChanged(Editable s) {
+            String[] arr = String.valueOf(s).split("\n\n");
 
+            for(String a : arr){
+                myData.add(new MyList(a));
+            }
+//            notifyDataSetChanged();
         }
     }
     public void refreshBlockOverlay(int position) {
