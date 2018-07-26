@@ -1,9 +1,7 @@
 package com.example.marvin.myadvancerv;
 
 public class MyList {
-    public String Item;
-//    public String Item;
-
+    private String Item;
 
     public void setItem(String item) {
         Item = item;
@@ -18,6 +16,4 @@ public class MyList {
 
         Item = item;
     }
-
-
 }
