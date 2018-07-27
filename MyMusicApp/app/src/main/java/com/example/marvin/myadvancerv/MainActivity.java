@@ -50,14 +50,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-         textView = (TextView) findViewById(R.id.tv_try);
-         button = (Button) findViewById(R.id.btn_chk);
-         editText = (EditText) findViewById(R.id.edt_input);
+        textView = (TextView) findViewById(R.id.tv_try);
+        button = (Button) findViewById(R.id.btn_chk);
+        editText = (EditText) findViewById(R.id.edt_input);
         String s = "HelloThere";
-/*        if (s.Contains(" ")){
-
-        }*/
-button.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         if (isNonPrintable(editText.getText().toString()) == true){
@@ -164,7 +161,6 @@ button.setOnClickListener(new View.OnClickListener() {
     public void onSecondaryIconClick(int p) {
 
         MyList item = (MyList) lstMyList.get(p);
-//        Adapter.setListData(lstMyList);
         Adapter.notifyDataSetChanged();
     }
 }

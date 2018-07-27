@@ -71,7 +71,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 else{
                     int a = parent.indexOfChild(textView);
                     if(a>-1 && a<=myData.size()) {
-                        Log.d("TAG", "index is: " + a);
                         myData.get(a).setItem(charSequence.toString());
                     }
                 }
