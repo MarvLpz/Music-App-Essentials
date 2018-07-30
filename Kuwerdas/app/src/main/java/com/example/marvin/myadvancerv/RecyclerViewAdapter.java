@@ -32,22 +32,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.itemClickCallback = itemClickCallback;
     }
     public RecyclerViewAdapter(Context context, List<MyList> _myData) {
-    con = context;
-    myData = _myData;
+        con = context;
+        myData = _myData;
 
     }
 
-    EditText textView;
+    EditText editText;
     @Override
     public MyViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view;
         LayoutInflater  inflater = LayoutInflater.from(con);
         view = inflater.inflate(R.layout.frame_layout,parent,false);
-        textView = (EditText)view.findViewById(R.id.fl_tv_id);
+        editText = (EditText)view.findViewById(R.id.fl_tv_id);
 //        textView.setTag(positionPlacer);
 
 
-        textView.addTextChangedListener(new TextWatcher() {
+        editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -95,19 +95,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.tv.setText(myData.get(position).getItem());
         holder.tv.setTag(position);
-        holder.tv.setOnTouchListener(new View.OnTouchListener() {
+
+
+        holder.tv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                positionPlacer = position;
-                Log.d("POSTION", String.valueOf(positionPlacer));
-//                holder.tv.setTag(position);
-                return false;
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus)
+                    positionPlacer = position;
             }
         });
+
+//        holder.tv.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                positionPlacer = position;
+//                Log.d("POSTION", String.valueOf(positionPlacer));
+////                holder.tv.setTag(position);
+//                return false;
+//            }
+//        });
 
         if(position == focusPosition){
             Log.d("TAGGY","position was focused " + focusPosition);
             holder.tv.requestFocus();
+            holder.tv.setSelection(holder.tv.getText().length());
         }
         onBind = false;
     }
@@ -119,11 +130,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,ItemTouchHelperViewHolder{
-        TextView tv;
+        EditText tv;
         FrameLayout frameLayout;
         public MyViewHolder(View itemView) {
             super(itemView);
-            tv = (TextView) itemView.findViewById(R.id.fl_tv_id);
+            tv = (EditText) itemView.findViewById(R.id.fl_tv_id);
             frameLayout = (FrameLayout) itemView.findViewById(R.id.frame_clickable_id);
             frameLayout.setOnClickListener(this);
 
