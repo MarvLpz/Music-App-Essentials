@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_song"
+        android:icon="@drawable/song"
+        android:title="@string/title_song"/>
+    <item
+        android:id="@+id/navigation_tempo"
+        android:icon="@drawable/tempo"
+        android:title="@string/title_tempo"/>
+    <item
+        android:id="@+id/navigation_tuner"
+        android:icon="@drawable/tuner"
+        android:title="@string/title_tuner"/>
+</menu>
