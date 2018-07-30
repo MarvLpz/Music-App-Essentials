@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Kuwerdas</string>
-    <string name="title_home">Home</string>
     <string name="title_song">Song</string>
     <string name="title_tempo">Tempo</string>
     <string name="title_tuner">Tuner</string>
