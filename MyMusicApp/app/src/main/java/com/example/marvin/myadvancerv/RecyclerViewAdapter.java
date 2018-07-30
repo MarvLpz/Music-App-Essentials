@@ -59,20 +59,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     myData.add (new MyList(ss));
                 }*/
                 if (!onBind) {
+
                     List<String> arr = Arrays.asList(charSequence.toString().split("\n\n"));
+                    myData.set(positionPlacer,new MyList(arr.get(0)));
+
                     if (arr.size() > 1) {
 //                        int position = myData.get().Item;
                         for (String a : arr.subList(1, arr.size())) {
                             myData.add(positionPlacer +1, new MyList(a));
                             notifyDataSetChanged();
                         }
-                    }
-                }
-                else{
-                    int a = parent.indexOfChild(textView);
-                    if(a>-1 && a<=myData.size()) {
-                        myData.get(a).setItem(charSequence.toString());
-                    }
+                        focusPosition = positionPlacer + arr.size() - 1;
+                    } else
+                        focusPosition = -1;
                 }
             }
 
@@ -88,13 +87,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
+    int focusPosition = -1;
+
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         onBind = true;
+
         holder.tv.setText(myData.get(position).getItem());
         holder.tv.setTag(position);
-        onBind = false;
-
         holder.tv.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -104,6 +104,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 return false;
             }
         });
+
+        if(position == focusPosition){
+            Log.d("TAGGY","position was focused " + focusPosition);
+            holder.tv.requestFocus();
+        }
+        onBind = false;
     }
 
 
