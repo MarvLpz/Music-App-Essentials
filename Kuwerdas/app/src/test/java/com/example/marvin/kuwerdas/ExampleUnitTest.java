@@ -1,4 +1,4 @@
-package com.example.marvin.myadvancerv;
+package com.example.marvin.kuwerdas;
 
 import org.junit.Test;
 

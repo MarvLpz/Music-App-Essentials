@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">MyAdvanceRV</string>
-    <string name="song">Song</string>
-    <string name="tempo">Tempo</string>
-    <string name="tuner">Tuner</string>
+    <string name="app_name">Kuwerdas</string>
+    <string name="title_home">Home</string>
+    <string name="title_song">Song</string>
+    <string name="title_tempo">Tempo</string>
+    <string name="title_tuner">Tuner</string>
     <string name="chords">Chords</string>
     <string name="transpose">Transpose</string>
 

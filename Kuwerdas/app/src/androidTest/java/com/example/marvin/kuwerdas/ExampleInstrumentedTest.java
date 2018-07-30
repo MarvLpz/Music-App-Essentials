@@ -1,4 +1,4 @@
-package com.example.marvin.myadvancerv;
+package com.example.marvin.kuwerdas;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.marvin.myadvancerv", appContext.getPackageName());
+        assertEquals("com.example.marvin.kuwerdas", appContext.getPackageName());
     }
 }
