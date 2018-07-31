@@ -32,6 +32,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> 
                 .inflate(R.layout.verse_layout, parent, false);
         return new VerseItemViewHolder(itemView);
     }
+
     @Override
     public void onBindViewHolder(VerseItemViewHolder holder, int position) {
         holder.setVerseLinesData(mVerses.get(position));
