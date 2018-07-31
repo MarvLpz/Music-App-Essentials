@@ -7,13 +7,13 @@ import android.widget.EditText;
 
 import com.example.marvin.myadvancerv.R;
 
-public class VerseRecyclerViewHolder extends RecyclerView.ViewHolder {
+public class LineItemViewHolder extends RecyclerView.ViewHolder {
     // define the View objects
     private GridLayout gridLayout;
     private EditText lineLyricsEditText;
     private View itemView;
 
-    public VerseRecyclerViewHolder(View itemView) {
+    public LineItemViewHolder(View itemView) {
         super(itemView);
         // initialize the View objects
         this.itemView = itemView;

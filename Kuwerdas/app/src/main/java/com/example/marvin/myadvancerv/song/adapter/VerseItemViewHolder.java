@@ -8,18 +8,18 @@ import android.widget.TextView;
 import com.example.marvin.myadvancerv.R;
 import com.example.marvin.myadvancerv.song.model.Verse;
 
-public class SongRecyclerViewHolder extends RecyclerView.ViewHolder {
+public class VerseItemViewHolder extends RecyclerView.ViewHolder {
     // define the View objects
     private RecyclerView recyclerView;
     private TextView textView;
 
-    public VerseRecyclerViewAdapter getAdapter() {
+    public LineItemAdapter getAdapter() {
         return adapter;
     }
 
-    private VerseRecyclerViewAdapter adapter;
+    private LineItemAdapter adapter;
 
-    public SongRecyclerViewHolder(View itemView) {
+    public VerseItemViewHolder(View itemView) {
         super(itemView);
         // initialize the View objects
         recyclerView = (RecyclerView) itemView.findViewById(R.id.rvVerses);
@@ -28,7 +28,7 @@ public class SongRecyclerViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setVerseLinesData(Verse data){
-        adapter = new VerseRecyclerViewAdapter(data);
+        adapter = new LineItemAdapter(data);
         recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
         recyclerView.setAdapter(adapter);
         textView.setText(data.getTitle());

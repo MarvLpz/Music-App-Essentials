@@ -3,13 +3,13 @@ package com.example.marvin.myadvancerv.song.adapter.itemtouch;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-import com.example.marvin.myadvancerv.song.adapter.SongRecyclerViewAdapter;
+import com.example.marvin.myadvancerv.song.adapter.VerseItemAdapter;
 
 public class EditItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
-    private final SongRecyclerViewAdapter mAdapter;
+    private final VerseItemAdapter mAdapter;
 
-    public EditItemTouchHelperCallback(SongRecyclerViewAdapter adapter) {
+    public EditItemTouchHelperCallback(VerseItemAdapter adapter) {
         mAdapter = adapter;
     }
 

@@ -5,11 +5,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 
 import com.example.marvin.myadvancerv.OnStartDragListener;
 import com.example.marvin.myadvancerv.R;
-import com.example.marvin.myadvancerv.song.adapter.SongRecyclerViewAdapter;
+import com.example.marvin.myadvancerv.song.adapter.VerseItemAdapter;
 import com.example.marvin.myadvancerv.song.adapter.itemtouch.EditItemTouchHelperCallback;
 import com.example.marvin.myadvancerv.song.model.Verse;
 import com.example.marvin.myadvancerv.song.util.SongUtil;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 
 public class SongActivity extends AppCompatActivity  implements OnStartDragListener {
 
-    private SongRecyclerViewAdapter adapter;
+    private VerseItemAdapter adapter;
     private RecyclerView recyclerView;
     private ItemTouchHelper itemTouchHelper;
 
@@ -54,7 +53,7 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
 
         ArrayList<Verse> verses = SongUtil.asVerses(lyrics);
 
-        adapter = new SongRecyclerViewAdapter(verses);
+        adapter = new VerseItemAdapter(verses);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         ItemTouchHelper.Callback callback = new EditItemTouchHelperCallback(adapter);
         itemTouchHelper = new ItemTouchHelper(callback);
