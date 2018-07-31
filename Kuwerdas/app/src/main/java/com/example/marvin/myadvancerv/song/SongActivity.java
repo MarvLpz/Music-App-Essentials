@@ -1,17 +1,26 @@
-package com.example.marvin.myadvancerv;
+package com.example.marvin.myadvancerv.song;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+
+import com.example.marvin.myadvancerv.OnStartDragListener;
+import com.example.marvin.myadvancerv.R;
+import com.example.marvin.myadvancerv.song.adapter.SongRecyclerViewAdapter;
+import com.example.marvin.myadvancerv.song.adapter.itemtouch.EditItemTouchHelperCallback;
+import com.example.marvin.myadvancerv.song.model.Verse;
+import com.example.marvin.myadvancerv.song.util.SongUtil;
 
 import java.util.ArrayList;
 
-public class SongActivity extends AppCompatActivity {
+public class SongActivity extends AppCompatActivity  implements OnStartDragListener {
 
     private SongRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
+    private ItemTouchHelper itemTouchHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +51,19 @@ public class SongActivity extends AppCompatActivity {
                 "Kaninay nariyan lang o ba't Bigla namang nawala.\n" +
                 "Daig mo pa ang isang kisapmata.";
 
-        Log.d("TAGGY","before asVerses: ");
+
         ArrayList<Verse> verses = SongUtil.asVerses(lyrics);
-        Log.d("TAGGY","after asVerses: " + verses);
+
         adapter = new SongRecyclerViewAdapter(verses);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        ItemTouchHelper.Callback callback = new EditItemTouchHelperCallback(adapter);
+        itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        itemTouchHelper.startDrag(viewHolder);
     }
 }

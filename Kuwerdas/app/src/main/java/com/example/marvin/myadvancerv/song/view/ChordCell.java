@@ -1,9 +1,9 @@
-package com.example.marvin.myadvancerv;
+package com.example.marvin.myadvancerv.song.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.widget.EditText;
-import android.widget.FrameLayout;
+
+import com.example.marvin.myadvancerv.song.model.Chord;
 
 public class ChordCell extends android.support.v7.widget.AppCompatEditText {
 

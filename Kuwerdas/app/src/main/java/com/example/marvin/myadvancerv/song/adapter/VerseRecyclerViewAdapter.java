@@ -1,11 +1,16 @@
-package com.example.marvin.myadvancerv;
+package com.example.marvin.myadvancerv.song.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.Arrays;
+import com.example.marvin.myadvancerv.R;
+import com.example.marvin.myadvancerv.song.view.ChordCell;
+import com.example.marvin.myadvancerv.song.model.Chord;
+import com.example.marvin.myadvancerv.song.model.Line;
+import com.example.marvin.myadvancerv.song.model.Verse;
+
 import java.util.List;
 
 public class VerseRecyclerViewAdapter extends RecyclerView.Adapter<VerseRecyclerViewHolder> {

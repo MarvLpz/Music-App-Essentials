@@ -1,6 +1,4 @@
-package com.example.marvin.myadvancerv;
-
-import android.support.v7.widget.helper.ItemTouchHelper;
+package com.example.marvin.myadvancerv.song.adapter.itemtouch;
 
 public interface ItemTouchHelperViewHolder {
     void onItemSelected();

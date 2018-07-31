@@ -1,9 +1,12 @@
-package com.example.marvin.myadvancerv;
+package com.example.marvin.myadvancerv.song.adapter;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.marvin.myadvancerv.R;
+import com.example.marvin.myadvancerv.song.model.Verse;
 
 public class SongRecyclerViewHolder extends RecyclerView.ViewHolder {
     // define the View objects

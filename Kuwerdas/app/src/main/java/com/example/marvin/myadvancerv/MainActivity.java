@@ -1,6 +1,5 @@
 package com.example.marvin.myadvancerv;
 
-import android.app.LauncherActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,8 +11,9 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.example.marvin.myadvancerv.song.adapter.itemtouch.ItemTouchHelperViewHolder;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.ItemClickCallback{
     private final String TAG = MainActivity.class.getSimpleName();

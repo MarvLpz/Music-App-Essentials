@@ -1,6 +1,7 @@
-package com.example.marvin.myadvancerv;
+package com.example.marvin.myadvancerv.song.util;
 
-import android.util.Log;
+import com.example.marvin.myadvancerv.song.model.Line;
+import com.example.marvin.myadvancerv.song.model.Verse;
 
 import java.util.ArrayList;
 

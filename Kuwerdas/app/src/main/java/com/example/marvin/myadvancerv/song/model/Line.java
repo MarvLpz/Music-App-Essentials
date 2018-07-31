@@ -1,4 +1,4 @@
-package com.example.marvin.myadvancerv;
+package com.example.marvin.myadvancerv.song.model;
 
 public class Line {
     public static final int CHORD_SET_LENGTH = 15;

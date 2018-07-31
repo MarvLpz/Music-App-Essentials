@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.example.marvin.myadvancerv.song.adapter.itemtouch.ItemTouchHelperViewHolder;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -118,7 +120,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return myData.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,ItemTouchHelperViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,ItemTouchHelperViewHolder {
         TextView tv;
         FrameLayout frameLayout;
         public MyViewHolder(View itemView) {
