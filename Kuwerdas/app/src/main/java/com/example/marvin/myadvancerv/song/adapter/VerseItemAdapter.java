@@ -1,5 +1,6 @@
 package com.example.marvin.myadvancerv.song.adapter;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,16 +11,19 @@ import com.example.marvin.myadvancerv.R;
 import com.example.marvin.myadvancerv.song.adapter.itemtouch.ItemTouchHelperAdapter;
 import com.example.marvin.myadvancerv.song.model.Verse;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> implements ItemTouchHelperAdapter {
     private static final String TAG = "TAGGY";
 
-    List<Verse> myVerses;
+    List<Verse> mVerses;
+    List<Verse> versesToDelete;
 
-    public VerseItemAdapter(List<Verse> myVerses){
-        this.myVerses = myVerses;
+    public VerseItemAdapter(List<Verse> mVerses){
+        this.mVerses = mVerses;
+        versesToDelete = new ArrayList<>();
     }
 
     @Override
@@ -30,15 +34,12 @@ public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> 
     }
     @Override
     public void onBindViewHolder(VerseItemViewHolder holder, int position) {
-        holder.setVerseLinesData(myVerses.get(position));
-//        Tempo tempo = tempoList.get(position);
-//        Log.d(TAG,"onBindViewHolder pos " + position + ": " + tempo);
-//        holder.title.setText(String.valueOf(tempo.getTempo()));
+        holder.setVerseLinesData(mVerses.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return myVerses.size();
+        return mVerses.size();
     }
 
     @Override
@@ -48,14 +49,14 @@ public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> 
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-        if (fromPosition < myVerses.size() && toPosition < myVerses.size()) {
+        if (fromPosition < mVerses.size() && toPosition < mVerses.size()) {
             if (fromPosition < toPosition) {
                 for (int i = fromPosition; i < toPosition; i++) {
-                    Collections.swap(myVerses, i, i + 1);
+                    Collections.swap(mVerses, i, i + 1);
                 }
             } else {
                 for (int i = fromPosition; i > toPosition; i--) {
-                    Collections.swap(myVerses, i, i - 1);
+                    Collections.swap(mVerses, i, i - 1);
                 }
             }
             notifyItemMoved(fromPosition, toPosition);
@@ -64,10 +65,23 @@ public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> 
     }
 
     @Override
-    public void onItemDismiss(int position) {
-        myVerses.remove(position);
-        notifyItemRemoved(position);
-        Log.d("TAGGY","removed item");
+    public void onItemDismiss(final RecyclerView.ViewHolder viewHolder, final RecyclerView recyclerView) {
+        final int adapterPosition = viewHolder.getAdapterPosition();
+        final Verse mVerse = mVerses.get(adapterPosition);
+        Snackbar snackbar = Snackbar
+                .make(recyclerView, "Verse Deleted", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mVerses.add(adapterPosition, mVerse);
+                        notifyItemInserted(adapterPosition);
+                        versesToDelete.remove(mVerse);
+                    }
+                });
+        snackbar.show();
+        mVerses.remove(adapterPosition);
+        notifyItemRemoved(adapterPosition);
+        versesToDelete.add(mVerse);
     }
 }
 

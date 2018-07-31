@@ -55,7 +55,7 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
 
         adapter = new VerseItemAdapter(verses);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        ItemTouchHelper.Callback callback = new EditItemTouchHelperCallback(adapter);
+        ItemTouchHelper.Callback callback = new EditItemTouchHelperCallback(adapter,recyclerView);
         itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
