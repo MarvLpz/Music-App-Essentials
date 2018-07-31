@@ -1,13 +1,13 @@
 package com.example.marvin.myadvancerv;
 
 public class Line {
-    public static final int CHORD_SET_LENGTH = 10;
+    public static final int CHORD_SET_LENGTH = 15;
     private Chord[] chordSet;
     private String lyrics;
 
     public Line(String lyrics) {
         this.lyrics = lyrics;
-        chordSet = new Chord[]{null,null,null,null,null,null,null,null,null,null};
+        chordSet = new Chord[CHORD_SET_LENGTH];
     }
 
     public boolean addChord(Chord chord, int pos){

@@ -3,6 +3,10 @@ package com.example.marvin.myadvancerv;
 public class Chord {
     private Character chord;
 
+    public Chord() {
+        chord = 'C';
+    }
+
     public Character getChord() {
         return chord;
     }

@@ -27,6 +27,7 @@ public class VerseRecyclerViewAdapter extends RecyclerView.Adapter<VerseRecycler
         Line line = verseLines.get(position);
         holder.getLineLyricsEditText().setText(line.getLyrics());
 
+        //TODO fix chords
         Chord[] chordSet = line.getChordSet();
         for(int i=0;i<Line.CHORD_SET_LENGTH;i++) {
             holder.getGridLayout().addView(new ChordCell(holder.getItemView().getContext(),chordSet[i]));
