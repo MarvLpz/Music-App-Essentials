@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +30,11 @@ import be.tarsos.dsp.pitch.PitchProcessor;
 
 public class TunerFragment extends Fragment {
     private static final int RECORD_AUDIO_PERMISSION = 1;
-    private ArrayList<TuneString> tuning = new ArrayList<>();
-
+//    private ArrayList<TuneString> tuning = new ArrayList<>();
+    private TextView textLabel;
+    private MusicChords musicChords = new MusicChords();
     private View view;
+    private AudioDispatcher dispatcher;
 
     @Nullable
     @Override
@@ -48,12 +51,8 @@ public class TunerFragment extends Fragment {
 
 
     private void init(){
-        tuning.add(new TuneString("E4",329.63f));
-        tuning.add(new TuneString("B3",246.94f));
-        tuning.add(new TuneString("G3",196.00f));
-        tuning.add(new TuneString("D3",146.83f));
-        tuning.add(new TuneString("A2",110.00f));
-        tuning.add(new TuneString("E2",82.41f));
+        textLabel = (TextView) view.findViewById(R.id.tvTuner);
+
 
         if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -74,13 +73,15 @@ public class TunerFragment extends Fragment {
             public void handlePitch(PitchDetectionResult result, AudioEvent e) {
                 final float pitchInHz = result.getPitch();
 
+                if(getActivity() != null)
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        TextView text = (TextView) view.findViewById(R.id.textView);
-                        text.setText(getClosestFrequency(pitchInHz));
-
-
+                        String closest = getClosestFrequency(pitchInHz);
+                        if(pitchInHz!=-1.0f) {
+                            Log.d("TAGGY", "the pitch is: " + pitchInHz + " - " + closest);
+                        }
+                        textLabel.setText(closest);
                     }
                 });
             }
@@ -99,9 +100,9 @@ public class TunerFragment extends Fragment {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initializePitchDetector();
                 }
-//                else {
-//                    Toast.makeText(TunerFragment.this, "Permission denied to record audio", Toast.LENGTH_SHORT).show();
-//                }
+                else {
+                    Toast.makeText(Objects.requireNonNull(getActivity()).getBaseContext(), "Permission denied to record audio", Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
@@ -113,13 +114,23 @@ public class TunerFragment extends Fragment {
 
         float diff = Float.MAX_VALUE;
         String freq = "";
-        for(TuneString ts : tuning){
-            if(Math.abs((pitch - ts.getFrequency())) < diff) {
-                diff = Math.abs(pitch - ts.getFrequency());
-                freq = ts.getPitchNotation();
+        for(Octave octave : musicChords.getOctaves()) {
+            if(pitch>=octave.getMin() && pitch<=octave.getMax()) {
+                for (TuneString ts : octave.getNotes()) {
+                    if (Math.abs((pitch - ts.getFrequency())) < diff) {
+                        diff = Math.abs(pitch - ts.getFrequency());
+                        freq = ts.getPitchNotation() + octave.getNumber();
+                    }
+                }
+                break;
             }
         }
 
         return freq;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }
