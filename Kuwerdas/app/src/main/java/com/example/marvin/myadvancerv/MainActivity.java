@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         recyclerView = (RecyclerView) findViewById(R.id.rv_id);
         Adapter = new RecyclerViewAdapter(this, lstMyList);
 
+        //Log.
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(Adapter);
         Adapter.setItemClickCallback(this);
