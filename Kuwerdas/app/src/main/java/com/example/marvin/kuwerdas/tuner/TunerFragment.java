@@ -66,7 +66,7 @@ public class TunerFragment extends Fragment {
     }
 
     private void initializePitchDetector(){
-        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050, 1024, 0);
+        dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050, 1024, 0);
 
         PitchDetectionHandler pdh = new PitchDetectionHandler() {
             @Override
@@ -130,7 +130,8 @@ public class TunerFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        dispatcher.stop();
+        super.onPause();
     }
 }

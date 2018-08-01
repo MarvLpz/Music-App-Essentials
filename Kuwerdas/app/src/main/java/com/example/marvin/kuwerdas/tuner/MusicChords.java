@@ -15,14 +15,14 @@ public class MusicChords {
     }
 
     public void init(){
-        octaves.add(new Octave(0,16.35f,30.87f));
-        octaves.add(new Octave(1,32.70f,61.74f));
-        octaves.add(new Octave(2,65.41f,123.5f));
-        octaves.add(new Octave(3,130.8f,246.9f));
-        octaves.add(new Octave(4,261.6f,493.9f));
-        octaves.add(new Octave(5,523.3f,987.8f));
-        octaves.add(new Octave(6,1047f,1976f));
-        octaves.add(new Octave(7,2093f,3951f));
+        octaves.add(new Octave(0,16.35f,31.78f));
+        octaves.add(new Octave(1,32.70f,63.57f));
+        octaves.add(new Octave(2,65.41f,127.15f));
+        octaves.add(new Octave(3,130.8f,254.25f));
+        octaves.add(new Octave(4,261.6f,508.6f));
+        octaves.add(new Octave(5,523.3f,1017.4f));
+        octaves.add(new Octave(6,1047f,2034.5f));
+        octaves.add(new Octave(7,2093f,4068.5f));
         octaves.add(new Octave(8,4186f,7092f));
 
         octaves.get(0).setNotes(new TuneString[]{
