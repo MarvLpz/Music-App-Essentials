@@ -1,8 +1,20 @@
 package com.example.marvin.myadvancerv.song.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Relation;
+
+@Entity
 public class Line {
-    public static final int CHORD_SET_LENGTH = 15;
+
+    @Ignore
+    private static final int CHORD_SET_LENGTH = 15;
+
+    @Relation(parentColumn = "chordId", entityColumn = "lineId", entity = Chord.class)
     private Chord[] chordSet;
+
+    @ColumnInfo(name = "lyrics")
     private String lyrics;
 
     public Line(String lyrics) {
