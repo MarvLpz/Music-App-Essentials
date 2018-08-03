@@ -9,18 +9,19 @@ import android.view.ViewGroup;
 
 import com.example.marvin.myadvancerv.R;
 import com.example.marvin.myadvancerv.song.adapter.itemtouch.ItemTouchHelperAdapter;
+import com.example.marvin.myadvancerv.song.model.Chord;
 import com.example.marvin.myadvancerv.song.model.Verse;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> implements ItemTouchHelperAdapter {
+public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> implements ItemTouchHelperAdapter, ChordItemAdapter.ItemClickCallback {
     private static final String TAG = "TAGGY";
 
     List<Verse> mVerses;
     List<Verse> versesToDelete;
-
+    ArrayList<Chord> chordLists = new ArrayList<Chord>();
     public VerseItemAdapter(List<Verse> mVerses){
         this.mVerses = mVerses;
         versesToDelete = new ArrayList<>();
@@ -46,6 +47,38 @@ public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    private void displayListView() {
+
+
+        Chord chord = new Chord("D");
+        chordLists.add(chord);
+
+        chord = new Chord("E");
+        chordLists.add(chord);
+        chord = new Chord("");
+        chordLists.add(chord);
+        chord = new Chord("");
+        chordLists.add(chord);
+        chord = new Chord("");
+        chordLists.add(chord);
+        chord = new Chord("");
+        chordLists.add(chord);
+        chord = new Chord("F");
+        chordLists.add(chord);
+        chord = new Chord("");
+        chordLists.add(chord);
+        chord = new Chord("");
+        chordLists.add(chord);
+        chord = new Chord("G");
+        chordLists.add(chord);
+        chord = new Chord("A");
+        chordLists.add(chord);
+        chord = new Chord("A");
+        chordLists.add(chord);
+        
+
     }
 
     @Override
@@ -83,6 +116,17 @@ public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> 
         mVerses.remove(adapterPosition);
         notifyItemRemoved(adapterPosition);
         versesToDelete.add(mVerse);
+    }
+
+    @Override
+    public void onItemClick(int p) {
+        Chord chord = chordLists.get(p);
+    }
+
+    @Override
+    public void onSecondaryIconClick(int p) {
+        Chord chord = chordLists.get(p);
+//        dataAdapter.notifyDataSetChanged();
     }
 }
 

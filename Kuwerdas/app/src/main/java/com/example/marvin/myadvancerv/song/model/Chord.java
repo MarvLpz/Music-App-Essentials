@@ -1,21 +1,17 @@
 package com.example.marvin.myadvancerv.song.model;
 
 public class Chord {
-    private Character chord;
+    private String chord;
 
-    public Chord() {
-        chord = 'C';
+    public Chord(String c) {
+        chord = c;
     }
 
-    public Character getChord() {
+    public String getChord() {
         return chord;
     }
 
-    public boolean setChord(Character chord) {
-        if (Character.isAlphabetic(chord)) {
-            this.chord = chord;
-            return true;
-        }
-        return false;
+    public void setChord(String chord) {
+        this.chord = chord;
     }
 }
