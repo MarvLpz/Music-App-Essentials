@@ -13,12 +13,14 @@ import android.widget.TextView;
 import com.example.marvin.myadvancerv.R;
 import com.example.marvin.myadvancerv.song.adapter.itemtouch.ItemClickCallback;
 import com.example.marvin.myadvancerv.song.model.Chord;
+import com.example.marvin.myadvancerv.song.model.Line;
+import com.example.marvin.myadvancerv.song.view.ChordCell;
 
 import org.w3c.dom.Text;
 
 import java.util.List;
 
-public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder> implements ItemClickCallback {
+public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
     Context con;
     private List<Chord> myChord;
     private ItemClickCallback itemClickCallback;
@@ -29,17 +31,6 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder> 
 
     TextView testview;
     String DragChord;
-
-    @Override
-    public void onItemClick(int p) {
-        Chord chord = (Chord) myChord.get(p);
-    }
-
-    @Override
-    public void onSecondaryIconClick(int p) {
-
-    }
-
 
     private class ChoiceDragListener implements View.OnDragListener{
         int positionChord;
@@ -102,13 +93,15 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder> 
     @Override
     public void onBindViewHolder(ChordItemViewHolder holder, int position) {
 //        holder.setChord(myChord.get(position).getChord());
-        holder.tv.setText(myChord.get(position).getChord());
-        holder.tv.setTag(position);
+        if(myChord != null) {
+            holder.tv.setText(myChord.get(position).getChord());
+            holder.tv.setTag(position);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 11;
+        return Line.CHORD_SET_LENGTH;
     }
 
 }

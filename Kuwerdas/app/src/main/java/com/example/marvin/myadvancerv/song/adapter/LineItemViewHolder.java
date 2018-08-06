@@ -30,7 +30,7 @@ public class LineItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setChordList( List<Chord> chordList){
-        adapter = new ChordItemAdapter(itemView.getContext(),chordList,"");
+        adapter = new ChordItemAdapter(itemView.getContext(),chordList);
         rvChords.setLayoutManager(new LinearLayoutManager(itemView.getContext(),LinearLayoutManager.HORIZONTAL,false));
         itemTouchHelperCallback = new ChordItemTouchHelperCallback(itemView.getContext(),chordList,adapter);
         itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback.createHelperCallback());

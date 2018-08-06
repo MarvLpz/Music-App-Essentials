@@ -124,26 +124,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
         }
 
         //TODO fix chords
-
-
-        List<Chord> chordList = new ArrayList<Chord>();
-        chordList.add(new Chord(" "));
-        chordList.add(new Chord("C"));
-        chordList.add(new Chord("E"));
-        chordList.add(new Chord(" "));
-        chordList.add(new Chord(" "));
-        chordList.add(new Chord("D"));
-        chordList.add(new Chord(" "));
-        chordList.add(new Chord("F"));
-        chordList.add(new Chord("F"));
-        chordList.add(new Chord("F"));
-        chordList.add(new Chord("F"));
-        holder.setChordList(chordList);
-//        Chord[] chordSet = line.getChordSet();
-//        for(int i=0;i<Line.CHORD_SET_LENGTH;i++) {
-//            holder.getGridLayout().addView(new ChordCell(holder.getItemView().getContext(),chordSet[i]));
-//        }
-
+        holder.setChordList(line.getChordSet());
         onBind = false;
 
     }

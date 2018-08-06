@@ -5,36 +5,47 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Relation;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Entity
 public class Line {
 
     @Ignore
-    private static final int CHORD_SET_LENGTH = 15;
+    public static final int CHORD_SET_LENGTH = 15;
 
     @Relation(parentColumn = "chordId", entityColumn = "lineId", entity = Chord.class)
-    private Chord[] chordSet;
+    private List<Chord> chordSet;
 
     @ColumnInfo(name = "lyrics")
     private String lyrics;
 
+    private void initializeEmptyChordSet(){
+        chordSet = new ArrayList<>();
+        Chord emptyChord = new Chord(Chord.EMPTY_CHORD);
+        for(int i=0;i<CHORD_SET_LENGTH;i++)
+            chordSet.add(emptyChord);
+    }
+
     public Line(String lyrics) {
         this.lyrics = lyrics;
-        chordSet = new Chord[CHORD_SET_LENGTH];
+        initializeEmptyChordSet();
     }
 
     public boolean addChord(Chord chord, int pos){
         if(pos>=0 && pos<=9){
-            chordSet[pos] = chord;
+            chordSet.set(pos,chord);
             return true;
         }
         return false;
     }
 
-    public Chord[] getChordSet() {
+    public List<Chord> getChordSet() {
         return chordSet;
     }
 
-    public void setChordSet(Chord[] chordSet) {
+    public void setChordSet(List<Chord> chordSet) {
         this.chordSet = chordSet;
     }
 
