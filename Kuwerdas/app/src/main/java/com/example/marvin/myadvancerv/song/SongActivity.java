@@ -4,17 +4,24 @@ import android.app.Application;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.content.ClipData;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.marvin.myadvancerv.OnStartDragListener;
 import com.example.marvin.myadvancerv.R;
 //import com.example.marvin.myadvancerv.db.SongDatabase;
+import com.example.marvin.myadvancerv.song.adapter.ChordItemAdapter;
 import com.example.marvin.myadvancerv.song.adapter.VerseItemAdapter;
+import com.example.marvin.myadvancerv.song.model.Chord;
 import com.example.marvin.myadvancerv.song.model.Song;
 import com.example.marvin.myadvancerv.song.model.Verse;
 import com.example.marvin.myadvancerv.song.util.SongUtil;
@@ -26,6 +33,14 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
 
     private VerseItemAdapter adapter;
     private RecyclerView recyclerView;
+
+    private List<Chord> myChord;
+    TextView tv_DragChord;
+
+    float dX;
+    float dY;
+    int lastAction;
+
 //    private ItemTouchHelper itemTouchHelper;
     private final String DATABASE_NAME = "SONG_DATABASE";
     @Override
@@ -33,6 +48,10 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song);
         init();
+        tv_DragChord = (TextView) findViewById(R.id.tv_dragChord);
+        tv_DragChord.setOnTouchListener(new ChoiceTouchListener());
+        ChordItemAdapter getTheChord = new ChordItemAdapter();
+        getTheChord.getChord(tv_DragChord.getText().toString());
     }
 
     private void init(){
@@ -77,4 +96,22 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
 //        itemTouchHelper.startDrag(viewHolder);
     }
 
+
+
+    public final class ChoiceTouchListener implements View.OnTouchListener{
+
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN){
+                ClipData data = ClipData.newPlainText("","");
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+                v.startDrag(data,shadowBuilder,v,0);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
 }

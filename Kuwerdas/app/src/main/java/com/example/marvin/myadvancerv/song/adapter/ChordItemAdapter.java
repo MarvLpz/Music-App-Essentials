@@ -30,13 +30,28 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
     int lastAction;
 
     TextView testview;
-    String DragChord;
+    static String DragChord;
+
+    public ChordItemAdapter(Context context, List<Chord> _myChord ){
+        con = context;
+        myChord = _myChord;
+    }
+
+    public ChordItemAdapter(){
+
+    }
+    public void getChord(String Chord){
+        DragChord = Chord;
+        Log.d("SET CHORD","dragchord: " + DragChord);
+    }
 
     private class ChoiceDragListener implements View.OnDragListener{
         int positionChord;
         @Override
         public boolean onDrag( View v, DragEvent event) {
             Log.d("TAGGY","chord dragged");
+            Log.d("Drag Chord Value",  DragChord);
+
             switch (event.getAction()){
                 case DragEvent.ACTION_DRAG_STARTED:
                     break;
@@ -45,18 +60,17 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
 
                     Log.d("DRAG TAG", String.valueOf(v.getTag()));
                     positionChord = (int) v.getTag();
+                    Log.d("HEY", String.valueOf(myChord.get(positionChord)));
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
                     Log.d("DRAGEVENT", "Drag Exited");
                     break;
                 case DragEvent.ACTION_DROP:
-
                     Log.d("TESTING",String.valueOf(DragChord));
-
                     myChord.set(positionChord ,new Chord(DragChord));
 
-                    ((TextView)v).setText(String.valueOf(DragChord));
-//                    notifyDataSetChanged();
+//                    ((TextView)v).setText(String.valueOf(DragChord));
+                    notifyDataSetChanged();
 
                     Log.d("DRAG","Drag to Place");
                     Log.d("DRAG",(String.valueOf((TextView)v)  ));
@@ -74,10 +88,7 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         this.itemClickCallback = itemClickCallback;
     }
 
-    public ChordItemAdapter(Context context, List<Chord> _myChord){
-        con = context;
-        myChord = _myChord;
-    }
+
 
     @Override
     public ChordItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -86,7 +97,6 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         view = inflater.inflate(R.layout.chord_layout,parent,false);
         TextView  ChoiceTextView = (TextView) view.findViewById(R.id.etChord);
         ChoiceTextView.setOnDragListener(new ChoiceDragListener());
-
         return new ChordItemViewHolder(view);
     }
 

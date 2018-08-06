@@ -10,7 +10,8 @@ import android.widget.TextView;
 import com.example.marvin.myadvancerv.R;
 import com.example.marvin.myadvancerv.song.adapter.itemtouch.ItemTouchHelperViewHolder;
 
-public class ChordItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder{
+public class
+ChordItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder{
     TextView tv;
     LinearLayout linearLayout;
     public ChordItemViewHolder(View itemView) {
@@ -27,6 +28,7 @@ public class ChordItemViewHolder extends RecyclerView.ViewHolder implements Item
     @Override
     public void onItemSelected() {
         itemView.setBackgroundColor(Color.LTGRAY);
+
     }
 
     @Override

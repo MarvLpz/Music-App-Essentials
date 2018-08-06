@@ -30,7 +30,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
     private int focusPosition;
     private int currentPosition;
     private View itemView;
-
+    String DragChord;
 
     public LineItemAdapter(Verse data) {
         verseLines = data.getLines();

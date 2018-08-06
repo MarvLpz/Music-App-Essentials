@@ -21,6 +21,7 @@ public class LineItemViewHolder extends RecyclerView.ViewHolder {
     private ItemTouchHelper itemTouchHelper;
     private ChordItemAdapter adapter;
 
+
     public LineItemViewHolder(View itemView) {
         super(itemView);
         // initialize the View objects

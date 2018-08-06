@@ -15,4 +15,7 @@ public class Chord {
     public void setChord(String chord) {
         this.chord = chord;
     }
+    public String toString(){
+        return chord;
+    }
 }
