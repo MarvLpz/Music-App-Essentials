@@ -19,15 +19,18 @@ import com.example.marvin.myadvancerv.song.model.Line;
 import com.example.marvin.myadvancerv.song.model.Verse;
 import com.example.marvin.myadvancerv.song.view.ChordCell;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
-    List<Line> verseLines;
+    private List<Line> verseLines;
     private boolean onBind;
 
     private int focusPosition;
     private int currentPosition;
+    private View itemView;
+
 
     public LineItemAdapter(Verse data) {
         verseLines = data.getLines();
@@ -36,7 +39,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
     @Override
     public LineItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.line_layout, parent, false);
+        itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.line_layout, parent, false);
         return new LineItemViewHolder(itemView);
     }
 
@@ -121,6 +124,21 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
         }
 
         //TODO fix chords
+
+
+        List<Chord> chordList = new ArrayList<Chord>();
+        chordList.add(new Chord(" "));
+        chordList.add(new Chord("C"));
+        chordList.add(new Chord("E"));
+        chordList.add(new Chord(" "));
+        chordList.add(new Chord(" "));
+        chordList.add(new Chord("D"));
+        chordList.add(new Chord(" "));
+        chordList.add(new Chord("F"));
+        chordList.add(new Chord("F"));
+        chordList.add(new Chord("F"));
+        chordList.add(new Chord("F"));
+        holder.setChordList(chordList);
 //        Chord[] chordSet = line.getChordSet();
 //        for(int i=0;i<Line.CHORD_SET_LENGTH;i++) {
 //            holder.getGridLayout().addView(new ChordCell(holder.getItemView().getContext(),chordSet[i]));

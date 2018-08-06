@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.marvin.myadvancerv.R;
+import com.example.marvin.myadvancerv.song.adapter.itemtouch.ItemClickCallback;
 import com.example.marvin.myadvancerv.song.adapter.itemtouch.ItemTouchHelperAdapter;
 import com.example.marvin.myadvancerv.song.model.Chord;
 import com.example.marvin.myadvancerv.song.model.Verse;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> implements ItemTouchHelperAdapter, ChordItemAdapter.ItemClickCallback {
+public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> implements ItemTouchHelperAdapter, ItemClickCallback {
     private static final String TAG = "TAGGY";
 
     List<Verse> mVerses;

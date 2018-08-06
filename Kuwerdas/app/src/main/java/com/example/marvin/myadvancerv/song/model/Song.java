@@ -18,7 +18,7 @@ public class Song {
     @ColumnInfo(name = "artist")
     private String artist;
 
-    @Ignored
+//    @Ignored
     private List<Verse> verses;
 
     public int getUid() {

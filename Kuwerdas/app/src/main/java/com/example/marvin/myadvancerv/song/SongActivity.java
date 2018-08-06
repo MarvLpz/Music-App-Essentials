@@ -13,9 +13,8 @@ import android.util.Log;
 
 import com.example.marvin.myadvancerv.OnStartDragListener;
 import com.example.marvin.myadvancerv.R;
-import com.example.marvin.myadvancerv.db.SongDatabase;
+//import com.example.marvin.myadvancerv.db.SongDatabase;
 import com.example.marvin.myadvancerv.song.adapter.VerseItemAdapter;
-import com.example.marvin.myadvancerv.song.adapter.itemtouch.EditItemTouchHelperCallback;
 import com.example.marvin.myadvancerv.song.model.Song;
 import com.example.marvin.myadvancerv.song.model.Verse;
 import com.example.marvin.myadvancerv.song.util.SongUtil;
@@ -27,7 +26,7 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
 
     private VerseItemAdapter adapter;
     private RecyclerView recyclerView;
-    private ItemTouchHelper itemTouchHelper;
+//    private ItemTouchHelper itemTouchHelper;
     private final String DATABASE_NAME = "SONG_DATABASE";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,7 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
     }
 
     private void init(){
-        SongDatabase database = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, DATABASE_NAME).build();
+//        SongDatabase database = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, DATABASE_NAME).build();
 
         recyclerView = findViewById(R.id.rvSong);
         String lyrics = "Nitong umaga lang, Pagka lambing-lambing\n" +
@@ -64,18 +63,18 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
         Song song = SongUtil.asSong("Kisapmata","Rivermaya", lyrics);
         adapter = new VerseItemAdapter(song.getVerses());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        ItemTouchHelper.Callback callback = new EditItemTouchHelperCallback(adapter,recyclerView);
-        itemTouchHelper = new ItemTouchHelper(callback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+//        ItemTouchHelper.Callback callback = new EditItemTouchHelperCallback(adapter,recyclerView);
+//        itemTouchHelper = new ItemTouchHelper(callback);
+//        itemTouchHelper.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
 
-        List<Song> songs = database.songDao().getAll();
-        Log.d("TAGGY","Songs: " + songs);
+//        List<Song> songs = database.songDao().getAll();
+//        Log.d("TAGGY","Songs: " + songs);
     }
 
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-        itemTouchHelper.startDrag(viewHolder);
+//        itemTouchHelper.startDrag(viewHolder);
     }
 
 }
