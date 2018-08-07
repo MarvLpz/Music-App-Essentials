@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">MyAdvanceRV</string>
+    <string name="app_name">chat2</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="send_button_label">Send</string>
+    <string name="start_game">Start Game</string>
 </resources>

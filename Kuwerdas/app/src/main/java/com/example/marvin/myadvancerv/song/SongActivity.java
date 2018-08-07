@@ -1,10 +1,15 @@
 package com.example.marvin.myadvancerv.song;
 
 import android.app.Application;
+import android.app.Dialog;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.ClipData;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +19,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +48,10 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
     float dY;
     int lastAction;
 
+    private FloatingActionButton FloatAdd;
+
+    private BottomNavigationView mBottomNavigationView;
+
 //    private ItemTouchHelper itemTouchHelper;
     private final String DATABASE_NAME = "SONG_DATABASE";
 
@@ -49,33 +59,25 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song);
+
         init();
         tv_DragChord = (TextView) findViewById(R.id.tv_dragChord);
         tv_DragChord.setOnTouchListener(new ChoiceTouchListener());
         ChordItemAdapter getTheChord = new ChordItemAdapter();
         getTheChord.getChord(tv_DragChord.getText().toString());
-    }
+        FloatAdd = (FloatingActionButton) findViewById(R.id.floatingActionButton);
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        if (keyCode == KeyEvent.KEYCODE_ENTER) {
-            Log.d("ENTER","PRESSED ENTER");
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-/*    @Override
-    public boolean dispatchKeyEvent(KeyEvent KEvent)
-    {
-        int keyaction = KEvent.getAction();
-
-        if(keyaction == KeyEvent.KEYCODE_ENTER)
-        {
-            Log.i("KEY PRESSED","KEY PRESSED");
-        }
-        return super.dispatchKeyEvent(KEvent);
-    }*/
+        FloatAdd.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                final Dialog fbDialogue = new Dialog(SongActivity.this);
+                fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(0, 0, 0, 0)));
+                fbDialogue.setContentView(R.layout.fragment_chord_drawer);
+                fbDialogue.setCancelable(true);
+                fbDialogue.show();
+            }
+        });
+     }
 
     private void init(){
 //        SongDatabase database = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, DATABASE_NAME).build();
@@ -110,6 +112,9 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
 //        itemTouchHelper.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
 
+        ((TextView)findViewById(R.id.etTitle)).setText(song.getSongTitle());
+        ((TextView)findViewById(R.id.etArtist)).setText(song.getArtist());
+
 //        List<Song> songs = database.songDao().getAll();
 //        Log.d("TAGGY","Songs: " + songs);
     }
@@ -137,4 +142,5 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
             }
         }
     }
+
 }

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+android:orientation="vertical"
+    tools:context=".Fragment.ChordDrawer">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tvChordE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="E"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/tvChordF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="F"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/tvChordG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="G"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/tvChordA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="A"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/tvChordB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="B"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/tvChordC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="C"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/tvChordD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="D"
+            android:textSize="30sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+<!--        <com.dpizarro.uipicker.library.picker.PickerUI
+            android:id="@+id/pickerAccidental"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:entries="@array/array_accidental" />
+
+        <com.dpizarro.uipicker.library.picker.PickerUI
+            android:id="@+id/pickerScale"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:entries="@array/array_scale" />
+
+        <com.dpizarro.uipicker.library.picker.PickerUI
+            android:id="@+id/picketNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:entries="@array/array_number" />-->
+    </LinearLayout>
+
+
+</LinearLayout>

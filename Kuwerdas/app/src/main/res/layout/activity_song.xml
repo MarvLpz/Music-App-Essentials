@@ -5,6 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.marvin.myadvancerv.song.SongActivity">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/plus"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@color/colorAccent"
+        app:useCompatPadding="true"
+        />
+
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
@@ -12,19 +26,36 @@
         >
 
         <TextView
-            android:layout_height="wrap_content"
+            android:id="@+id/tv_dragChord"
             android:layout_width="wrap_content"
-            android:textSize="15dp"
+            android:layout_height="wrap_content"
             android:paddingHorizontal="5dp"
             android:paddingVertical="3dp"
             android:text="D"
-            android:id="@+id/tv_dragChord"
-            />
+            android:textSize="15dp" />
+
+        <EditText
+            android:id="@+id/etTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:text="Kisapmata"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <EditText
+            android:id="@+id/etArtist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:text="Rivermaya"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvSong"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
