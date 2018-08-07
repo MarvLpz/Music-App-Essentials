@@ -22,13 +22,14 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
 
     private LineItemAdapter adapter;
 
+
     public VerseItemViewHolder(View itemView) {
         super(itemView);
         // initialize the View objects
         recyclerView = (RecyclerView) itemView.findViewById(R.id.rvVerses);
         textView = (EditText) itemView.findViewById(R.id.etTitle);
-
     }
+
 
     public void setVerseLinesData(Verse data){
         adapter = new LineItemAdapter(data);
@@ -37,11 +38,13 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
         textView.setText(data.getTitle());
     }
 
+
     @Override
     public void onItemSelected() {
         itemView.setBackgroundColor(Color.LTGRAY);
         recyclerView.clearFocus();
     }
+
 
     @Override
     public void onItemClear() {

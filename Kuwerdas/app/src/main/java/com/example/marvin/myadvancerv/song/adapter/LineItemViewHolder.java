@@ -37,6 +37,7 @@ public class LineItemViewHolder extends RecyclerView.ViewHolder {
         itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback.createHelperCallback());
         itemTouchHelper.attachToRecyclerView(rvChords);
         rvChords.setAdapter(adapter);
+
     }
 
     public RecyclerView getRvChords() {

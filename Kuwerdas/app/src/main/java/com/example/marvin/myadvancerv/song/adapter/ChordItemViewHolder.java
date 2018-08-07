@@ -21,14 +21,21 @@ ChordItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperVi
 
     }
 
+
+    public void getTV(TextView view) {
+        tv = view;
+    }
+
     public void setChord(String chord){
         tv.setText(chord);
     }
 
     @Override
     public void onItemSelected() {
-        itemView.setBackgroundColor(Color.LTGRAY);
-
+        if (tv.getText().toString() == " ")
+            return;
+        else
+            itemView.setBackgroundColor(Color.LTGRAY);
     }
 
     @Override
@@ -36,4 +43,6 @@ ChordItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperVi
         itemView.setBackgroundColor(0);
 
     }
+
+
 }

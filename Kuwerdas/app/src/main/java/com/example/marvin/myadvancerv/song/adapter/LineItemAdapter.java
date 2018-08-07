@@ -68,16 +68,20 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (!onBind) {
                     Log.d("TAGGY","onKeyPressed: " + currentPosition + " - " + pos);
+                    Log.d("CurrentPosition",String.valueOf(currentPosition));
                     if (i == KeyEvent.KEYCODE_DEL && currentPosition == pos) {
                         //Perform action for backspace
                         int cursorPosition = etLine.getSelectionStart();
                         if (cursorPosition == 0) {
-                            if(currentPosition>0){
+                            if(currentPosition>0) {
                                 String lineLyrics = verseLines.get(currentPosition).getLyrics();
 
                                 verseLines.get(currentPosition-1).setLyrics(verseLines.get(currentPosition - 1).getLyrics() + " " + lineLyrics);
                                 verseLines.remove(currentPosition);
+                                notifyItemRemoved(currentPosition);
                                 notifyDataSetChanged();
+                                Log.d("CurrentPosition",String.valueOf(currentPosition) + " - "+focusPosition);
+//                                notifyItemRemoved(currentPosition);
                             }
                         }
                     }

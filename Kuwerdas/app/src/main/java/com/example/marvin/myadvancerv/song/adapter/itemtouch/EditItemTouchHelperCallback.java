@@ -3,6 +3,7 @@ package com.example.marvin.myadvancerv.song.adapter.itemtouch;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+import com.example.marvin.myadvancerv.song.adapter.ChordItemViewHolder;
 import com.example.marvin.myadvancerv.song.adapter.VerseItemAdapter;
 
 public class EditItemTouchHelperCallback extends ItemTouchHelper.Callback {
@@ -35,6 +36,7 @@ public class EditItemTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                           RecyclerView.ViewHolder target) {
+
         mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
@@ -48,6 +50,7 @@ public class EditItemTouchHelperCallback extends ItemTouchHelper.Callback {
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         // We only want the active item to change
         if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+
             if (viewHolder instanceof ItemTouchHelperViewHolder) {
                 // Let the view holder know that this item is being moved or dragged
                 ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;

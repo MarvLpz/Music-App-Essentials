@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         >
+
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -19,6 +20,7 @@
             android:text="D"
             android:id="@+id/tv_dragChord"
             />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvSong"
             android:layout_width="match_parent"

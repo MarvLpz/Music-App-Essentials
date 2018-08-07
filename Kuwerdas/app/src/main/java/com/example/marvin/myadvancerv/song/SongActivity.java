@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -43,6 +44,7 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
 
 //    private ItemTouchHelper itemTouchHelper;
     private final String DATABASE_NAME = "SONG_DATABASE";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,27 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
         ChordItemAdapter getTheChord = new ChordItemAdapter();
         getTheChord.getChord(tv_DragChord.getText().toString());
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            Log.d("ENTER","PRESSED ENTER");
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+/*    @Override
+    public boolean dispatchKeyEvent(KeyEvent KEvent)
+    {
+        int keyaction = KEvent.getAction();
+
+        if(keyaction == KeyEvent.KEYCODE_ENTER)
+        {
+            Log.i("KEY PRESSED","KEY PRESSED");
+        }
+        return super.dispatchKeyEvent(KEvent);
+    }*/
 
     private void init(){
 //        SongDatabase database = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, DATABASE_NAME).build();

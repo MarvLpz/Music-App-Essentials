@@ -38,6 +38,7 @@ public class ChordItemTouchHelperCallback {
                         }
                         @Override
                         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+
                             moveItem(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                             return true;
                         }
@@ -85,6 +86,10 @@ public class ChordItemTouchHelperCallback {
 
         private void moveItem(int oldPos,int newPos){
             Chord item = (Chord) myChord.get(oldPos);
+
+            if(item.getChord().equals(Chord.EMPTY_CHORD))
+                return;
+
             myChord.remove(oldPos);
             myChord.add(newPos,item);
             adapter2.notifyItemMoved(oldPos,newPos);
@@ -92,6 +97,7 @@ public class ChordItemTouchHelperCallback {
         /*editText2 = (EditText) findViewById(R.id.fl_tv_id);
         editText2.setFocusable(false);
         editText2.setFocusable(true);
+
         */
 
         }

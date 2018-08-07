@@ -38,8 +38,8 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
     }
 
     public ChordItemAdapter(){
-
     }
+
     public void getChord(String Chord){
         DragChord = Chord;
         Log.d("SET CHORD","dragchord: " + DragChord);
