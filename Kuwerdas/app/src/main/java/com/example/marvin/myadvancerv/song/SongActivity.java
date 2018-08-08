@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -125,8 +126,34 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
                 fbDialogue.show();
             }
         });*/
+
+        NumberPicker accidental = findViewById(R.id.accidentals);
+
+        accidental.setMinValue(0);
+        accidental.setMaxValue(2);
+        accidental.setDisplayedValues( new String[] { "#", "n", "b" } );
+        accidental.setOnValueChangedListener(onValueChangeListener);
+
+        NumberPicker number = findViewById(R.id.number);
+        number.setMinValue(6);
+        number.setMaxValue(9);
+        number.setOnValueChangedListener(onValueChangeListener);
+
+        NumberPicker scale = findViewById(R.id.scale);
+        scale.setMinValue(0);
+        scale.setMaxValue(2);
+        scale.setDisplayedValues( new String[] { "m", "maj", "sus" } );
+        scale.setOnValueChangedListener(onValueChangeListener);
      }
 
+    NumberPicker.OnValueChangeListener onValueChangeListener =
+            new 	NumberPicker.OnValueChangeListener(){
+                @Override
+                public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                    Toast.makeText(SongActivity.this,
+                            "selected number "+numberPicker.getValue(), Toast.LENGTH_SHORT);
+                }
+            };
 /*     public void showFragment(View view) {
         Fragment fragment;
 
