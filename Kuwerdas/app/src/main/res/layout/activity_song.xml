@@ -165,36 +165,42 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal"
             >
-            <NumberPicker
 
-                android:id="@+id/accidentals"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:theme="@style/NumberPickerText"
-                android:scaleX="2"
-                android:scaleY="2"
-                />
-            <NumberPicker
-                android:id="@+id/number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:theme="@style/NumberPickerText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:scaleX="2"
-                android:scaleY="2"
-                />
-            <NumberPicker
-                android:id="@+id/scale"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:theme="@style/NumberPickerText"
-                android:scaleX="2"
-                android:scaleY="2"
-                />
+            <top.defaults.view.PickerView
+                android:id="@+id/pickerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <!--<NumberPicker-->
+
+                <!--android:id="@+id/accidentals"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingHorizontal="5dp"-->
+                <!--android:theme="@style/NumberPickerText"-->
+                <!--android:scaleX="2"-->
+                <!--android:scaleY="2"-->
+                <!--/>-->
+            <!--<NumberPicker-->
+                <!--android:id="@+id/number"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingHorizontal="5dp"-->
+                <!--android:theme="@style/NumberPickerText"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--android:scaleX="2"-->
+                <!--android:scaleY="2"-->
+                <!--/>-->
+            <!--<NumberPicker-->
+                <!--android:id="@+id/scale"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingHorizontal="5dp"-->
+                <!--android:theme="@style/NumberPickerText"-->
+                <!--android:scaleX="2"-->
+                <!--android:scaleY="2"-->
+                <!--/>-->
         </LinearLayout>
 
 

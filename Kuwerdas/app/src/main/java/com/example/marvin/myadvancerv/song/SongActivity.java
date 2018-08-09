@@ -43,7 +43,10 @@ import com.example.marvin.myadvancerv.song.model.Verse;
 import com.example.marvin.myadvancerv.song.util.SongUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import top.defaults.view.PickerView;
 
 public class SongActivity extends AppCompatActivity  implements OnStartDragListener {
 
@@ -127,23 +130,53 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
             }
         });*/
 
-        NumberPicker accidental = findViewById(R.id.accidentals);
+        PickerView pickerView = findViewById(R.id.pickerView);
 
-        accidental.setMinValue(0);
-        accidental.setMaxValue(2);
-        accidental.setDisplayedValues( new String[] { "#", "n", "b" } );
-        accidental.setOnValueChangedListener(onValueChangeListener);
+        List<PickerView.PickerItem> pickerItems = Arrays.asList(new PickerView.PickerItem() {
+            @Override
+            public String getText() {
+                return "#";
+            }
+        },
+                new PickerView.PickerItem() {
+                    @Override
+                    public String getText() {
+                        return " ";
+                    }
+                }
+                ,
+                new PickerView.PickerItem() {
+                    @Override
+                    public String getText() {
+                        return "b";
+                    }
+                }
+        );
+        pickerView.setItems(pickerItems, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
+            @Override
+            public void onItemSelected(PickerView.PickerItem item) {
+                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
+            }
+        });
 
-        NumberPicker number = findViewById(R.id.number);
-        number.setMinValue(6);
-        number.setMaxValue(9);
-        number.setOnValueChangedListener(onValueChangeListener);
-
-        NumberPicker scale = findViewById(R.id.scale);
-        scale.setMinValue(0);
-        scale.setMaxValue(2);
-        scale.setDisplayedValues( new String[] { "m", "maj", "sus" } );
-        scale.setOnValueChangedListener(onValueChangeListener);
+//
+//        NumberPicker accidental = findViewById(R.id.accidentals);
+//
+//        accidental.setMinValue(0);
+//        accidental.setMaxValue(2);
+//        accidental.setDisplayedValues( new String[] { "#", "n", "b" } );
+//        accidental.setOnValueChangedListener(onValueChangeListener);
+//
+//        NumberPicker number = findViewById(R.id.number);
+//        number.setMinValue(6);
+//        number.setMaxValue(9);
+//        number.setOnValueChangedListener(onValueChangeListener);
+//
+//        NumberPicker scale = findViewById(R.id.scale);
+//        scale.setMinValue(0);
+//        scale.setMaxValue(2);
+//        scale.setDisplayedValues( new String[] { "m", "maj", "sus" } );
+//        scale.setOnValueChangedListener(onValueChangeListener);
      }
 
     NumberPicker.OnValueChangeListener onValueChangeListener =
