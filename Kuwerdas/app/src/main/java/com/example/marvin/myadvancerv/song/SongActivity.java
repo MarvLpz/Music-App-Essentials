@@ -75,13 +75,57 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
 //    private ItemTouchHelper itemTouchHelper;
     private final String DATABASE_NAME = "SONG_DATABASE";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song);
-
+        instantiate();
         init();
+        showPicker();
+
+/*        FloatAdd.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                final Dialog fbDialogue = new Dialog(SongActivity.this);
+                fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(0, 0, 0, 0)));
+                fbDialogue.setContentView(R.layout.fragment_chord_drawer);
+                fbDialogue.setCancelable(true);
+                fbDialogue.show();
+            }
+        });*/
+     }
+/*     public void showFragment(View view) {
+        Fragment fragment;
+
+        *//*if (view == findViewById(R.id.floatingActionButton)){
+            fragment = new ChordDrawer();
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft =  fm.beginTransaction();
+            ft.replace(R.id.fragment_place, fragment);
+            ft.commit();
+        }*//*
+     }*/
+
+    private class floataddBtn implements View.OnClickListener{
+
+        boolean clicked = false;
+        @Override
+        public void onClick(View v) {
+            if (clicked == false){
+                linearLayout.setVisibility(View.VISIBLE);
+                Log.d("Position X and Y",linearLayout.getX() + " " + linearLayout.getY());
+                linearLayout.setX(16);
+                linearLayout.setY(880);
+                clicked = true;
+            }
+            else {
+                linearLayout.setVisibility(View.INVISIBLE);
+                clicked = false;
+            }
+
+        }
+    }
+    public void instantiate(){
         tv_DragChord1 = (TextView) findViewById(R.id.tv_dragChord1);
         tv_DragChord2 = (TextView) findViewById(R.id.tv_dragChord2);
         tv_DragChord3 = (TextView) findViewById(R.id.tv_dragChord3);
@@ -97,108 +141,42 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
         tv_DragChord6.setOnTouchListener(new ChoiceTouchListener());
         tv_DragChord7.setOnTouchListener(new ChoiceTouchListener());
 
-
         FloatAdd = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        FloatAdd.setOnClickListener(new floataddBtn());
         linearLayout = (LinearLayout) findViewById(R.id.frame_place);
         linearLayout.setOnTouchListener(new touchMe());
         linearLayout.setVisibility(View.INVISIBLE);
+    }
+    public void showPicker() {
+        Picker picker = new Picker();
+        PickerView accidental = findViewById(R.id.accidental);
 
-        FloatAdd.setOnClickListener(new View.OnClickListener() {
-            boolean clicked = false;
-            @Override
-            public void onClick(View v) {
-                if (clicked == false){
-                    linearLayout.setVisibility(View.VISIBLE);
-                    clicked = true;
-                }
-                else {
-                    linearLayout.setVisibility(View.INVISIBLE);
-                    clicked = false;
-                }
-
-            }
-        });
-
-/*        FloatAdd.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                final Dialog fbDialogue = new Dialog(SongActivity.this);
-                fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(0, 0, 0, 0)));
-                fbDialogue.setContentView(R.layout.fragment_chord_drawer);
-                fbDialogue.setCancelable(true);
-                fbDialogue.show();
-            }
-        });*/
-
-        PickerView pickerView = findViewById(R.id.pickerView);
-
-        List<PickerView.PickerItem> pickerItems = Arrays.asList(new PickerView.PickerItem() {
-            @Override
-            public String getText() {
-                return "#";
-            }
-        },
-                new PickerView.PickerItem() {
-                    @Override
-                    public String getText() {
-                        return " ";
-                    }
-                }
-                ,
-                new PickerView.PickerItem() {
-                    @Override
-                    public String getText() {
-                        return "b";
-                    }
-                }
-        );
-        pickerView.setItems(pickerItems, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
+        accidental.setTextSize(40);
+        accidental.setItems(picker.pickerAccidentals, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
             @Override
             public void onItemSelected(PickerView.PickerItem item) {
                 Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
             }
         });
 
-//
-//        NumberPicker accidental = findViewById(R.id.accidentals);
-//
-//        accidental.setMinValue(0);
-//        accidental.setMaxValue(2);
-//        accidental.setDisplayedValues( new String[] { "#", "n", "b" } );
-//        accidental.setOnValueChangedListener(onValueChangeListener);
-//
-//        NumberPicker number = findViewById(R.id.number);
-//        number.setMinValue(6);
-//        number.setMaxValue(9);
-//        number.setOnValueChangedListener(onValueChangeListener);
-//
-//        NumberPicker scale = findViewById(R.id.scale);
-//        scale.setMinValue(0);
-//        scale.setMaxValue(2);
-//        scale.setDisplayedValues( new String[] { "m", "maj", "sus" } );
-//        scale.setOnValueChangedListener(onValueChangeListener);
-     }
+        PickerView scale = findViewById(R.id.scale);
+        scale.setTextSize(40);
+        scale.setItems(picker.pickerScale, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
+            @Override
+            public void onItemSelected(PickerView.PickerItem item) {
+                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
+            }
+        });
 
-    NumberPicker.OnValueChangeListener onValueChangeListener =
-            new 	NumberPicker.OnValueChangeListener(){
-                @Override
-                public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-                    Toast.makeText(SongActivity.this,
-                            "selected number "+numberPicker.getValue(), Toast.LENGTH_SHORT);
-                }
-            };
-/*     public void showFragment(View view) {
-        Fragment fragment;
-
-        *//*if (view == findViewById(R.id.floatingActionButton)){
-            fragment = new ChordDrawer();
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction ft =  fm.beginTransaction();
-            ft.replace(R.id.fragment_place, fragment);
-            ft.commit();
-        }*//*
-     }*/
-
+        PickerView number = findViewById(R.id.number);
+        number.setTextSize(40);
+        number.setItems(picker.pickerNumber, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
+            @Override
+            public void onItemSelected(PickerView.PickerItem item) {
+                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private final class touchMe implements View.OnTouchListener{
 
         @Override
