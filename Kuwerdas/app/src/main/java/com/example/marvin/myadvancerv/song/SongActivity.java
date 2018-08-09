@@ -53,7 +53,7 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
     private VerseItemAdapter adapter;
     private RecyclerView recyclerView;
 
-    private List<Chord> myChord;
+//    private List<Chord> myChord;
     TextView tv_DragChord1;
     TextView tv_DragChord2;
     TextView tv_DragChord3;
@@ -62,13 +62,15 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
     TextView tv_DragChord6;
     TextView tv_DragChord7;
 
+    String get_accidental = "",get_scale= "",get_number= "";
+
     float dX;
     float dY;
     int lastAction;
 
     private FloatingActionButton FloatAdd;
 
-    private BottomNavigationView mBottomNavigationView;
+//    private BottomNavigationView mBottomNavigationView;
 
     LinearLayout linearLayout;
 
@@ -152,18 +154,29 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
         PickerView accidental = findViewById(R.id.accidental);
 
         accidental.setTextSize(40);
+
         accidental.setItems(picker.pickerAccidentals, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
             @Override
             public void onItemSelected(PickerView.PickerItem item) {
+                if (item.getText() == "x") { get_accidental = "";}
+                else {
+                    get_accidental = item.getText();
+                }
+
                 Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
             }
         });
 
         PickerView scale = findViewById(R.id.scale);
         scale.setTextSize(40);
+
         scale.setItems(picker.pickerScale, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
             @Override
             public void onItemSelected(PickerView.PickerItem item) {
+                if (item.getText() == "x") {get_scale = ""; }
+                else {
+                    get_scale = item.getText();
+                }
                 Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
             }
         });
@@ -173,6 +186,11 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
         number.setItems(picker.pickerNumber, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
             @Override
             public void onItemSelected(PickerView.PickerItem item) {
+
+                if (item.getText() == "x") { get_number = "";}
+                else {
+                    get_number = item.getText();
+                }
                 Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
             }
         });
@@ -256,9 +274,7 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
 //        itemTouchHelper.startDrag(viewHolder);
     }
-
-
-
+    
     public final class ChoiceTouchListener implements View.OnTouchListener{
 
         @Override
@@ -268,25 +284,32 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
                 ChordItemAdapter getTheChord = new ChordItemAdapter();
                 switch(v.getId()) {
                     case R.id.tv_dragChord1:
-                        getTheChord.getChord(tv_DragChord1.getText().toString());
+                        getTheChord.getChord
+                                (tv_DragChord1.getText().toString() + get_accidental + get_scale + get_number);
                         break;
                     case R.id.tv_dragChord2:
-                        getTheChord.getChord(tv_DragChord2.getText().toString());
+                        getTheChord.getChord
+                                (tv_DragChord2.getText().toString() + get_accidental + get_scale + get_number);
                         break;
                     case R.id.tv_dragChord3:
-                        getTheChord.getChord(tv_DragChord3.getText().toString());
+                        getTheChord.getChord
+                                (tv_DragChord3.getText().toString() + get_accidental + get_scale + get_number);
                         break;
                     case R.id.tv_dragChord4:
-                        getTheChord.getChord(tv_DragChord4.getText().toString());
+                        getTheChord.getChord
+                                (tv_DragChord4.getText().toString() + get_accidental + get_scale + get_number);
                         break;
                     case R.id.tv_dragChord5:
-                        getTheChord.getChord(tv_DragChord5.getText().toString());
+                        getTheChord.getChord
+                                (tv_DragChord5.getText().toString() + get_accidental + get_scale + get_number);
                         break;
                     case R.id.tv_dragChord6:
-                        getTheChord.getChord(tv_DragChord6.getText().toString());
+                        getTheChord.getChord
+                                (tv_DragChord6.getText().toString() + get_accidental + get_scale + get_number);
                         break;
                     case R.id.tv_dragChord7:
-                        getTheChord.getChord(tv_DragChord7.getText().toString());
+                        getTheChord.getChord
+                                (tv_DragChord7.getText().toString() + get_accidental + get_scale + get_number);
                         break;
                 }
 

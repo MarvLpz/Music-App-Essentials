@@ -7,18 +7,19 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvChords"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:visibility="visible" />
 
     <EditText
         android:id="@+id/etLine"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_weight="1"
         android:ems="10"
         android:inputType="textMultiLine"
         android:singleLine="false"
-        android:textSize="14sp" />
+        android:background="@null"
+        />
 </LinearLayout>

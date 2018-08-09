@@ -147,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="5dp"
                 android:paddingVertical="3dp"
-                android:text="C#"
+                android:text="C"
                 android:textSize="20dp" />
 
             <TextView
@@ -156,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="5dp"
                 android:paddingVertical="3dp"
-                android:text="Dsus"
+                android:text="D"
                 android:textSize="20dp" />
         </LinearLayout>
         <LinearLayout
@@ -172,13 +172,14 @@
                 android:layout_height="wrap_content" />
 
             <top.defaults.view.PickerView
-                android:id="@+id/number"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content" />
-            <top.defaults.view.PickerView
                 android:id="@+id/scale"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"/>
+
+            <top.defaults.view.PickerView
+                android:id="@+id/number"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

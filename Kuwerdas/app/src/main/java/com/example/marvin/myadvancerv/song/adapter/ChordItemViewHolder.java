@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.marvin.myadvancerv.R;
 import com.example.marvin.myadvancerv.song.adapter.itemtouch.ItemTouchHelperViewHolder;
+import com.example.marvin.myadvancerv.song.model.Chord;
 
 public class
 ChordItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder{
@@ -32,7 +33,7 @@ ChordItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperVi
 
     @Override
     public void onItemSelected() {
-        if (tv.getText().toString() == " ")
+        if (tv.getText().toString() == Chord.EMPTY_CHORD)
             return;
         else
             itemView.setBackgroundColor(Color.LTGRAY);
