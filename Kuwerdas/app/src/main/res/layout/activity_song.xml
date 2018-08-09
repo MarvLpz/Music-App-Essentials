@@ -16,7 +16,20 @@
         android:src="@drawable/plus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@color/colorAccent"
+        app:backgroundTint="#76d177"
+        app:useCompatPadding="true" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingDeleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="76dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:backgroundTint="#f57777"
         app:useCompatPadding="true" />
     <LinearLayout
         android:layout_height="wrap_content"
@@ -31,8 +44,6 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         >
-
-
 
         <EditText
             android:id="@+id/etTitle"

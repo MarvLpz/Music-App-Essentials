@@ -1,6 +1,8 @@
 package com.example.marvin.myadvancerv.song.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.DragEvent;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.marvin.myadvancerv.R;
+import com.example.marvin.myadvancerv.song.SongActivity;
 import com.example.marvin.myadvancerv.song.adapter.itemtouch.ItemClickCallback;
 import com.example.marvin.myadvancerv.song.model.Chord;
 import com.example.marvin.myadvancerv.song.model.Line;
@@ -31,7 +34,7 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
 
     TextView testview;
     static String DragChord;
-
+    static boolean delClicked;
     public ChordItemAdapter(Context context, List<Chord> _myChord ){
         con = context;
         myChord = _myChord;
@@ -45,6 +48,9 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         Log.d("SET CHORD","dragchord: " + DragChord);
     }
 
+    public void getTriggerDelBtn(boolean delClicked){
+        this.delClicked = delClicked;
+    }
     private class ChoiceDragListener implements View.OnDragListener{
         int positionChord;
         @Override
@@ -88,7 +94,17 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         this.itemClickCallback = itemClickCallback;
     }
 
+    private class ChoiceClickListener implements View.OnClickListener{
 
+        @Override
+        public void onClick(View v) {
+            if (delClicked == true){
+                myChord.set((int) v.getTag() ,new Chord(" "));
+                notifyDataSetChanged();
+            }
+            Log.d("CHORD CLICKED","TRUE " + delClicked);
+        }
+    }
 
     @Override
     public ChordItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -96,7 +112,9 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         LayoutInflater inflater = LayoutInflater.from(con);
         view = inflater.inflate(R.layout.chord_layout,parent,false);
         TextView  ChoiceTextView = (TextView) view.findViewById(R.id.etChord);
+        ChoiceTextView.setOnClickListener(new ChoiceClickListener());
         ChoiceTextView.setOnDragListener(new ChoiceDragListener());
+
         return new ChordItemViewHolder(view);
     }
 

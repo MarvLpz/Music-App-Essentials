@@ -25,6 +25,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -69,6 +70,7 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
     int lastAction;
 
     private FloatingActionButton FloatAdd;
+    private FloatingActionButton FloatDelete;
 
 //    private BottomNavigationView mBottomNavigationView;
 
@@ -118,11 +120,40 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
                 Log.d("Position X and Y",linearLayout.getX() + " " + linearLayout.getY());
                 linearLayout.setX(16);
                 linearLayout.setY(880);
+                FloatAdd.setAlpha(255);
                 clicked = true;
+                FloatDelete.setClickable(false);
             }
             else {
                 linearLayout.setVisibility(View.INVISIBLE);
                 clicked = false;
+                FloatAdd.setAlpha(127);
+                FloatDelete.setClickable(true);
+            }
+
+        }
+    }
+
+    public class floatdelBtn implements View.OnClickListener{
+        boolean delClicked = false;
+        @Override
+        public void onClick(View v) {
+            if (delClicked == false){
+                ChordItemAdapter triggerClicked = new ChordItemAdapter();
+                delClicked = true;
+                triggerClicked.getTriggerDelBtn(delClicked);
+                FloatDelete.setAlpha(255);
+                linearLayout.setVisibility(View.INVISIBLE);
+                FloatAdd.setClickable(false);
+//                FloatAdd.setAlpha(127);
+            }
+            else if (delClicked == true){
+                ChordItemAdapter triggerClicked = new ChordItemAdapter();
+                delClicked = false;
+                triggerClicked.getTriggerDelBtn(delClicked);
+                FloatDelete.setAlpha(80);
+                FloatAdd.setClickable(true);
+//                FloatAdd.setAlpha(255);
             }
 
         }
@@ -144,7 +175,11 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
         tv_DragChord7.setOnTouchListener(new ChoiceTouchListener());
 
         FloatAdd = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        FloatDelete = (FloatingActionButton) findViewById(R.id.floatingDeleteButton);
         FloatAdd.setOnClickListener(new floataddBtn());
+        FloatDelete.setOnClickListener(new floatdelBtn());
+        FloatAdd.setAlpha(127);
+        FloatDelete.setAlpha(80);
         linearLayout = (LinearLayout) findViewById(R.id.frame_place);
         linearLayout.setOnTouchListener(new touchMe());
         linearLayout.setVisibility(View.INVISIBLE);
@@ -274,7 +309,7 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
 //        itemTouchHelper.startDrag(viewHolder);
     }
-    
+
     public final class ChoiceTouchListener implements View.OnTouchListener{
 
         @Override

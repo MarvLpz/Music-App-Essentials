@@ -16,7 +16,8 @@ import com.example.marvin.myadvancerv.song.adapter.itemtouch.ItemTouchHelperView
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.ItemClickCallback{
-                                    private final String TAG = MainActivity.class.getSimpleName();
+
+    private final String TAG = MainActivity.class.getSimpleName();
     ArrayList<MyList> lstMyList;
     RecyclerView recyclerView;
     public static final float ALPHA_FULL = 1.0f;
