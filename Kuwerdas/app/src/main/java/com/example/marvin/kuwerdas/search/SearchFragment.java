@@ -23,7 +23,6 @@ import com.example.marvin.kuwerdas.MainActivity;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.search.adapter.SongItemAdapter;
-import com.example.marvin.kuwerdas.song.SongActivity;
 import com.example.marvin.kuwerdas.song.model.Song;
 
 import java.util.List;

@@ -21,7 +21,7 @@ import com.example.marvin.kuwerdas.song.model.Song;
 
 import java.util.Objects;
 
-public class SongActivity extends Fragment implements OnStartDragListener {
+public class SongFragment extends Fragment implements OnStartDragListener {
 
     private VerseItemAdapter adapter;
     private RecyclerView recyclerView;
