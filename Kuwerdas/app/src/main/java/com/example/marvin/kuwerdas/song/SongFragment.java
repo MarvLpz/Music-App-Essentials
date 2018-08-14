@@ -1,6 +1,7 @@
 package com.example.marvin.kuwerdas.song;
 
 import android.arch.persistence.room.Room;
+import android.content.ClipData;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,19 +13,24 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.marvin.kuwerdas.OnStartDragListener;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.search.SearchFragment;
+import com.example.marvin.kuwerdas.song.adapter.ChordItemAdapter;
 import com.example.marvin.kuwerdas.song.adapter.VerseItemAdapter;
 import com.example.marvin.kuwerdas.song.model.Song;
 
 import java.util.Objects;
+
+import top.defaults.view.PickerView;
 
 public class SongFragment extends Fragment implements OnStartDragListener,SearchFragment.OnChangeSong {
 
@@ -68,6 +74,7 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         //if it is DashboardFragment it should have R.layout.fragment_dashboard
         view = inflater.inflate(R.layout.fragment_song, null);
         init();
+        instantiate();
         SearchFragment.callback = this;
         return view;
     }
@@ -94,14 +101,122 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
 
     }
 
+    private final class touchMe implements View.OnTouchListener{
+
+        @Override
+        public boolean onTouch(View view, MotionEvent event) {
+            switch (event.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                    dX = view.getX() - event.getRawX();
+                    dY = view.getY() - event.getRawY();
+                    lastAction = MotionEvent.ACTION_DOWN;
+
+                    /*LinearLayout.LayoutParams params = new LinearLayout.
+                            LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(10,10,10,10);
+                    view.setLayoutParams(params);*/
+                    break;
+
+                case MotionEvent.ACTION_MOVE:
+                    view.setY(event.getRawY() + dY);
+                    view.setX(event.getRawX() + dX);
+                    lastAction = MotionEvent.ACTION_MOVE;
+                    break;
+
+                case MotionEvent.ACTION_UP:
+                    if (lastAction == MotionEvent.ACTION_DOWN)
+//                        Toast.makeText(con, "Clicked!", Toast.LENGTH_SHORT).show();
+                        break;
+
+                default:
+                    return false;
+            }
+            return true;
+
+        }
+    }
+
+    private class floataddBtn implements View.OnClickListener{
+
+        boolean clicked = false;
+        @Override
+        public void onClick(View v) {
+            if (clicked == false){
+                linearLayout.setVisibility(View.VISIBLE);
+                Log.d("Position X and Y",linearLayout.getX() + " " + linearLayout.getY());
+                linearLayout.setX(16);
+                linearLayout.setY(880);
+                FloatAdd.setAlpha(255);
+                clicked = true;
+//                FloatDelete.setClickable(false);
+            }
+            else {
+                linearLayout.setVisibility(View.INVISIBLE);
+                clicked = false;
+                FloatAdd.setAlpha(127);
+//                FloatDelete.setClickable(true);
+            }
+
+        }
+    }
+    public final class ChoiceTouchListener implements View.OnTouchListener{
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN){
+
+                ChordItemAdapter getTheChord = new ChordItemAdapter();
+                switch(v.getId()) {
+                    case R.id.tv_dragChord1:
+                        getTheChord.getChord
+                                (tv_DragChord1.getText().toString() + get_accidental + get_scale + get_number);
+                        break;
+                    case R.id.tv_dragChord2:
+                        getTheChord.getChord
+                                (tv_DragChord2.getText().toString() + get_accidental + get_scale + get_number);
+                        break;
+                    case R.id.tv_dragChord3:
+                        getTheChord.getChord
+                                (tv_DragChord3.getText().toString() + get_accidental + get_scale + get_number);
+                        break;
+                    case R.id.tv_dragChord4:
+                        getTheChord.getChord
+                                (tv_DragChord4.getText().toString() + get_accidental + get_scale + get_number);
+                        break;
+                    case R.id.tv_dragChord5:
+                        getTheChord.getChord
+                                (tv_DragChord5.getText().toString() + get_accidental + get_scale + get_number);
+                        break;
+                    case R.id.tv_dragChord6:
+                        getTheChord.getChord
+                                (tv_DragChord6.getText().toString() + get_accidental + get_scale + get_number);
+                        break;
+                    case R.id.tv_dragChord7:
+                        getTheChord.getChord
+                                (tv_DragChord7.getText().toString() + get_accidental + get_scale + get_number);
+                        break;
+                }
+
+
+                ClipData data = ClipData.newPlainText("","");
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+                v.startDrag(data,shadowBuilder,v,0);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
     public void instantiate(){
-/*        tv_DragChord1 = (TextView) view.findViewById(R.id.tv_dragChord1);
-        tv_DragChord2 = (TextView) findViewById(R.id.tv_dragChord2);
-        tv_DragChord3 = (TextView) findViewById(R.id.tv_dragChord3);
-        tv_DragChord4 = (TextView) findViewById(R.id.tv_dragChord4);
-        tv_DragChord5 = (TextView) findViewById(R.id.tv_dragChord5);
-        tv_DragChord6 = (TextView) findViewById(R.id.tv_dragChord6);
-        tv_DragChord7 = (TextView) findViewById(R.id.tv_dragChord7);
+
+        tv_DragChord1 = (TextView) view.findViewById(R.id.tv_dragChord1);
+        tv_DragChord2 = (TextView) view.findViewById(R.id.tv_dragChord2);
+        tv_DragChord3 = (TextView) view.findViewById(R.id.tv_dragChord3);
+        tv_DragChord4 = (TextView) view.findViewById(R.id.tv_dragChord4);
+        tv_DragChord5 = (TextView) view.findViewById(R.id.tv_dragChord5);
+        tv_DragChord6 = (TextView) view.findViewById(R.id.tv_dragChord6);
+        tv_DragChord7 = (TextView) view.findViewById(R.id.tv_dragChord7);
         tv_DragChord1.setOnTouchListener(new ChoiceTouchListener());
         tv_DragChord2.setOnTouchListener(new ChoiceTouchListener());
         tv_DragChord3.setOnTouchListener(new ChoiceTouchListener());
@@ -110,16 +225,65 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         tv_DragChord6.setOnTouchListener(new ChoiceTouchListener());
         tv_DragChord7.setOnTouchListener(new ChoiceTouchListener());
 
-        FloatAdd = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-        FloatDelete = (FloatingActionButton) findViewById(R.id.floatingDeleteButton);
+        FloatAdd = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
+//        FloatDelete = (FloatingActionButton) view.findViewById(R.id.floatingDeleteButton);
         FloatAdd.setOnClickListener(new floataddBtn());
-        FloatDelete.setOnClickListener(new floatdelBtn());
+        FloatAdd = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
+//        FloatDelete.setOnClickListener(new floatdelBtn());
         FloatAdd.setAlpha(127);
-        FloatDelete.setAlpha(80);
-        linearLayout = (LinearLayout) findViewById(R.id.frame_place);
+//        FloatDelete.setAlpha(80);
+
+        linearLayout = (LinearLayout) view.findViewById(R.id.frame_place);
         linearLayout.setOnTouchListener(new touchMe());
-        linearLayout.setVisibility(View.INVISIBLE);*/
+        linearLayout.setVisibility(View.INVISIBLE);
     }
+
+//    public void showPicker() {
+//        Picker picker = new Picker();
+//        PickerView accidental = view.findViewById(R.id.accidental);
+//
+//        accidental.setTextSize(40);
+//
+//        accidental.setItems(picker.pickerAccidentals, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
+//            @Override
+//            public void onItemSelected(PickerView.PickerItem item) {
+//                if (item.getText() == "x") { get_accidental = "";}
+//                else {
+//                    get_accidental = item.getText();
+//                }
+//
+////                Toast.makeText(this.getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        PickerView scale = view.findViewById(R.id.scale);
+//        scale.setTextSize(40);
+//
+//        scale.setItems(picker.pickerScale, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
+//            @Override
+//            public void onItemSelected(PickerView.PickerItem item) {
+//                if (item.getText() == "x") {get_scale = ""; }
+//                else {
+//                    get_scale = item.getText();
+//                }
+////                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        PickerView number = view.findViewById(R.id.number);
+//        number.setTextSize(40);
+//        number.setItems(picker.pickerNumber, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
+//            @Override
+//            public void onItemSelected(PickerView.PickerItem item) {
+//
+//                if (item.getText() == "x") { get_number = "";}
+//                else {
+//                    get_number = item.getText();
+//                }
+////                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         itemTouchHelper.startDrag(viewHolder);

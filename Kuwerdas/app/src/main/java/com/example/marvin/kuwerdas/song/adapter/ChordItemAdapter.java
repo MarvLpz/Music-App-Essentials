@@ -44,6 +44,7 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
     public void getTriggerDelBtn(boolean delClicked){
         this.delClicked = delClicked;
     }
+
     private class ChoiceDragListener implements View.OnDragListener{
         int positionChord;
         @Override

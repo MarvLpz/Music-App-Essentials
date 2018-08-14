@@ -12,7 +12,7 @@ import java.util.List;
 public class Line {
 
     @Ignore
-    public static final int CHORD_SET_LENGTH = 22;
+    public static final int CHORD_SET_LENGTH = 15;
 
     @PrimaryKey(autoGenerate = true)
     private int id;

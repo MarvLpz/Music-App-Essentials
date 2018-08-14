@@ -122,6 +122,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
 //            holder.getGridLayout().addView(new ChordCell(holder.getItemView().getContext(),chordSet[i]));
 //        }
 
+        holder.setChordList(line.getChordSet());
         onBind = false;
 
     }
