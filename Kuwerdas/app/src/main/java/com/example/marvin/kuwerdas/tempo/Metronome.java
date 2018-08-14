@@ -1,52 +1,95 @@
 package com.example.marvin.kuwerdas.tempo;
 
+import android.app.Service;
+import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Binder;
 import android.os.Handler;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Metronome {
+public class Metronome extends Service {
     public static final String TAG = "TAGGY";
     private static final int LONGEST_INTERVAL = 3000;
     private static final int COUNT = 4;
-
+    private static final int MIN_TEMPO = 20;
+    private static final int MAX_TEMPO = 250;
+    static String TimeSig = "4/4";
     private int tempo;
     private long delay;
 
     private Long previousTime = null;
 
+    private final IBinder binder = new LocalBinder();
+
     private List<Beat> userTapList = new ArrayList<>();
-    private MediaPlayer mp;
+    private MediaPlayer mpL;
+    private MediaPlayer mpH;
 
     private boolean isPlaying;
 
     private Handler handler = new Handler();
+    public int counter;
+    
+    
+    private int getTimeSigMaxCount(){
+        if(TimeSig.equals("4/4"))
+            return 4;
+        else if (TimeSig.equals("6/8"))
+            return 6;
+        else if (TimeSig.equals("2/4"))
+            return 2;
+        else
+            return -1;
+    }
+
     private Runnable beatRunnable = new Runnable() {
         @Override
         public void run() {
-//            Log.d(TAG,"Running at " + delay + " delay.");
-            mp.start();
             handler.postDelayed(beatRunnable, delay);
+            
+            int maxCount = getTimeSigMaxCount();
+            
+            if (counter >= maxCount){
+                    counter = 0;
+                    Log.d("COUNT", "TICK");
+                    mpH.start();
+            }
+            else
+                mpL.start();
+            
+            counter++;
+            Log.d("COUNT", String.valueOf(counter));
         }
+
     };
 
-
-    public void setTone(MediaPlayer mp){
-        this.mp = mp;
+    public void setTimeSignature(String GetTimeSig){
+        TimeSig = GetTimeSig;
+        if(isPlaying)
+            startTimer();
     }
 
+    public void setToneLow(MediaPlayer mp){
+        this.mpL = mp;
+    }
+    public void setToneHigh(MediaPlayer mp){
+        this.mpH = mp;
+    }
     public int getTempo() {
         return tempo;
     }
 
     public boolean changeTempo(int t){
-        if(t>=20 && t<=400) {
+        if(t>=MIN_TEMPO && t<=MAX_TEMPO) {
             tempo = t;
             delay = 60000 / tempo;
-            Log.d(TAG, "changeTempoByRV: new [tempo: " + tempo + "] [delay: " + delay + "]");
             startTimer();
+
             return true;
         }
         return false;
@@ -63,11 +106,11 @@ public class Metronome {
         delay = ((sum)/beats);
         tempo = (int) (60000/delay);
 
-        if(tempo>400)
-            tempo = 400;
+        if(tempo>MAX_TEMPO)
+            tempo = MAX_TEMPO;
 
-        Log.d(TAG,"changeTempoByTaps: new [tempo: "+tempo + "] [delay: " + delay + "]");
     }
+
 
     private void startTimer(){
         handler.removeCallbacks(beatRunnable);
@@ -77,11 +120,13 @@ public class Metronome {
 
     public void stop(){
         handler.removeCallbacks(beatRunnable);
+        userTapList.clear();
         tempo = 0;
         delay = 0;
         previousTime = null;
         isPlaying = false;
     }
+
 
     public void tap(){
         if (previousTime == null) {
@@ -107,5 +152,24 @@ public class Metronome {
 
     public boolean isPlaying() {
         return isPlaying;
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return binder;
+    }
+
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        stop();
+        return super.onUnbind(intent);
+    }
+
+    public class LocalBinder extends Binder {
+        public Metronome getService() {
+            return Metronome.this;
+        }
     }
 }

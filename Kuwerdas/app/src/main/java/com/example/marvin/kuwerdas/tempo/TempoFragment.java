@@ -1,13 +1,15 @@
 package com.example.marvin.kuwerdas.tempo;
 
-import android.support.v4.app.Fragment;
+
 import android.content.Context;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,10 @@ import android.widget.Toast;
 import com.example.marvin.kuwerdas.R;
 import com.sdsmdg.harjot.crollerTest.Croller;
 import com.sdsmdg.harjot.crollerTest.OnCrollerChangeListener;
+
+import java.util.Arrays;
+
+import top.defaults.view.PickerView;
 
 import static android.content.Context.VIBRATOR_SERVICE;
 
@@ -36,6 +42,7 @@ public class TempoFragment extends Fragment {
 
     private Vibrator mVibrator;
     private View view;
+    private PickerView mPicker;
 
     @Nullable
     @Override
@@ -49,13 +56,22 @@ public class TempoFragment extends Fragment {
         return view;
     }
 
+    int crollerPreviousValue = 0;
 
     private void init(){
         mMetronome = new Metronome();
-        mMetronome.setTone(MediaPlayer.create(view.getContext(), R.raw.beat));
+/*        if (mMetronome.counter == mMetronome.maxcount){
+//            mMetronome.setTone(MediaPlayer.create(view.getContext(), R.raw.beephigh));
+            Log.d("TRY LOG MEDIA", "HIGH");
+        }
+        else{
+//            mMetronome.setTone(MediaPlayer.create(view.getContext(), R.raw.beeplow));
+            Log.d("TRY LOG MEDIA", "LOW");
+        }*/
 
+        mMetronome.setToneLow(MediaPlayer.create(view.getContext(), R.raw.beeplow));
+        mMetronome.setToneHigh(MediaPlayer.create(view.getContext(), R.raw.beephigh));
         audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
-
         mButtonTap = (Button) view.findViewById(R.id.btnTap);
         mButtonTap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,34 +92,50 @@ public class TempoFragment extends Fragment {
 
         mCroller = (Croller) view.findViewById(R.id.croller);
 //        mCroller.setIndicatorWidth(10);
-//        mCroller.setBackCircleColor(Color.parseColor("#EDEDED"));
-//        mCroller.setMainCircleColor(Color.WHITE);
-        mCroller.setMin(0);
-        mCroller.setMax(400);
-//        mCroller.setStartOffset(45);
+        mCroller.setBackCircleColor(Color.parseColor("#3e060d"));
+        mCroller.setMainCircleColor(Color.parseColor("#FAB36E"));
+        mCroller.setMin(20);
+        mCroller.setMax(250);
+        mCroller.setStartOffset(20);
         mCroller.setIsContinuous(true);
 //        mCroller.setLabelColor(Color.BLACK);
-//        mCroller.setProgressPrimaryColor(Color.parseColor("#0B3C49"));
-//        mCroller.setIndicatorColor(Color.parseColor("#0B3C49"));
-//        mCroller.setProgressSecondaryColor(Color.parseColor("#EEEEEE"));
+        mCroller.setProgressPrimaryColor(Color.parseColor("#FAB36E"));
+        mCroller.setIndicatorColor(Color.parseColor("#FAB36E"));
+        mCroller.setProgressSecondaryColor(Color.parseColor("#3e060d"));
 //        mCroller.setProgressRadius(380);
-//        mCroller.setBackCircleRadius(300);
-
+        mCroller.setBackCircleRadius(245);
+        mCroller.setProgress(0);
         mCroller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
+            boolean isTouched = false;
             @Override
             public void onProgressChanged(Croller croller, int progress) {
-                mMetronome.changeTempo(progress);
-                mButtonTap.setText(String.valueOf(mMetronome.getTempo()));
+                if(isTouched) {
+                    if (mMetronome.changeTempo(progress)) {
+                        mButtonTap.setText(String.valueOf(mMetronome.getTempo()));
+                        crollerPreviousValue = progress;
+                    } else
+                        mCroller.setProgress(crollerPreviousValue);
+                }
             }
 
             @Override
             public void onStartTrackingTouch(Croller croller) {
-                Toast.makeText(getActivity(), "Start", Toast.LENGTH_SHORT).show();
+                isTouched = true;
             }
 
             @Override
             public void onStopTrackingTouch(Croller croller) {
-                Toast.makeText(getActivity(), "Stop", Toast.LENGTH_SHORT).show();
+                isTouched = false;
+            }
+        });
+
+        mPicker = (PickerView) view.findViewById(R.id.pv_timeSig);
+        mPicker.setItemHeight(50);
+        mPicker.setCurved(true);
+        mPicker.setItems(Arrays.asList(TimeSignature.four_four,TimeSignature.six_eight,TimeSignature.two_four), new PickerView.OnItemSelectedListener<TimeSignature>() {
+            @Override
+            public void onItemSelected(TimeSignature item) {
+                mMetronome.setTimeSignature(item.getText());
             }
         });
     }
@@ -127,7 +159,7 @@ public class TempoFragment extends Fragment {
 
     @Override
     public void onPause(){
-        mMetronome.stop();
+//        mMetronome.stop();
         super.onPause();
     }
 }
