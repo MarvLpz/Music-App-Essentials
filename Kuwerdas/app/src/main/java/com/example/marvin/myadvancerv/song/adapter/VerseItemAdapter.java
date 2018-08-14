@@ -30,6 +30,11 @@ public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> 
         versesToDelete = new ArrayList<>();
     }
 
+    public void updateItems(List<Verse> verses){
+        mVerses = verses;
+        notifyDataSetChanged();
+    }
+
     public VerseItemAdapter(){
     }
 

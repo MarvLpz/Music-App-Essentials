@@ -41,6 +41,7 @@ import com.example.marvin.myadvancerv.song.adapter.LineItemAdapter;
 import com.example.marvin.myadvancerv.song.adapter.LineItemViewHolder;
 import com.example.marvin.myadvancerv.song.adapter.VerseItemAdapter;
 import com.example.marvin.myadvancerv.song.model.Chord;
+import com.example.marvin.myadvancerv.song.model.Line;
 import com.example.marvin.myadvancerv.song.model.Song;
 import com.example.marvin.myadvancerv.song.model.Verse;
 import com.example.marvin.myadvancerv.song.util.SongUtil;
@@ -74,6 +75,8 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
     private FloatingActionButton FloatAdd;
     private FloatingActionButton FloatDelete;
     private FloatingActionButton FloatTranspose;
+
+    private Song song;
 //    private BottomNavigationView mBottomNavigationView;
 
     LinearLayout linearLayout;
@@ -119,34 +122,50 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
     }
 
     public void Transpose(){
-        int pos1,pos2,pos3;
-        VerseItemAdapter verseItemAdapter = new VerseItemAdapter();
-        LineItemAdapter line = new LineItemAdapter();
-        ChordItemAdapter chordAdapt = new ChordItemAdapter();
+//        int pos1,pos2,pos3;
+//        VerseItemAdapter verseItemAdapter = new VerseItemAdapter();
+//        LineItemAdapter line = new LineItemAdapter();
+//        ChordItemAdapter chordAdapt = new ChordItemAdapter();
 
-        if (transClicked == true){
+        if (transClicked){
             /*if (holder.tv.getText().equals("A")){
                 holder.tv.setText("B");
             }*/
 
-            for (pos1 = 0;pos1 < verseItemAdapter.getSize; ++pos1){
-                Log.d("CHECKCONTAINERSTART","START " + String.valueOf(pos1));
-                for (pos2 = 0;pos2 < line.getSize; ++pos2){
-                    Log.d("CHECKCONTAINERSECOND",String.valueOf(pos2));
-                    for(pos3 = 0;pos3 < chordAdapt.getItemCount(); ++pos3){
-                        Log.d("CHECKCONTAINER",String.valueOf(pos3));
-                   Log.d("CHECKCHORD",String.valueOf(chordAdapt.myChord.get(pos3).getChord()));
-                   if(chordAdapt.myChord.get(pos3).getChord().equals("A")){
-                       Log.d("CHECKCHORDTorF","TRUE");
-                       chordAdapt.myChord.set(pos3, new Chord("B"));
-                       chordAdapt.notifyDataSetChanged();
-                   }
-               /* if (myChord.get(pos).getChord() == "A"){
-                    Log.d("CHECK CONTAINER","CONTAINS A");
-                }*/
+            for(Verse verse : song.getVerses()){
+                for(Line line: verse.getLines()){
+                    for(Chord chord : line.getChordSet()){
+                        String letter = chord.getChord();
+                        if(letter.equals("A")){
+                            letter = "B";
+                            Log.d("TRANSPOSE","letter was transposed");
+                        }
+
+                        chord.setChord(letter);
                     }
                 }
             }
+
+            adapter.updateItems(song.getVerses());
+
+//            for (pos1 = 0;pos1 < verseItemAdapter.getSize; ++pos1){
+//                Log.d("CHECKCONTAINERSTART","START " + String.valueOf(pos1));
+//                for (pos2 = 0;pos2 < line.getSize; ++pos2){
+//                    Log.d("CHECKCONTAINERSECOND",String.valueOf(pos2));
+//                    for(pos3 = 0;pos3 < chordAdapt.getItemCount(); ++pos3){
+//                        Log.d("CHECKCONTAINER",String.valueOf(pos3));
+//                   Log.d("CHECKCHORD",String.valueOf(chordAdapt.myChord.get(pos3).getChord()));
+//                   if(chordAdapt.myChord.get(pos3).getChord().equals("A")){
+//                       Log.d("CHECKCHORDTorF","TRUE");
+//                       chordAdapt.myChord.set(pos3, new Chord("B"));
+//                       chordAdapt.notifyDataSetChanged();
+//                   }
+//               /* if (myChord.get(pos).getChord() == "A"){
+//                    Log.d("CHECK CONTAINER","CONTAINS A");
+//                }*/
+//                    }
+//                }
+//            }
 
 
             Log.d("TRANSCLICK",String.valueOf(transClicked));
@@ -355,7 +374,7 @@ private class floatTransposeBtn implements View.OnClickListener{
                 "Daig mo pa ang isang kisapmata.";
 
 
-        Song song = SongUtil.asSong("Kisapmata","Rivermaya", lyrics);
+        song = SongUtil.asSong("Kisapmata","Rivermaya", lyrics);
         adapter = new VerseItemAdapter(song.getVerses());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        ItemTouchHelper.Callback callback = new EditItemTouchHelperCallback(adapter,recyclerView);
