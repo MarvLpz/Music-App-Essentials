@@ -26,7 +26,7 @@ import java.util.List;
 public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
     private List<Line> verseLines;
     private boolean onBind;
-
+    public static int getSize;
     private int focusPosition;
     private int currentPosition;
     private View itemView;
@@ -34,10 +34,11 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
     public LineItemAdapter(Verse data) {
         verseLines = data.getLines();
     }
+    public LineItemAdapter(){
+    }
 
     @Override
     public LineItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.line_layout, parent, false);
         return new LineItemViewHolder(itemView);
     }
@@ -51,6 +52,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
         etLine.setText(line.getLyrics());
 
         final int pos = holder.getAdapterPosition();
+
         etLine.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean focused) {
@@ -88,6 +90,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                 return false;
             }
         });
+
         etLine.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -99,6 +102,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                 for ( String ss : arr) {
                     myData.add (new MyList(ss));
                 }*/
+
                 if (!onBind) {
                     List<String> arr = Arrays.asList(charSequence.toString().split("\n"));
                     verseLines.set(currentPosition, new Line(arr.get(0)));
@@ -114,13 +118,11 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                 }
             }
 
-
             @Override
             public void afterTextChanged(Editable editable) {
 
             }
         });
-
 
         if(position == focusPosition){
             holder.getLineLyricsEditText().requestFocus();
@@ -129,11 +131,14 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
         //TODO fix chords
         holder.setChordList(line.getChordSet());
         onBind = false;
-
     }
 
     @Override
     public int getItemCount() {
+        getSize = verseLines.size();
         return verseLines.size();
+
     }
+
+//    public int getSize = verseLines.size();
 }

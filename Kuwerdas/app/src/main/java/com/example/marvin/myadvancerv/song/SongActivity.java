@@ -37,6 +37,8 @@ import com.example.marvin.myadvancerv.OnStartDragListener;
 import com.example.marvin.myadvancerv.R;
 //import com.example.marvin.myadvancerv.db.SongDatabase;
 import com.example.marvin.myadvancerv.song.adapter.ChordItemAdapter;
+import com.example.marvin.myadvancerv.song.adapter.LineItemAdapter;
+import com.example.marvin.myadvancerv.song.adapter.LineItemViewHolder;
 import com.example.marvin.myadvancerv.song.adapter.VerseItemAdapter;
 import com.example.marvin.myadvancerv.song.model.Chord;
 import com.example.marvin.myadvancerv.song.model.Song;
@@ -71,7 +73,7 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
 
     private FloatingActionButton FloatAdd;
     private FloatingActionButton FloatDelete;
-
+    private FloatingActionButton FloatTranspose;
 //    private BottomNavigationView mBottomNavigationView;
 
     LinearLayout linearLayout;
@@ -110,6 +112,68 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
         }*//*
      }*/
 
+    static boolean transClicked;
+
+    public void getTriggerTransposeBtn(boolean transClicked){
+        this.transClicked = transClicked;
+    }
+
+    public void Transpose(){
+        int pos1,pos2,pos3;
+        VerseItemAdapter verseItemAdapter = new VerseItemAdapter();
+        LineItemAdapter line = new LineItemAdapter();
+        ChordItemAdapter chordAdapt = new ChordItemAdapter();
+
+        if (transClicked == true){
+            /*if (holder.tv.getText().equals("A")){
+                holder.tv.setText("B");
+            }*/
+
+            for (pos1 = 0;pos1 < verseItemAdapter.getSize; ++pos1){
+                Log.d("CHECKCONTAINERSTART","START " + String.valueOf(pos1));
+                for (pos2 = 0;pos2 < line.getSize; ++pos2){
+                    Log.d("CHECKCONTAINERSECOND",String.valueOf(pos2));
+                    for(pos3 = 0;pos3 < chordAdapt.getItemCount(); ++pos3){
+                        Log.d("CHECKCONTAINER",String.valueOf(pos3));
+                   Log.d("CHECKCHORD",String.valueOf(chordAdapt.myChord.get(pos3).getChord()));
+                   if(chordAdapt.myChord.get(pos3).getChord().equals("A")){
+                       Log.d("CHECKCHORDTorF","TRUE");
+                       chordAdapt.myChord.set(pos3, new Chord("B"));
+                       chordAdapt.notifyDataSetChanged();
+                   }
+               /* if (myChord.get(pos).getChord() == "A"){
+                    Log.d("CHECK CONTAINER","CONTAINS A");
+                }*/
+                    }
+                }
+            }
+
+
+            Log.d("TRANSCLICK",String.valueOf(transClicked));
+        }
+    }
+
+private class floatTransposeBtn implements View.OnClickListener{
+
+    boolean clickedTranspose = false;
+    @Override
+    public void onClick(View v) {
+        Log.d("TRANSCLICK", "clicked");
+        if (clickedTranspose == false){
+            clickedTranspose = true;
+            Log.d("TRANSCLICK TorF", String.valueOf(clickedTranspose));
+//            VerseItemAdapter verseItemAdapter = new VerseItemAdapter();
+            getTriggerTransposeBtn(clickedTranspose);
+            Transpose();
+//            verseItemAdapter.Transpose();
+        }
+        clickedTranspose = false;
+//        clickedTranspose = true;
+        }
+    }
+
+
+
     private class floataddBtn implements View.OnClickListener{
 
         boolean clicked = false;
@@ -130,7 +194,6 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
                 FloatAdd.setAlpha(127);
                 FloatDelete.setClickable(true);
             }
-
         }
     }
 
@@ -180,6 +243,8 @@ public class SongActivity extends AppCompatActivity  implements OnStartDragListe
         FloatDelete.setOnClickListener(new floatdelBtn());
         FloatAdd.setAlpha(127);
         FloatDelete.setAlpha(80);
+        FloatTranspose = (FloatingActionButton) findViewById(R.id.floatingTransposeButton);
+        FloatTranspose .setOnClickListener(new floatTransposeBtn());
         linearLayout = (LinearLayout) findViewById(R.id.frame_place);
         linearLayout.setOnTouchListener(new touchMe());
         linearLayout.setVisibility(View.INVISIBLE);

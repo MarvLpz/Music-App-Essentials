@@ -11,6 +11,7 @@ import com.example.marvin.myadvancerv.R;
 import com.example.marvin.myadvancerv.song.adapter.itemtouch.ItemClickCallback;
 import com.example.marvin.myadvancerv.song.adapter.itemtouch.ItemTouchHelperAdapter;
 import com.example.marvin.myadvancerv.song.model.Chord;
+import com.example.marvin.myadvancerv.song.model.Line;
 import com.example.marvin.myadvancerv.song.model.Verse;
 
 import java.util.ArrayList;
@@ -21,11 +22,15 @@ public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> 
     private static final String TAG = "TAGGY";
 
     List<Verse> mVerses;
+    public static int getSize;
     List<Verse> versesToDelete;
     ArrayList<Chord> chordLists = new ArrayList<Chord>();
     public VerseItemAdapter(List<Verse> mVerses){
         this.mVerses = mVerses;
         versesToDelete = new ArrayList<>();
+    }
+
+    public VerseItemAdapter(){
     }
 
     @Override
@@ -42,44 +47,13 @@ public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> 
 
     @Override
     public int getItemCount() {
+        getSize = mVerses.size();
         return mVerses.size();
     }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    private void displayListView() {
-
-
-        Chord chord = new Chord("D");
-        chordLists.add(chord);
-
-        chord = new Chord("E");
-        chordLists.add(chord);
-        chord = new Chord("");
-        chordLists.add(chord);
-        chord = new Chord("");
-        chordLists.add(chord);
-        chord = new Chord("");
-        chordLists.add(chord);
-        chord = new Chord("");
-        chordLists.add(chord);
-        chord = new Chord("F");
-        chordLists.add(chord);
-        chord = new Chord("");
-        chordLists.add(chord);
-        chord = new Chord("");
-        chordLists.add(chord);
-        chord = new Chord("G");
-        chordLists.add(chord);
-        chord = new Chord("A");
-        chordLists.add(chord);
-        chord = new Chord("A");
-        chordLists.add(chord);
-        
-
     }
 
     @Override
@@ -129,5 +103,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> 
         Chord chord = chordLists.get(p);
 //        dataAdapter.notifyDataSetChanged();
     }
+
+
 }
 

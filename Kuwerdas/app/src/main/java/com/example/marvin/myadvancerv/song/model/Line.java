@@ -32,6 +32,8 @@ public class Line {
         this.lyrics = lyrics;
         initializeEmptyChordSet();
     }
+    public Line(){
+    }
 
     public boolean addChord(Chord chord, int pos){
         if(pos>=0 && pos<=9){

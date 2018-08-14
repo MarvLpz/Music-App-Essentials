@@ -21,7 +21,6 @@ public class LineItemViewHolder extends RecyclerView.ViewHolder {
     private ItemTouchHelper itemTouchHelper;
     private ChordItemAdapter adapter;
 
-
     public LineItemViewHolder(View itemView) {
         super(itemView);
         // initialize the View objects
@@ -37,8 +36,9 @@ public class LineItemViewHolder extends RecyclerView.ViewHolder {
         itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback.createHelperCallback());
         itemTouchHelper.attachToRecyclerView(rvChords);
         rvChords.setAdapter(adapter);
-
     }
+
+
 
     public RecyclerView getRvChords() {
         return rvChords;

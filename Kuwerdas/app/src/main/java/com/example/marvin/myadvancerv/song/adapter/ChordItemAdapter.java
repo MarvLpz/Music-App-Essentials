@@ -25,7 +25,7 @@ import java.util.List;
 
 public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
     Context con;
-    private List<Chord> myChord;
+    public static List<Chord> myChord;
     private ItemClickCallback itemClickCallback;
 
     float dX;
@@ -35,6 +35,7 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
     TextView testview;
     static String DragChord;
     static boolean delClicked;
+
     public ChordItemAdapter(Context context, List<Chord> _myChord ){
         con = context;
         myChord = _myChord;
@@ -51,6 +52,7 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
     public void getTriggerDelBtn(boolean delClicked){
         this.delClicked = delClicked;
     }
+
     private class ChoiceDragListener implements View.OnDragListener{
         int positionChord;
         @Override
@@ -84,11 +86,9 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
                 case DragEvent.ACTION_DRAG_ENDED:
                     break;
             }
-
             return true;
         }
     }
-
 
     public void setItemClickCallback(final ItemClickCallback itemClickCallback){
         this.itemClickCallback = itemClickCallback;
@@ -114,7 +114,6 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         TextView  ChoiceTextView = (TextView) view.findViewById(R.id.etChord);
         ChoiceTextView.setOnClickListener(new ChoiceClickListener());
         ChoiceTextView.setOnDragListener(new ChoiceDragListener());
-
         return new ChordItemViewHolder(view);
     }
 
@@ -131,5 +130,6 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
     public int getItemCount() {
         return Line.CHORD_SET_LENGTH;
     }
+
 
 }
