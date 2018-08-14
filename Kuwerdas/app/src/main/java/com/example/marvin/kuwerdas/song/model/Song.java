@@ -67,6 +67,6 @@ public class Song implements Serializable{
 
     @Override
     public String toString(){
-        return "songId: " + uid + " - " + songTitle + " - " + artist + "\n\n" + verses;
+        return "[" + uid + " - " + songTitle + " - " + artist + " ]";
     }
 }

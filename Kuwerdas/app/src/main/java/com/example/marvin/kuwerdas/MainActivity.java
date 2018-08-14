@@ -20,12 +20,13 @@ import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.search.SearchFragment;
 import com.example.marvin.kuwerdas.search.adapter.SongItemAdapter;
 import com.example.marvin.kuwerdas.song.model.Song;
+import com.example.marvin.kuwerdas.song.util.SongUtil;
 import com.example.marvin.kuwerdas.tempo.TempoFragment;
 import com.example.marvin.kuwerdas.tuner.TunerFragment;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     public interface OnNewSearchResult {
         public boolean onNewSearchResult(List<Song> songs);
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private static final String DATABASE_NAME = "SONG_DATABASE";
 
+    public static OnNewSearchResult callback;
     private RecyclerView rvSearchResults;
     private SongItemAdapter adapter;
     private SongDatabase database;
@@ -41,8 +43,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         init();
+
     }
 
     private boolean loadFragment(Fragment fragment) {
@@ -62,11 +64,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_view_menu_item, menu);
         MenuItem searchViewItem = menu.findItem(R.id.action_search);
+
         final SearchView searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
         searchViewAndroidActionBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchViewAndroidActionBar.clearFocus();
+                loadFragment(new SearchFragment());
                 (new SearchSongDatabaseTask(query)).execute();
                 return true;
             }
@@ -120,11 +124,31 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         @Override
         protected void onPostExecute(List<Song> songList) {
-            adapter.updateItems(songList);
+            callback.onNewSearchResult(songList);
         }
     }
 
+    private class InsertSongDatabaseTask extends AsyncTask<Void,Void,Integer> {
+        Song song;
+
+        public InsertSongDatabaseTask(Song song){
+            this.song = song;
+        }
+
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            return database.songDao().insertSong(song);
+        }
+
+        @Override
+        protected void onPostExecute(Integer id) {
+        }
+    }
+
+
     public void init(){
+
         //loading the default fragment
         loadFragment(new SearchFragment());
 

@@ -27,10 +27,23 @@ import com.example.marvin.kuwerdas.song.model.Song;
 
 import java.util.List;
 
-public class SearchFragment extends Fragment implements SongItemAdapter.RecyclerViewItemClickListener{
+public class SearchFragment extends Fragment implements SongItemAdapter.RecyclerViewItemClickListener, MainActivity.OnNewSearchResult{
+
+    @Override
+    public boolean onNewSearchResult(List<Song> songs) {
+        adapter.updateItems(songs);
+        Log.d("UPDATE ITEM","Your query: " + songs);
+        Log.d("UPDATE ITEM","Your items: " + adapter.getItemCount());
+
+        return false;
+    }
 
     public interface OnClickSearchItem{
         boolean onClickSearchItem(Song item);
+    }
+
+    public SearchFragment(){
+        MainActivity.callback = this;
     }
 
     private OnClickSearchItem callback;
@@ -56,15 +69,9 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
     public void init(){
         rvSearchResults = (RecyclerView) view.findViewById(R.id.rvSearchResults);
         rvSearchResults.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
-        database = Room.databaseBuilder(view.getContext(), SongDatabase.class, DATABASE_NAME).build();
-
-        adapter = new SongItemAdapter(this);
+        adapter = new SongItemAdapter();
         rvSearchResults.setAdapter(adapter);
-
-        (new SearchSongDatabaseTask()).execute();
-    }
-
+        }
 
 
     @Override
@@ -76,27 +83,4 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
 //        startActivity(mIntent);
     }
 
-    private class SearchSongDatabaseTask extends AsyncTask<Void,Void,List<Song>> {
-        String search;
-
-        public SearchSongDatabaseTask(String search){
-            this.search = search;
-        }
-
-        public SearchSongDatabaseTask(){
-            this.search = "";
-        }
-
-
-        @Override
-        protected List<Song> doInBackground(Void... voids) {
-            search = "%" + search + "%";
-            return database.songDao().getSongsFromSearch(search);
-        }
-
-        @Override
-        protected void onPostExecute(List<Song> songList) {
-            adapter.updateItems(songList);
-        }
-    }
 }
