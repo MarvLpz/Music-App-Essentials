@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.marvin.kuwerdas.OnStartDragListener;
 import com.example.marvin.kuwerdas.R;
@@ -32,6 +35,29 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
     private SongDatabase database;
     public static Song song;
     private View view;
+
+    TextView tv_DragChord1;
+    TextView tv_DragChord2;
+    TextView tv_DragChord3;
+    TextView tv_DragChord4;
+    TextView tv_DragChord5;
+    TextView tv_DragChord6;
+    TextView tv_DragChord7;
+
+    String get_accidental = "",get_scale= "",get_number= "";
+
+    float dX;
+    float dY;
+    int lastAction;
+
+    private FloatingActionButton FloatAdd;
+    private FloatingActionButton FloatDelete;
+
+//    private BottomNavigationView mBottomNavigationView;
+
+    LinearLayout linearLayout;
+
+    //    private ItemTouchHelper itemTouchHelper;
 
     @Nullable
     @Override
@@ -68,6 +94,32 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
 
     }
 
+    public void instantiate(){
+/*        tv_DragChord1 = (TextView) view.findViewById(R.id.tv_dragChord1);
+        tv_DragChord2 = (TextView) findViewById(R.id.tv_dragChord2);
+        tv_DragChord3 = (TextView) findViewById(R.id.tv_dragChord3);
+        tv_DragChord4 = (TextView) findViewById(R.id.tv_dragChord4);
+        tv_DragChord5 = (TextView) findViewById(R.id.tv_dragChord5);
+        tv_DragChord6 = (TextView) findViewById(R.id.tv_dragChord6);
+        tv_DragChord7 = (TextView) findViewById(R.id.tv_dragChord7);
+        tv_DragChord1.setOnTouchListener(new ChoiceTouchListener());
+        tv_DragChord2.setOnTouchListener(new ChoiceTouchListener());
+        tv_DragChord3.setOnTouchListener(new ChoiceTouchListener());
+        tv_DragChord4.setOnTouchListener(new ChoiceTouchListener());
+        tv_DragChord5.setOnTouchListener(new ChoiceTouchListener());
+        tv_DragChord6.setOnTouchListener(new ChoiceTouchListener());
+        tv_DragChord7.setOnTouchListener(new ChoiceTouchListener());
+
+        FloatAdd = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        FloatDelete = (FloatingActionButton) findViewById(R.id.floatingDeleteButton);
+        FloatAdd.setOnClickListener(new floataddBtn());
+        FloatDelete.setOnClickListener(new floatdelBtn());
+        FloatAdd.setAlpha(127);
+        FloatDelete.setAlpha(80);
+        linearLayout = (LinearLayout) findViewById(R.id.frame_place);
+        linearLayout.setOnTouchListener(new touchMe());
+        linearLayout.setVisibility(View.INVISIBLE);*/
+    }
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         itemTouchHelper.startDrag(viewHolder);

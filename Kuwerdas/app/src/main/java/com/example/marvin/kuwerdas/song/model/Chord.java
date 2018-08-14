@@ -5,7 +5,7 @@ import android.arch.persistence.room.PrimaryKey;
 
 @Entity
 public class Chord {
-    public static final String EMPTY_CHORD = " ";
+    public static final String EMPTY_CHORD = "  ";
 
     @PrimaryKey(autoGenerate = true)
     private int id;

@@ -17,7 +17,7 @@ public class LineItemViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         // initialize the View objects
         this.itemView = itemView;
-        gridLayout = (GridLayout) itemView.findViewById(R.id.glChords);
+//        gridLayout = (GridLayout) itemView.findViewById(R.id.glChords);
         lineLyricsEditText = (EditText) itemView.findViewById(R.id.etLine);
     }
 
