@@ -1,5 +1,6 @@
 package com.example.marvin.kuwerdas.search.adapter;
 
+import android.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -7,7 +8,7 @@ import android.widget.TextView;
 import com.example.marvin.kuwerdas.R;
 
 
-public class SongItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class SongItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private TextView tvTitle;
     private TextView tvArtist;

@@ -36,6 +36,7 @@ public class SongItemAdapter extends RecyclerView.Adapter<SongItemViewHolder>{
         notifyDataSetChanged();
     }
 
+
     @NonNull
     @Override
     public SongItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

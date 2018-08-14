@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,19 +17,20 @@ import android.view.ViewGroup;
 import com.example.marvin.kuwerdas.OnStartDragListener;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabase;
+import com.example.marvin.kuwerdas.search.SearchFragment;
 import com.example.marvin.kuwerdas.song.adapter.VerseItemAdapter;
 import com.example.marvin.kuwerdas.song.model.Song;
 
 import java.util.Objects;
 
-public class SongFragment extends Fragment implements OnStartDragListener {
+public class SongFragment extends Fragment implements OnStartDragListener,SearchFragment.OnChangeSong {
 
     private VerseItemAdapter adapter;
     private RecyclerView recyclerView;
     private ItemTouchHelper itemTouchHelper;
     private final String DATABASE_NAME = "SONG_DATABASE";
     private SongDatabase database;
-    private Song song;
+    public static Song song;
     private View view;
 
     @Nullable
@@ -40,6 +42,7 @@ public class SongFragment extends Fragment implements OnStartDragListener {
         //if it is DashboardFragment it should have R.layout.fragment_dashboard
         view = inflater.inflate(R.layout.fragment_song, null);
         init();
+        SearchFragment.callback = this;
         return view;
     }
 
@@ -48,18 +51,33 @@ public class SongFragment extends Fragment implements OnStartDragListener {
         database = Room.databaseBuilder(Objects.requireNonNull(getActivity()), SongDatabase.class, DATABASE_NAME).build();
         recyclerView = view.findViewById(R.id.rvSong);
 
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            song = (Song) bundle.getSerializable("Song");
-        }
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+//        Bundle bundle = this.getArguments();
+//        if (bundle != null) {
+//            song = (Song) bundle.getSerializable("Song");
+//        }
 
-        (new GetSongDetailsDatabaseTask()).execute();
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        if(song!=null){
+            Log.d("SONG","found song" + song);
+            new GetSongDetailsDatabaseTask().execute();
+            onChangeSong(song);
+        }
+        else
+            Log.d("SONG", "no song found");
+
+
     }
 
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         itemTouchHelper.startDrag(viewHolder);
+    }
+
+    @Override
+    public void onChangeSong(Song item) {
+        song = item;
+        adapter = new VerseItemAdapter(song.getVerses());
+        recyclerView.setAdapter(adapter);
     }
 
     private class GetSongDetailsDatabaseTask extends AsyncTask<Void,Void,Song> {
@@ -70,11 +88,9 @@ public class SongFragment extends Fragment implements OnStartDragListener {
         }
 
         @Override
-        protected void onPostExecute(Song song) {
-            super.onPostExecute(song);
-
-            adapter = new VerseItemAdapter(song.getVerses());
-            recyclerView.setAdapter(adapter);
+        protected void onPostExecute(Song s) {
+            super.onPostExecute(s);
+            onChangeSong(s);
         }
     }
 

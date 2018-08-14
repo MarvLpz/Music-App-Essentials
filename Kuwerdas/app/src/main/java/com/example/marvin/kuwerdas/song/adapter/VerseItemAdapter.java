@@ -39,7 +39,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> 
 
     @Override
     public int getItemCount() {
-        return mVerses.size();
+        return (mVerses!=null) ? mVerses.size() : -1;
     }
 
     @Override
