@@ -83,5 +83,9 @@ public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> 
         notifyItemRemoved(adapterPosition);
         versesToDelete.add(mVerse);
     }
+
+    public List<Verse> getItems() {
+        return mVerses;
+    }
 }
 

@@ -26,7 +26,10 @@ import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.search.SearchFragment;
 import com.example.marvin.kuwerdas.song.adapter.ChordItemAdapter;
 import com.example.marvin.kuwerdas.song.adapter.VerseItemAdapter;
+import com.example.marvin.kuwerdas.song.model.Chord;
+import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Song;
+import com.example.marvin.kuwerdas.song.model.Verse;
 
 import java.util.Objects;
 
@@ -132,6 +135,17 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
             }
             return true;
 
+        }
+    }
+
+    public void Transpose(){
+        for(Verse verse : adapter.getItems())
+        {
+            for(Line line : verse.getLines()){
+                for(Chord chord : line.getChordSet()){
+                    chord.setChord(transposeChord(chord.getChord()));
+                }
+            }
         }
     }
 
@@ -332,6 +346,4 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
             onChangeSong(s);
         }
     }
-
-
 }
