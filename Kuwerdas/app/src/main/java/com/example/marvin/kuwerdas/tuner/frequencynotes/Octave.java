@@ -1,12 +1,10 @@
-package com.example.marvin.kuwerdas.tuner;
-
-import java.util.List;
+package com.example.marvin.kuwerdas.tuner.frequencynotes;
 
 public class Octave {
     int number;
     float min;
     float max;
-    TuneString[] notes;
+    Note[] notes;
 
     public Octave(int number, float min, float max) {
         this.number = number;
@@ -38,11 +36,11 @@ public class Octave {
         this.max = max;
     }
 
-    public TuneString[] getNotes() {
+    public Note[] getNotes() {
         return notes;
     }
 
-    public void setNotes(TuneString[] notes) {
+    public void setNotes(Note[] notes) {
         this.notes = notes;
     }
 

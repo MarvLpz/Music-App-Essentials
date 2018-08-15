@@ -40,7 +40,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public static OnNewSearchResult callback;
     public static OnChangeFragment onChangeFragment;
     private SongDatabase database;
+
     private SearchView searchViewAndroidActionBar;
+    private MenuItem searchViewItem;
+
+    private OnChangeFragment.Frags currentFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_view_menu_item, menu);
-        MenuItem searchViewItem = menu.findItem(R.id.action_search);
+        searchViewItem = menu.findItem(R.id.action_search);
 
         searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
         searchViewAndroidActionBar.setOnSearchClickListener(new View.OnClickListener() {
@@ -110,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             public boolean onQueryTextSubmit(String query) {
                 searchViewAndroidActionBar.clearFocus();
                 loadFragment(new SearchFragment());
+                currentFragment = Frags.SEARCH;
                 (new SearchSongDatabaseTask(query)).execute();
                 return true;
             }
@@ -126,23 +131,50 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
      Fragment fragment = null;
- 
+     searchViewItem.collapseActionView();
         switch (item.getItemId()) {
             case R.id.navigation_song:
+                if(currentFragment == Frags.SONG)
+                    return false;
                 fragment = new SongFragment();
+                currentFragment = Frags.SONG;
                 break;
  
             case R.id.navigation_tempo:
+                if(currentFragment == Frags.TEMPO)
+                    return false;
+
                 fragment = new TempoFragment();
+                currentFragment = Frags.TEMPO;
                 break;
  
             case R.id.navigation_tuner:
+                if(currentFragment == Frags.TUNER)
+                    return false;
+
                 fragment = new TunerFragment();
+                currentFragment = Frags.TUNER;
                 break;
         }
  
         return loadFragment(fragment); 
     }
+
+
+    private void init(){
+        //loading the default fragment
+        loadFragment(new SearchFragment());
+        currentFragment = Frags.SEARCH;
+
+        onChangeFragment = this;
+        //getting bottom navigation view and attaching the listener
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(this);
+
+        database = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, DATABASE_NAME).build();
+        (new SearchSongDatabaseTask()).execute();
+    }
+
 
     private class SearchSongDatabaseTask extends AsyncTask<Void,Void,List<Song>> {
         String search;
@@ -164,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         @Override
         protected void onPostExecute(List<Song> songList) {
             if(callback!=null)
-            callback.onNewSearchResult(songList);
+                callback.onNewSearchResult(songList);
         }
     }
 
@@ -184,18 +216,5 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         @Override
         protected void onPostExecute(Integer id) {
         }
-    }
-
-
-    public void init(){
-        //loading the default fragment
-        loadFragment(new SongFragment());
-        onChangeFragment = this;
-        //getting bottom navigation view and attaching the listener
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(this);
-
-        database = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, DATABASE_NAME).build();
-        (new SearchSongDatabaseTask()).execute();
     }
 }

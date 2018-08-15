@@ -11,8 +11,16 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:gravity="center"
-        android:textAlignment="center"
-        android:textSize="36sp"
+        android:paddingBottom="100dp"
+        android:textColor="@android:color/black"
+        android:textSize="200sp"
         tools:layout_editor_absoluteX="131dp"
         tools:layout_editor_absoluteY="235dp" />
+
+    <com.example.marvin.kuwerdas.tuner.TunerView
+        android:id="@+id/tunerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
 </RelativeLayout>

@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -13,8 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.example.marvin.kuwerdas.OnStartDragListener;
+import com.example.marvin.kuwerdas.song.adapter.itemtouch.OnStartDragListener;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.search.SearchFragment;
@@ -51,6 +51,8 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         database = Room.databaseBuilder(Objects.requireNonNull(getActivity()), SongDatabase.class, DATABASE_NAME).build();
         recyclerView = view.findViewById(R.id.rvSong);
 
+
+
 //        Bundle bundle = this.getArguments();
 //        if (bundle != null) {
 //            song = (Song) bundle.getSerializable("Song");
@@ -62,9 +64,8 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
             new GetSongDetailsDatabaseTask().execute();
             onChangeSong(song);
         }
-        else
-            Log.d("SONG", "no song found");
 
+        (view.findViewById(R.id.tvNoSong)).setVisibility(song==null ? View.VISIBLE : View.GONE);
 
     }
 

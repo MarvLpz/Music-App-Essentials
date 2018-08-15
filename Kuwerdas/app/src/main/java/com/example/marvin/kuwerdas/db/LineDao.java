@@ -17,6 +17,7 @@ public abstract class LineDao {
     @Query("DELETE FROM line")
     public abstract void deleteAll();
 
+
     @Insert
     abstract void _insertLine(Line line);
 

@@ -159,7 +159,15 @@ public class TempoFragment extends Fragment {
 
     @Override
     public void onPause(){
-//        mMetronome.stop();
         super.onPause();
+
+//        mMetronome.stop();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        mMetronome.stop();
     }
 }

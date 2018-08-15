@@ -1,4 +1,4 @@
-package com.example.marvin.kuwerdas;
+package com.example.marvin.kuwerdas.song.adapter.itemtouch;
 
 import android.support.v7.widget.RecyclerView;
 
