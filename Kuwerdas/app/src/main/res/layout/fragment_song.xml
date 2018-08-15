@@ -6,6 +6,21 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingDeleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="69dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/delete"
+        app:backgroundTint="#f57777"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:useCompatPadding="true" />
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
         app:backgroundTint="#76d177"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -18,10 +33,14 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/plus" />
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvSong"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
     <LinearLayout
         android:id="@+id/frame_place"
@@ -109,28 +128,28 @@
                 android:textSize="20dp" />
         </LinearLayout>
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:gravity="center_horizontal"-->
-            <!--android:orientation="horizontal">-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-            <!--<top.defaults.view.PickerView-->
-                <!--android:id="@+id/accidental"-->
-                <!--android:layout_width="110dp"-->
-                <!--android:layout_height="wrap_content" />-->
+            <top.defaults.view.PickerView
+                android:id="@+id/accidental"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content" />
 
-            <!--<top.defaults.view.PickerView-->
-                <!--android:id="@+id/scale"-->
-                <!--android:layout_width="110dp"-->
-                <!--android:layout_height="wrap_content" />-->
+            <top.defaults.view.PickerView
+                android:id="@+id/scale"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content" />
 
-            <!--<top.defaults.view.PickerView-->
-                <!--android:id="@+id/number"-->
-                <!--android:layout_width="110dp"-->
-                <!--android:layout_height="wrap_content" />-->
+            <top.defaults.view.PickerView
+                android:id="@+id/number"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content" />
 
-        <!--</LinearLayout>-->
+        </LinearLayout>
 
 
     </LinearLayout>

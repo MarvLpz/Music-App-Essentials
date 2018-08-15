@@ -75,15 +75,14 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         view = inflater.inflate(R.layout.fragment_song, null);
         init();
         instantiate();
+        showPicker();
         SearchFragment.callback = this;
         return view;
     }
 
-
     private void init(){
         database = Room.databaseBuilder(Objects.requireNonNull(getActivity()), SongDatabase.class, DATABASE_NAME).build();
         recyclerView = view.findViewById(R.id.rvSong);
-
 //        Bundle bundle = this.getArguments();
 //        if (bundle != null) {
 //            song = (Song) bundle.getSerializable("Song");
@@ -159,6 +158,30 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
 
         }
     }
+    public class floatdelBtn implements View.OnClickListener{
+        boolean delClicked = false;
+        @Override
+        public void onClick(View v) {
+            if (delClicked == false){
+                ChordItemAdapter triggerClicked = new ChordItemAdapter();
+                delClicked = true;
+                triggerClicked.getTriggerDelBtn(delClicked);
+                FloatDelete.setAlpha(255);
+                linearLayout.setVisibility(View.INVISIBLE);
+                FloatAdd.setClickable(false);
+//                FloatAdd.setAlpha(127);
+            }
+            else if (delClicked == true){
+                ChordItemAdapter triggerClicked = new ChordItemAdapter();
+                delClicked = false;
+                triggerClicked.getTriggerDelBtn(delClicked);
+                FloatDelete.setAlpha(80);
+                FloatAdd.setClickable(true);
+//                FloatAdd.setAlpha(255);
+            }
+
+        }
+    }
     public final class ChoiceTouchListener implements View.OnTouchListener{
 
         @Override
@@ -226,64 +249,64 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         tv_DragChord7.setOnTouchListener(new ChoiceTouchListener());
 
         FloatAdd = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
-//        FloatDelete = (FloatingActionButton) view.findViewById(R.id.floatingDeleteButton);
+        FloatDelete = (FloatingActionButton) view.findViewById(R.id.floatingDeleteButton);
         FloatAdd.setOnClickListener(new floataddBtn());
         FloatAdd = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
-//        FloatDelete.setOnClickListener(new floatdelBtn());
+        FloatDelete.setOnClickListener(new floatdelBtn());
         FloatAdd.setAlpha(127);
-//        FloatDelete.setAlpha(80);
+        FloatDelete.setAlpha(80);
 
         linearLayout = (LinearLayout) view.findViewById(R.id.frame_place);
         linearLayout.setOnTouchListener(new touchMe());
         linearLayout.setVisibility(View.INVISIBLE);
     }
 
-//    public void showPicker() {
-//        Picker picker = new Picker();
-//        PickerView accidental = view.findViewById(R.id.accidental);
-//
-//        accidental.setTextSize(40);
-//
-//        accidental.setItems(picker.pickerAccidentals, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
-//            @Override
-//            public void onItemSelected(PickerView.PickerItem item) {
-//                if (item.getText() == "x") { get_accidental = "";}
-//                else {
-//                    get_accidental = item.getText();
-//                }
-//
-////                Toast.makeText(this.getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        PickerView scale = view.findViewById(R.id.scale);
-//        scale.setTextSize(40);
-//
-//        scale.setItems(picker.pickerScale, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
-//            @Override
-//            public void onItemSelected(PickerView.PickerItem item) {
-//                if (item.getText() == "x") {get_scale = ""; }
-//                else {
-//                    get_scale = item.getText();
-//                }
-////                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        PickerView number = view.findViewById(R.id.number);
-//        number.setTextSize(40);
-//        number.setItems(picker.pickerNumber, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
-//            @Override
-//            public void onItemSelected(PickerView.PickerItem item) {
-//
-//                if (item.getText() == "x") { get_number = "";}
-//                else {
-//                    get_number = item.getText();
-//                }
-////                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    public void showPicker() {
+        Picker picker = new Picker();
+        PickerView accidental = view.findViewById(R.id.accidental);
+
+        accidental.setTextSize(40);
+
+        accidental.setItems(picker.pickerAccidentals, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
+            @Override
+            public void onItemSelected(PickerView.PickerItem item) {
+                if (item.getText() == "x") { get_accidental = "";}
+                else {
+                    get_accidental = item.getText();
+                }
+
+//                Toast.makeText(this.getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        PickerView scale = view.findViewById(R.id.scale);
+        scale.setTextSize(40);
+
+        scale.setItems(picker.pickerScale, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
+            @Override
+            public void onItemSelected(PickerView.PickerItem item) {
+                if (item.getText() == "x") {get_scale = ""; }
+                else {
+                    get_scale = item.getText();
+                }
+//                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        PickerView number = view.findViewById(R.id.number);
+        number.setTextSize(40);
+        number.setItems(picker.pickerNumber, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
+            @Override
+            public void onItemSelected(PickerView.PickerItem item) {
+
+                if (item.getText() == "x") { get_number = "";}
+                else {
+                    get_number = item.getText();
+                }
+//                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         itemTouchHelper.startDrag(viewHolder);
