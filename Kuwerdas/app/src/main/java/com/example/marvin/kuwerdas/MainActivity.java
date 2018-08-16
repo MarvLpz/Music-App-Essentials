@@ -28,8 +28,13 @@ import com.example.marvin.kuwerdas.tempo.TempoFragment;
 import com.example.marvin.kuwerdas.tuner.TunerFragment;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, OnChangeFragment{
+
+    TempoFragment tempoFragment;
+    SongFragment songFragment;
+    TunerFragment tunerFragment;
 
     public interface OnNewSearchResult {
         public boolean onNewSearchResult(List<Song> songs);
@@ -50,6 +55,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tempoFragment = new TempoFragment();
+        songFragment = new SongFragment();
+        tunerFragment = new TunerFragment();
+
         init();
 
     }
@@ -58,15 +68,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public void change(OnChangeFragment.Frags frag) {
         switch(frag){
             case SONG:
-                loadFragment(new SongFragment());
+                loadFragment(songFragment);
                 clearSearch();
                 break;
             case TEMPO:
-                loadFragment(new TempoFragment());
+                loadFragment(tempoFragment);
                 clearSearch();
                 break;
             case TUNER:
-                loadFragment(new TunerFragment());
+                loadFragment(tunerFragment);
                 clearSearch();
                 break;
             case SEARCH:
@@ -85,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private boolean loadFragment(Fragment fragment) {
         if(searchViewItem!=null)
-        searchViewItem.collapseActionView();
+            searchViewItem.collapseActionView();
         //switching fragment 
         if (fragment != null) {
             getSupportFragmentManager()
@@ -96,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
         return false;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -138,6 +147,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.navigation_song:
                 if(currentFragment == Frags.SONG)
                     return false;
+
+
                 fragment = new SongFragment();
                 currentFragment = Frags.SONG;
                 break;
@@ -166,8 +177,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void init(){
         //loading the default fragment
         database = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, DATABASE_NAME).build();
+        Objects.requireNonNull(ViewTools.findActionBarTitle(getWindow().getDecorView())).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFragment(new SearchFragment());
+            }
+        });
 
-        loadFragment(new SongFragment());
+        loadFragment(songFragment);
         loadFragment(new SearchFragment());
         currentFragment = Frags.SEARCH;
         onChangeFragment = this;
