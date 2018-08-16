@@ -84,18 +84,18 @@ public class TempoFragment extends Fragment {
 
         mCroller = (Croller) view.findViewById(R.id.croller);
 //        mCroller.setIndicatorWidth(10);
-        mCroller.setBackCircleColor(Color.parseColor("#3e060d"));
-        mCroller.setMainCircleColor(Color.parseColor("#FAB36E"));
+        mCroller.setBackCircleColor(Color.parseColor("#8CA7A6A7"));
+        mCroller.setMainCircleColor(Color.parseColor("#8CA7A6A7"));
         mCroller.setMin(20);
         mCroller.setMax(250);
         mCroller.setStartOffset(20);
         mCroller.setIsContinuous(true);
 //        mCroller.setLabelColor(Color.BLACK);
-        mCroller.setProgressPrimaryColor(Color.parseColor("#FAB36E"));
+        mCroller.setProgressPrimaryColor(Color.parseColor("#df8b37"));
         mCroller.setIndicatorColor(Color.parseColor("#FAB36E"));
-        mCroller.setProgressSecondaryColor(Color.parseColor("#3e060d"));
-//        mCroller.setProgressRadius(380);
-        mCroller.setBackCircleRadius(245);
+        mCroller.setProgressSecondaryColor(Color.parseColor("#818181"));
+        mCroller.setProgressRadius(365);
+        mCroller.setBackCircleRadius(400);
         mCroller.setProgress(0);
         mCroller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
             boolean isTouched = false;
@@ -122,7 +122,9 @@ public class TempoFragment extends Fragment {
         });
 
         mPicker = (PickerView) view.findViewById(R.id.pv_timeSig);
-        mPicker.setItemHeight(50);
+        mPicker.setItemHeight(100);
+        mPicker.setTextSize(60);
+        mPicker.setTextColor(Color.GRAY);
         mPicker.setCurved(true);
         mPicker.setItems(Arrays.asList(TimeSignature.four_four,TimeSignature.six_eight,TimeSignature.two_four), new PickerView.OnItemSelectedListener<TimeSignature>() {
             @Override
