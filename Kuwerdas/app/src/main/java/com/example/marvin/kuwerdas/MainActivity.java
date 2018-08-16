@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
             case SEARCH:
                 loadFragment(new SearchFragment());
+                (new SearchSongDatabaseTask()).execute();
                 break;
         }
 
@@ -83,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
     private boolean loadFragment(Fragment fragment) {
+        if(searchViewItem!=null)
+        searchViewItem.collapseActionView();
         //switching fragment 
         if (fragment != null) {
             getSupportFragmentManager()
@@ -131,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
      Fragment fragment = null;
-     searchViewItem.collapseActionView();
         switch (item.getItemId()) {
             case R.id.navigation_song:
                 if(currentFragment == Frags.SONG)
@@ -163,16 +165,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private void init(){
         //loading the default fragment
+        database = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, DATABASE_NAME).build();
+
+        loadFragment(new SongFragment());
         loadFragment(new SearchFragment());
         currentFragment = Frags.SEARCH;
-
         onChangeFragment = this;
+        onChangeFragment.change(Frags.SEARCH);
         //getting bottom navigation view and attaching the listener
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
 
-        database = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, DATABASE_NAME).build();
-        (new SearchSongDatabaseTask()).execute();
     }
 
 
@@ -197,24 +200,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         protected void onPostExecute(List<Song> songList) {
             if(callback!=null)
                 callback.onNewSearchResult(songList);
-        }
-    }
-
-    private class InsertSongDatabaseTask extends AsyncTask<Void,Void,Integer> {
-        Song song;
-
-        public InsertSongDatabaseTask(Song song){
-            this.song = song;
-        }
-
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            return database.songDao().insertSong(song);
-        }
-
-        @Override
-        protected void onPostExecute(Integer id) {
         }
     }
 }

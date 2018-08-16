@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.OnStartDragListener;
 import com.example.marvin.kuwerdas.R;
@@ -20,6 +22,7 @@ import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.search.SearchFragment;
 import com.example.marvin.kuwerdas.song.adapter.VerseItemAdapter;
 import com.example.marvin.kuwerdas.song.model.Song;
+import com.example.marvin.kuwerdas.song.util.SongUtil;
 
 import java.util.Objects;
 
@@ -32,6 +35,9 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
     private SongDatabase database;
     public static Song song;
     private View view;
+    public static boolean isLoadedFromDB = false;
+
+    private FloatingActionButton mFabSaveSong;
 
     @Nullable
     @Override
@@ -50,23 +56,41 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
     private void init(){
         database = Room.databaseBuilder(Objects.requireNonNull(getActivity()), SongDatabase.class, DATABASE_NAME).build();
         recyclerView = view.findViewById(R.id.rvSong);
-
-
-
-//        Bundle bundle = this.getArguments();
-//        if (bundle != null) {
-//            song = (Song) bundle.getSerializable("Song");
-//        }
-
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        (view.findViewById(R.id.tvNoSong)).setVisibility(song==null ? View.VISIBLE : View.GONE);
+        mFabSaveSong = view.findViewById(R.id.fabSaveSong);
+        mFabSaveSong.setVisibility(song==null ? View.GONE : View.VISIBLE);
+
+        mFabSaveSong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isLoadedFromDB) {
+                    (new InsertSongDatabaseTask(song)).execute();
+                    isLoadedFromDB = true;
+                }
+                //TODO else updatesongdb
+            }
+        });
         if(song!=null){
             Log.d("SONG","found song" + song);
-            new GetSongDetailsDatabaseTask().execute();
+            if(isLoadedFromDB) {
+                new GetSongDetailsDatabaseTask().execute();
+            }
             onChangeSong(song);
         }
 
-        (view.findViewById(R.id.tvNoSong)).setVisibility(song==null ? View.VISIBLE : View.GONE);
+    }
 
+    @Override
+    public void onDetach() {
+        song = null;
+        super.onDetach();
+    }
+
+    @Override
+    public void onPause() {
+        song = null;
+        super.onPause();
     }
 
     @Override
@@ -76,9 +100,14 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
 
     @Override
     public void onChangeSong(Song item) {
-        song = item;
-        adapter = new VerseItemAdapter(song.getVerses());
-        recyclerView.setAdapter(adapter);
+        if(item!=null){
+            song = item;
+            isLoadedFromDB = song.getUid()!=0;
+            adapter = new VerseItemAdapter(song.getVerses());
+            recyclerView.setAdapter(adapter);
+        }
+        else
+            isLoadedFromDB = false;
     }
 
     private class GetSongDetailsDatabaseTask extends AsyncTask<Void,Void,Song> {
@@ -95,5 +124,22 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         }
     }
 
+    private class InsertSongDatabaseTask extends AsyncTask<Void,Void,Integer> {
+        Song song;
+
+        public InsertSongDatabaseTask(Song song){
+            this.song = song;
+        }
+
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            return database.songDao().insertSong(song);
+        }
+
+        @Override
+        protected void onPostExecute(Integer id) {
+        }
+    }
 
 }
