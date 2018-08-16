@@ -1,6 +1,7 @@
 package com.example.marvin.kuwerdas.db;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.util.Log;
@@ -35,6 +36,9 @@ public abstract class SongDao {
 
         return id;
     }
+
+    @Delete
+    public abstract void deleteSong(Song song);
 
     @Insert
     abstract Long insertLine(Line line);

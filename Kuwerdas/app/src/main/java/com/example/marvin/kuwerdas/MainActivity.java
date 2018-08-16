@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -68,18 +69,22 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public void change(OnChangeFragment.Frags frag) {
         switch(frag){
             case SONG:
+                currentFragment = Frags.SONG;
                 loadFragment(songFragment);
                 clearSearch();
                 break;
             case TEMPO:
+                currentFragment = Frags.TEMPO;
                 loadFragment(tempoFragment);
                 clearSearch();
                 break;
             case TUNER:
+                currentFragment = Frags.TUNER;
                 loadFragment(tunerFragment);
                 clearSearch();
                 break;
             case SEARCH:
+                currentFragment = Frags.SEARCH;
                 loadFragment(new SearchFragment());
                 (new SearchSongDatabaseTask()).execute();
                 break;
@@ -180,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Objects.requireNonNull(ViewTools.findActionBarTitle(getWindow().getDecorView())).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new SearchFragment());
+                onChangeFragment.change(Frags.SEARCH);
             }
         });
 
@@ -217,6 +222,37 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         protected void onPostExecute(List<Song> songList) {
             if(callback!=null)
                 callback.onNewSearchResult(songList);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if(currentFragment.equals(Frags.SONG)){
+            onChangeFragment.change(Frags.SEARCH);
+            return;
+        }
+
+        super.onBackPressed();
+    }
+
+
+    //TODO delet this
+    private class InsertSongDatabaseTask extends AsyncTask<Void,Void,Integer> {
+        Song song;
+
+        public InsertSongDatabaseTask(Song song){
+            this.song = song;
+        }
+
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            return database.songDao().insertSong(song);
+        }
+
+        @Override
+        protected void onPostExecute(Integer id) {
         }
     }
 }

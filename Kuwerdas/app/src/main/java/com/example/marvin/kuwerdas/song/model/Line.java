@@ -2,13 +2,19 @@ package com.example.marvin.kuwerdas.song.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity(foreignKeys = @ForeignKey(entity = Verse.class,
+        parentColumns = "uid",
+        childColumns = "verseId",
+        onDelete = CASCADE))
 public class Line {
 
     @Ignore
@@ -17,6 +23,7 @@ public class Line {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    @ColumnInfo(name = "verseId")
     private int verseId;
 
     @Ignore

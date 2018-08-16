@@ -52,6 +52,7 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         view = inflater.inflate(R.layout.fragment_song, null);
         init();
         SearchFragment.callback = this;
+
         return view;
     }
 
@@ -159,5 +160,4 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         protected void onPostExecute(Integer id) {
         }
     }
-
 }

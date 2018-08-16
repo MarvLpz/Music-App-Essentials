@@ -2,17 +2,24 @@ package com.example.marvin.kuwerdas.song.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.util.List;
 
-@Entity
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity(foreignKeys = @ForeignKey(entity = Song.class,
+        parentColumns = "uid",
+        childColumns = "songId",
+        onDelete = CASCADE))
 public class Verse{
 
     @PrimaryKey(autoGenerate = true)
     private int uid;
 
+    @ColumnInfo(name = "songId")
     private int songId;
 
     @ColumnInfo(name = "verseTitle")

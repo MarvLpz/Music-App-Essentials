@@ -36,6 +36,10 @@ public class SongItemAdapter extends RecyclerView.Adapter<SongItemViewHolder>{
         notifyDataSetChanged();
     }
 
+    public Song getItem(int position){
+        return songList.get(position);
+    }
+
 
     @NonNull
     @Override
