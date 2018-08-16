@@ -87,7 +87,7 @@ public class TempoFragment extends Fragment {
         mCroller.setBackCircleColor(Color.parseColor("#8CA7A6A7"));
         mCroller.setMainCircleColor(Color.parseColor("#8CA7A6A7"));
         mCroller.setMin(20);
-        mCroller.setMax(250);
+        mCroller.setMax(Metronome.MAX_TEMPO);
         mCroller.setStartOffset(20);
         mCroller.setIsContinuous(true);
 //        mCroller.setLabelColor(Color.BLACK);

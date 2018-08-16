@@ -12,19 +12,18 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Metronome extends Service {
+public class Metronome {
     public static final String TAG = "TAGGY";
     private static final int LONGEST_INTERVAL = 3000;
     private static final int COUNT = 4;
-    private static final int MIN_TEMPO = 20;
-    private static final int MAX_TEMPO = 400;
+    public static final int MIN_TEMPO = 20;
+    public static final int MAX_TEMPO = 400;
     static String TimeSig = "4/4";
     private int tempo;
     private long delay;
 
     private Long previousTime = null;
 
-    private final IBinder binder = new LocalBinder();
 
     private List<Beat> userTapList = new ArrayList<>();
     private MediaPlayer mpL;
@@ -111,7 +110,6 @@ public class Metronome extends Service {
             delay = 60000/tempo;
         }
     }
-
 
     private void startTimer(){
         handler.removeCallbacks(beatRunnable);
