@@ -21,7 +21,10 @@ import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.search.SearchFragment;
 import com.example.marvin.kuwerdas.song.adapter.VerseItemAdapter;
+import com.example.marvin.kuwerdas.song.model.Chord;
+import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Song;
+import com.example.marvin.kuwerdas.song.model.Verse;
 import com.example.marvin.kuwerdas.song.util.SongUtil;
 
 import java.util.Objects;
@@ -67,6 +70,21 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
                 if(!isLoadedFromDB) {
                     (new InsertSongDatabaseTask(song)).execute();
                     isLoadedFromDB = true;
+                }
+                else{
+                    Log.d("SONG","song: " + song.getArtist() + " - " + song.getSongTitle());
+                    for(Verse verse : song.getVerses()){
+                        Log.d("SONG","verse " + verse.getUid() + ": " + verse.getTitle());
+                        for(Line line : verse.getLines()){
+                            String chordset = "";
+                            for(Chord chord : line.getChordSet()){
+                                chordset += "[" + chord.getChord() + "]";
+                            }
+                            Log.d("SONG","line: " + line.getLyrics());
+                            Log.d("SONG","chords: " + chordset);
+
+                        }
+                    }
                 }
                 //TODO else updatesongdb
             }
