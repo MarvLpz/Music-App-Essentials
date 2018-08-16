@@ -34,8 +34,8 @@ public class Metronome extends Service {
 
     private Handler handler = new Handler();
     public int counter;
-    
-    
+
+
     private int getTimeSigMaxCount(){
         if(TimeSig.equals("4/4"))
             return 4;
@@ -51,17 +51,17 @@ public class Metronome extends Service {
         @Override
         public void run() {
             handler.postDelayed(beatRunnable, delay);
-            
+
             int maxCount = getTimeSigMaxCount();
-            
+
             if (counter >= maxCount){
-                    counter = 0;
-                    Log.d("COUNT", "TICK");
-                    mpH.start();
+                counter = 0;
+                Log.d("COUNT", "TICK");
+                mpH.start();
             }
             else
                 mpL.start();
-            
+
             counter++;
             Log.d("COUNT", String.valueOf(counter));
         }
