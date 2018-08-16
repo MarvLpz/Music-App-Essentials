@@ -143,10 +143,39 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         {
             for(Line line : verse.getLines()){
                 for(Chord chord : line.getChordSet()){
-                    chord.setChord(transposeChord(chord.getChord()));
+                    chord.setChord(transposeChordUp(chord.getChord()));
                 }
             }
         }
+    }
+
+    private String transposeChordUp(String chord){
+        if(chord.startsWith("Ab"))
+            return "A";
+        else if(chord.startsWith("A"))
+            return "Bb";
+        else if(chord.startsWith("Bb"))
+            return "B";
+        else if(chord.startsWith("B"))
+            return "C";
+        else if(chord.startsWith("C#"))
+            return "D";
+        else if(chord.startsWith("C"))
+            return "C#";
+        else if(chord.startsWith("D"))
+            return "Eb";
+        else if(chord.startsWith("Eb"))
+            return "E";
+        else if(chord.startsWith("E"))
+            return "F";
+        else if(chord.startsWith("F#"))
+            return "G";
+        else if(chord.startsWith("F"))
+            return "F#";
+        else if(chord.startsWith("G"))
+            return "Ab";
+
+        return chord;
     }
 
     private class floataddBtn implements View.OnClickListener{
