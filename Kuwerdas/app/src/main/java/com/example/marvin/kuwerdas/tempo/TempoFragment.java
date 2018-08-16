@@ -60,14 +60,6 @@ public class TempoFragment extends Fragment {
 
     private void init(){
         mMetronome = new Metronome();
-/*        if (mMetronome.counter == mMetronome.maxcount){
-//            mMetronome.setTone(MediaPlayer.create(view.getContext(), R.raw.beephigh));
-            Log.d("TRY LOG MEDIA", "HIGH");
-        }
-        else{
-//            mMetronome.setTone(MediaPlayer.create(view.getContext(), R.raw.beeplow));
-            Log.d("TRY LOG MEDIA", "LOW");
-        }*/
 
         mMetronome.setToneLow(MediaPlayer.create(view.getContext(), R.raw.beeplow));
         mMetronome.setToneHigh(MediaPlayer.create(view.getContext(), R.raw.beephigh));

@@ -17,7 +17,7 @@ public class Metronome extends Service {
     private static final int LONGEST_INTERVAL = 3000;
     private static final int COUNT = 4;
     private static final int MIN_TEMPO = 20;
-    private static final int MAX_TEMPO = 250;
+    private static final int MAX_TEMPO = 400;
     static String TimeSig = "4/4";
     private int tempo;
     private long delay;
@@ -106,9 +106,10 @@ public class Metronome extends Service {
         delay = ((sum)/beats);
         tempo = (int) (60000/delay);
 
-        if(tempo>MAX_TEMPO)
+        if(tempo>MAX_TEMPO) {
             tempo = MAX_TEMPO;
-
+            delay = 60000/tempo;
+        }
     }
 
 
@@ -152,24 +153,5 @@ public class Metronome extends Service {
 
     public boolean isPlaying() {
         return isPlaying;
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return binder;
-    }
-
-
-    @Override
-    public boolean onUnbind(Intent intent) {
-        stop();
-        return super.onUnbind(intent);
-    }
-
-    public class LocalBinder extends Binder {
-        public Metronome getService() {
-            return Metronome.this;
-        }
     }
 }
