@@ -139,44 +139,23 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
     }
 
     public void Transpose(){
-        for(Verse verse : adapter.getItems())
-        {
+        Log.d("SONG","song: " + song.getArtist() + " - " + song.getSongTitle());
+        for(Verse verse : song.getVerses()){
+            Log.d("SONG","verse " + verse.getUid() + ": " + verse.getTitle());
             for(Line line : verse.getLines()){
+                String chordset = "";
                 for(Chord chord : line.getChordSet()){
-                    chord.setChord(transposeChordUp(chord.getChord()));
+                    chord.setChord(Transposer.transposeChordUp(chord.getChord()));
+                    chordset += "[" + chord.getChord() + "]";
                 }
+                Log.d("SONG","line: " + line.getLyrics());
+                Log.d("SONG","chords: " + chordset);
+
             }
         }
+        adapter.notifyDataSetChanged();
     }
 
-    private String transposeChordUp(String chord){
-        if(chord.startsWith("Ab"))
-            return "A";
-        else if(chord.startsWith("A"))
-            return "Bb";
-        else if(chord.startsWith("Bb"))
-            return "B";
-        else if(chord.startsWith("B"))
-            return "C";
-        else if(chord.startsWith("C#"))
-            return "D";
-        else if(chord.startsWith("C"))
-            return "C#";
-        else if(chord.startsWith("D"))
-            return "Eb";
-        else if(chord.startsWith("Eb"))
-            return "E";
-        else if(chord.startsWith("E"))
-            return "F";
-        else if(chord.startsWith("F#"))
-            return "G";
-        else if(chord.startsWith("F"))
-            return "F#";
-        else if(chord.startsWith("G"))
-            return "Ab";
-
-        return chord;
-    }
 
     private class floataddBtn implements View.OnClickListener{
 
