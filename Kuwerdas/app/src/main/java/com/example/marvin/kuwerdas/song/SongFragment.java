@@ -64,7 +64,7 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         mFabSaveSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isLoadedFromDB) {
+                if(!isLoadedFromDB) {
                     (new InsertSongDatabaseTask(song)).execute();
                     isLoadedFromDB = true;
                 }

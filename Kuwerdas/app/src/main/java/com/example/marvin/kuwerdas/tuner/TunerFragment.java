@@ -63,13 +63,11 @@ public class TunerFragment extends Fragment {
     private void init(){
         textLabel = (TextView) view.findViewById(R.id.tvTuner);
         tunerView = (TunerView) view.findViewById(R.id.tunerView);
-        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.RECORD_AUDIO)
+        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
             tunerView.setVisibility(View.GONE);
             // Permission is not granted
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.RECORD_AUDIO},
-                    RECORD_AUDIO_PERMISSION);
+            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO_PERMISSION);
 
         } else
             initializePitchDetector();
@@ -90,7 +88,7 @@ public class TunerFragment extends Fragment {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initializePitchDetector();
-                    tunerView.setDotPosition(2);
+                    Toast.makeText(Objects.requireNonNull(getActivity()).getBaseContext(), "Permission granted to record audio", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     Toast.makeText(Objects.requireNonNull(getActivity()).getBaseContext(), "Permission denied to record audio", Toast.LENGTH_SHORT).show();
