@@ -25,6 +25,9 @@ public class Song implements Serializable{
     @Ignore
     private List<Verse> verses;
 
+    @ColumnInfo(name = "tempo")
+    private int tempo;
+
     public int getUid() {
         return uid;
     }
@@ -63,6 +66,14 @@ public class Song implements Serializable{
 
     public void setDateModified(String dateModified) {
         this.dateModified = dateModified;
+    }
+
+    public int getTempo() {
+        return tempo;
+    }
+
+    public void setTempo(int tempo) {
+        this.tempo = tempo;
     }
 
     @Override

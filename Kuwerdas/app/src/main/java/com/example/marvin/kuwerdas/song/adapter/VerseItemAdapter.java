@@ -1,6 +1,5 @@
 package com.example.marvin.kuwerdas.song.adapter;
 
-import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,8 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.marvin.kuwerdas.R;
-import com.example.marvin.kuwerdas.db.DatabaseUtils;
-import com.example.marvin.kuwerdas.db.SongDatabase;
+import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemTouchHelperAdapter;
 import com.example.marvin.kuwerdas.song.model.Verse;
 
@@ -85,7 +83,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> 
         mVerses.remove(adapterPosition);
         notifyItemRemoved(adapterPosition);
         versesToDelete.add(mVerse);
-        new DatabaseUtils.DeleteVerseFromDatabaseTask(mVerse).execute();
+        new SongDatabaseUtils.DeleteVerseFromDatabaseTask(mVerse).execute();
     }
 
     public List<Verse> getItems() {

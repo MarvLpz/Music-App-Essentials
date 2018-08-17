@@ -1,6 +1,5 @@
 package com.example.marvin.kuwerdas.song;
 
-import android.arch.persistence.room.Room;
 import android.content.ClipData;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.marvin.kuwerdas.db.DatabaseUtils;
+import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.OnStartDragListener;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabase;
@@ -29,10 +28,9 @@ import com.example.marvin.kuwerdas.song.model.Chord;
 import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
-import com.example.marvin.kuwerdas.song.util.SongUtil;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 import top.defaults.view.PickerView;
 
@@ -368,13 +366,17 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
 
         @Override
         protected Song doInBackground(Void... voids) {
-            return database.songDao().getSongWithVerses(song.getUid());
+            if(song!=null)
+                return database.songDao().getSongWithVerses(song.getUid());
+
+            return null;
         }
 
         @Override
         protected void onPostExecute(Song s) {
             super.onPostExecute(s);
-            onChangeSong(s);
+            if(s!=null)
+                onChangeSong(s);
         }
     }
     private void saveSongToDatabase() {
@@ -382,10 +384,10 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
             song.setDateModified((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(new Date()));
 
             if (!isLoadedFromDB) {
-                (new DatabaseUtils.InsertSongDatabaseTask(song)).execute();
+                (new SongDatabaseUtils.InsertSongDatabaseTask(song)).execute();
                 isLoadedFromDB = true;
             } else {
-                (new DatabaseUtils.UpdateSongDatabaseTask(song)).execute();
+                (new SongDatabaseUtils.UpdateSongDatabaseTask(song)).execute();
             }
 
             Toast.makeText(getContext(), "Saved changes to \'" + song.getSongTitle() + "\'", Toast.LENGTH_SHORT).show();

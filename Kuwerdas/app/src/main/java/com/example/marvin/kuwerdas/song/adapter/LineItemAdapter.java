@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.example.marvin.kuwerdas.R;
-import com.example.marvin.kuwerdas.db.DatabaseUtils;
+import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Verse;
@@ -73,7 +73,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                                 String lineLyrics = verseLines.get(currentPosition).getLyrics();
 
                                 verseLines.get(currentPosition-1).setLyrics(verseLines.get(currentPosition - 1).getLyrics() + " " + lineLyrics);
-                                new DatabaseUtils.DeleteLineFromDatabaseTask(verseLines.get(currentPosition)).execute();
+                                new SongDatabaseUtils.DeleteLineFromDatabaseTask(verseLines.get(currentPosition)).execute();
                                 verseLines.remove(currentPosition);
 
                                 notifyDataSetChanged();

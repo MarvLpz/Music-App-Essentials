@@ -6,7 +6,7 @@ import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
 
-public class DatabaseUtils {
+public class SongDatabaseUtils {
     private static SongDatabase database = null;
 
     public static void initialize(SongDatabase db){
