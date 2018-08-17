@@ -2,6 +2,7 @@ package com.example.marvin.kuwerdas.song.adapter;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,10 +33,13 @@ ChordItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperVi
 
     @Override
     public void onItemSelected() {
-        if (tv.getText().toString() == Chord.EMPTY_CHORD)
-            return;
-        else
+        if(tv.getText().toString().equals(Chord.EMPTY_CHORD)) {
+        }
+        else{
+            Log.d("CHORD SELECTED","TRUE");
             itemView.setBackgroundColor(Color.LTGRAY);
+        }
+
     }
 
     @Override
