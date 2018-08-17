@@ -12,7 +12,8 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
         childColumns = "lineId",
         onDelete = CASCADE))
 public class Chord {
-    public static final String EMPTY_CHORD = " ";
+    public static final String EMPTY_CHORD = " " + " ";
+    private String chord;
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -20,26 +21,11 @@ public class Chord {
     @ColumnInfo(name = "lineId")
     private int lineId;
 
-    private String chord;
-
-    public Chord(int id, int lineId, String chord) {
-        this.id = id;
-        this.lineId = lineId;
-        this.chord = chord;
-    }
-
-    public Chord() {
-    }
+    public Chord(){}
 
     public Chord(String c) {
         chord = c;
     }
-
-    public Chord(int id, String chord) {
-        this.id = id;
-        this.chord = chord;
-    }
-
 
     public String getChord() {
         return chord;
@@ -47,6 +33,9 @@ public class Chord {
 
     public void setChord(String chord) {
         this.chord = chord;
+    }
+    public String toString(){
+        return chord;
     }
 
     public int getId() {
@@ -63,9 +52,5 @@ public class Chord {
 
     public void setLineId(int lineId) {
         this.lineId = lineId;
-    }
-
-    public String toString(){
-        return "chordId: " + id + " - lineId: " + lineId + " - chord: " + chord;
     }
 }

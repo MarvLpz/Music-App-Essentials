@@ -63,7 +63,27 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         tunerFragment = new TunerFragment();
 
         init();
-
+        String lyrics = "Nitong umaga lang, Pagka lambing-lambing\n" +
+                "Ng iyong mga matang, Hayup kung tumingin.\n" +
+                "Nitong umaga lang, Pagka galing-galing\n" +
+                "Ng iyong sumpang, Walang aawat sa atin.\n" +
+                "\n" +
+                "O kay bilis namang maglaho ng Pag-ibig mo sinta,\n" +
+                "Daig mo pa ang isang kisapmata.\n" +
+                "Kaninay nariyan lang o ba't Bigla namang nawala.\n" +
+                "Daig mo pa ang isang kisapmata.\n" +
+                "\n" +
+                "Kani-kanina lang, Pagka ganda-ganda\n" +
+                "Ng pagkasabi mong Sana'y tayo na nga.\n" +
+                "Kani-kanina lang, Pagka saya-saya\n" +
+                "Ng buhay kong Bigla na lamang nagiba.\n" +
+                "\n" +
+                "O kay bilis namang maglaho ng Pag-ibig mo sinta,\n" +
+                "Daig mo pa ang isang kisapmata.\n" +
+                "Kaninay nariyan lang o ba't Bigla namang nawala.\n" +
+                "Daig mo pa ang isang kisapmata.";
+        Song song = SongUtil.asSong("Kisapmata","Rivermaya",lyrics);
+        new InsertSongDatabaseTask(song).execute();
     }
 
     @Override
