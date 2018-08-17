@@ -1,6 +1,5 @@
 package com.example.marvin.kuwerdas.search;
 
-import android.arch.persistence.room.Room;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -23,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.marvin.kuwerdas.MainActivity;
+import com.example.marvin.kuwerdas.OnChangeFragment;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.search.adapter.SongItemAdapter;
@@ -30,7 +30,6 @@ import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.util.SongUtil;
 
 import java.util.List;
-import java.util.Objects;
 
 public class SearchFragment extends Fragment implements SongItemAdapter.RecyclerViewItemClickListener, MainActivity.OnNewSearchResult{
 

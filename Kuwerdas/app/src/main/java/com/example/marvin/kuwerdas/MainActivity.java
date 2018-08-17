@@ -1,18 +1,13 @@
 package com.example.marvin.kuwerdas;
 
-import android.arch.persistence.room.Room;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,12 +15,9 @@ import android.view.View;
 
 import com.example.marvin.kuwerdas.db.DatabaseUtils;
 import com.example.marvin.kuwerdas.db.SongDatabase;
-import com.example.marvin.kuwerdas.search.OnChangeFragment;
 import com.example.marvin.kuwerdas.search.SearchFragment;
-import com.example.marvin.kuwerdas.search.adapter.SongItemAdapter;
 import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.model.Song;
-import com.example.marvin.kuwerdas.song.util.SongUtil;
 import com.example.marvin.kuwerdas.tempo.TempoFragment;
 import com.example.marvin.kuwerdas.tuner.TunerFragment;
 
