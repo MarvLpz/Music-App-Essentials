@@ -37,7 +37,6 @@ import static be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm.FFT_YI
 
 public class TunerFragment extends Fragment {
     private static final int RECORD_AUDIO_PERMISSION = 1;
-    //    private ArrayList<Note> tuning = new ArrayList<>();
     private TextView textLabel;
     private FreqNoteIndex freqNoteIndex = new FreqNoteIndex();
     private View view;
@@ -128,12 +127,10 @@ public class TunerFragment extends Fragment {
     private class PitchListener extends AsyncTask<Void, Float, Void> {
 
         private AudioDispatcher audioDispatcher;
-//        private List<Float> pitchList;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//            pitchList = new ArrayList<>();
         }
 
         @Override

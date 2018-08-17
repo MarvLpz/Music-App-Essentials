@@ -124,12 +124,6 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
             holder.getLineLyricsEditText().requestFocus();
         }
 
-        //TODO fix chords
-//        Chord[] chordSet = line.getChordSet();
-//        for(int i=0;i<Line.CHORD_SET_LENGTH;i++) {
-//            holder.getGridLayout().addView(new ChordCell(holder.getItemView().getContext(),chordSet[i]));
-//        }
-
         holder.setChordList(line.getChordSet());
         onBind = false;
 

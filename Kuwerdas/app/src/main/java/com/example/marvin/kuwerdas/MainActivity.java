@@ -18,6 +18,7 @@ import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.search.SearchFragment;
 import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.model.Song;
+import com.example.marvin.kuwerdas.song.util.SongUtil;
 import com.example.marvin.kuwerdas.tempo.TempoFragment;
 import com.example.marvin.kuwerdas.tuner.TunerFragment;
 
@@ -36,8 +37,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private static final String DATABASE_NAME = "SONG_DATABASE";
 
-    public static OnNewSearchResult callback;
-    public static OnChangeFragment onChangeFragment;
+    public static OnNewSearchResult SearchResultListener;
+    public static OnChangeFragment FragmentSwitcher;
     private SongDatabase database;
 
     private SearchView searchViewAndroidActionBar;
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         searchViewAndroidActionBar.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onChangeFragment.change(Frags.SEARCH);
+                FragmentSwitcher.change(Frags.SEARCH);
             }
         });
         
@@ -180,15 +181,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Objects.requireNonNull(ViewTools.findActionBarTitle(getWindow().getDecorView())).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onChangeFragment.change(Frags.SEARCH);
+                FragmentSwitcher.change(Frags.SEARCH);
             }
         });
 
         loadFragment(songFragment);
         loadFragment(new SearchFragment());
         currentFragment = Frags.SEARCH;
-        onChangeFragment = this;
-        onChangeFragment.change(Frags.SEARCH);
+        FragmentSwitcher = this;
+        FragmentSwitcher.change(Frags.SEARCH);
         //getting bottom navigation view and attaching the listener
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
@@ -215,8 +216,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         @Override
         protected void onPostExecute(List<Song> songList) {
-            if(callback!=null)
-                callback.onNewSearchResult(songList);
+            if(SearchResultListener!=null)
+                SearchResultListener.onNewSearchResult(songList);
         }
     }
 
@@ -224,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public void onBackPressed() {
 
         if(currentFragment.equals(Frags.SONG)){
-            onChangeFragment.change(Frags.SEARCH);
+            FragmentSwitcher.change(Frags.SEARCH);
             return;
         }
 

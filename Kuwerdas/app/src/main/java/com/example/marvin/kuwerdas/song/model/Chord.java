@@ -21,6 +21,9 @@ public class Chord {
     @ColumnInfo(name = "lineId")
     private int lineId;
 
+    @ColumnInfo(name = "order")
+    private int order = -1;
+
     public Chord(){}
 
     public Chord(String c) {
@@ -52,5 +55,13 @@ public class Chord {
 
     public void setLineId(int lineId) {
         this.lineId = lineId;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 }

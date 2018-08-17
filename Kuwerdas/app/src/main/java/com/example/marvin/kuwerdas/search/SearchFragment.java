@@ -25,6 +25,7 @@ import com.example.marvin.kuwerdas.MainActivity;
 import com.example.marvin.kuwerdas.OnChangeFragment;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabase;
+import com.example.marvin.kuwerdas.search.adapter.HeaderViewHolder;
 import com.example.marvin.kuwerdas.search.adapter.SongItemAdapter;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.util.SongUtil;
@@ -33,11 +34,10 @@ import java.util.List;
 
 public class SearchFragment extends Fragment implements SongItemAdapter.RecyclerViewItemClickListener, MainActivity.OnNewSearchResult{
 
-    public static OnChangeSong callback;
+    public static OnChangeSong SongLoader;
     private static final String DATABASE_NAME = "SONG_DATABASE";
 
     private RecyclerView rvSearchResults;
-    private FloatingActionButton mAddSongButton;
     private SongItemAdapter adapter;
     private SongDatabase database;
     private View view;
@@ -52,8 +52,6 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
     }
 
 
-
-
     public interface OnClickSearchItem{
         boolean onClickSearchItem(Song item);
     }
@@ -64,7 +62,7 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
 
 
     public SearchFragment(){
-        MainActivity.callback = this;
+        MainActivity.SearchResultListener = this;
     }
 
     @Nullable
@@ -114,6 +112,8 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 int swipedPosition = viewHolder.getAdapterPosition();
 
+                if(viewHolder instanceof HeaderViewHolder)
+                    return;
 
                 new DeleteSongFromDatabaseTask(adapter.getSong(swipedPosition)).execute();
                 Snackbar.make(view,"Deleted song",Snackbar.LENGTH_SHORT).show();
@@ -128,6 +128,9 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
                     // not interested in those
                     return;
                 }
+
+                if(viewHolder instanceof HeaderViewHolder)
+                    return;
 
                 if (!initiated) {
                     init();
@@ -250,18 +253,6 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
         setUpItemTouchHelper();
         setUpAnimationDecoratorHelper();
         database = SongDatabase.getSongDatabase(getActivity());
-        mAddSongButton = (FloatingActionButton) view.findViewById(R.id.fabAddSong);
-        mAddSongButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(callback!=null){
-                    Toast.makeText(getContext(),"Create new song",Toast.LENGTH_SHORT).show();
-                    callback.onChangeSong(SongUtil.asSong("", "", ""));
-                    MainActivity.onChangeFragment.change(OnChangeFragment.Frags.SONG);
-
-                }
-            }
-        });
         rvSearchResults.setLayoutManager(new LinearLayoutManager(view.getContext()));
         adapter = new SongItemAdapter(this);
         rvSearchResults.setAdapter(adapter);
@@ -270,10 +261,10 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
     @Override
     public void recyclerViewListItemClicked(View v, int position) {
         Log.d("TAGGY","item clicked at position: " + position);
-        if(callback!=null){
-            callback.onChangeSong(adapter.getSong(position));
-            if(MainActivity.onChangeFragment!=null){
-                MainActivity.onChangeFragment.change(OnChangeFragment.Frags.SONG);
+        if(SongLoader!=null){
+            SongLoader.onChangeSong(adapter.getSong(position));
+            if(MainActivity.FragmentSwitcher!=null){
+                MainActivity.FragmentSwitcher.change(OnChangeFragment.Frags.SONG);
 
             }
         }

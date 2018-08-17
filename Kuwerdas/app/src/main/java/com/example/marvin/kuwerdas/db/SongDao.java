@@ -2,7 +2,6 @@ package com.example.marvin.kuwerdas.db;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
-import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
@@ -10,11 +9,13 @@ import android.arch.persistence.room.Update;
 import android.database.sqlite.SQLiteConstraintException;
 import android.util.Log;
 
+import com.example.marvin.kuwerdas.song.adapter.ChordOrderComparator;
 import com.example.marvin.kuwerdas.song.model.Chord;
 import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
 
+import java.util.Collections;
 import java.util.List;
 
 @Dao
@@ -34,8 +35,10 @@ public abstract class SongDao {
             for(Line line : verse.getLines()){
                 line.setVerseId(verseId);
                 int lineId = insertLine(line).intValue();
-                for(Chord chord : line.getChordSet()){
+                for(int i=0;i<line.getChordSet().size();i++){
+                    Chord chord = line.getChordSet().get(i);
                     chord.setLineId(lineId);
+                    chord.setOrder(i);
                 }
                 insertAllChords(line.getChordSet());
             }
@@ -60,6 +63,7 @@ public abstract class SongDao {
             for(Line line :lines){
                 List<Chord> chords = getLineChords(line.getId());
                 line.setChordSet(chords);
+                Collections.sort(line.getChordSet(),new ChordOrderComparator());
                 Log.d("RETRIEVE SONG","CHORDSET:" + chords);
             }
             verse.setLines(lines);
@@ -115,12 +119,13 @@ public abstract class SongDao {
                 int lineId = upsertLine(line).intValue();//Insert or update line
                 String chordset = "";
 
-                for(Chord chord : line.getChordSet()){
+                for(int i=0;i<line.getChordSet().size();i++){
+                    Chord chord = line.getChordSet().get(i);
                     chord.setLineId(lineId);
                     chordset += chord.getId() + "[" + chord.getChord() + "] - ";
-                    upsertChord(chord);//Insert or update chord
-
+                    upsertChord(chord,i);//Insert or update chord
                 }
+
                 Log.d("UPDATE2","chords: " + chordset);
             }
         }
@@ -183,9 +188,12 @@ public abstract class SongDao {
         try { long id = insertLine(line); Log.d("UPDATE","insert line: " + id); return id;} catch (SQLiteConstraintException exception) { long id = line.getId(); updateLine(line); Log.d("UPDATE","update line: " + id); return id;}
     }
 
-    private Long upsertChord(Chord chord) {
-        try { long id =insertChord(chord); Log.d("UPDATE","insert chord: " + id); return id;} catch (SQLiteConstraintException exception) { long id = chord.getId(); updateChord(chord); Log.d("UPDATE","update chord: " + id); return id;}
+    private Long upsertChord(Chord chord, int order) {
+        try { Long id =insertChord(chord); setChordOrder(id,order); Log.d("UPDATE","insert chord: " + id); return id;} catch (SQLiteConstraintException exception) { long id = chord.getId(); updateChord(chord);  setChordOrder(id,order);Log.d("UPDATE","update chord: " + id); return id;}
     }
+
+    @Query("UPDATE chord set `order`=:mOrder where id=:mChordId")
+    abstract void setChordOrder(long mChordId, int mOrder);
 
     /*************************************** DO NOT EDIT ABOVE ***************************************/
 }

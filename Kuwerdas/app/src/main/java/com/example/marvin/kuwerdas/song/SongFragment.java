@@ -1,6 +1,5 @@
 package com.example.marvin.kuwerdas.song;
 
-import android.arch.persistence.room.Room;
 import android.content.ClipData;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,10 +28,10 @@ import com.example.marvin.kuwerdas.song.model.Chord;
 import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
-import com.example.marvin.kuwerdas.song.util.SongUtil;
+import com.example.marvin.kuwerdas.song.util.Transposer;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 import top.defaults.view.PickerView;
 
@@ -82,7 +81,7 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         init();
         instantiate();
         showPicker();
-        SearchFragment.callback = this;
+        SearchFragment.SongLoader = this;
 
         return view;
     }
