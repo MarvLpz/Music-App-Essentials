@@ -96,24 +96,42 @@ public abstract class SongDao {
     public abstract List<Chord> getAllChords();
 
     public void updateSong(Song song){
-        _updateSong(song);//Update song title, artist, and date modified
+        int songId = upsertSong(song).intValue();//Update song title, artist, and date modified
+        Log.d("UPDATE2","song: " + song.getUid() + " - " + song.getArtist() + " - " + song.getSongTitle());
         for(Verse verse : song.getVerses()){
-            upsert((Entity) verse);//Insert or update verse
+            verse.setSongId(songId);
+            int verseId = upsertVerse(verse).intValue();//Insert or update verse
+            Log.d("UPDATE2","verse: " + verse.getUid() + " - " + verse.getTitle());
+
             for(Line line : verse.getLines()){
-                upsert((Entity) line);//Insert or update line
+                line.setVerseId(verseId);
+                Log.d("UPDATE2","line: " + line.getId() + " - " + line.getLyrics());
+                int lineId = upsertLine(line).intValue();//Insert or update line
+                String chordset = "";
+
                 for(Chord chord : line.getChordSet()){
-                    upsert((Entity) chord);//Insert or update chord
+                    chord.setLineId(lineId);
+                    chordset += chord.getId() + "[" + chord.getChord() + "] - ";
+                    upsertChord(chord);//Insert or update chord
+
                 }
+                Log.d("UPDATE2","chords: " + chordset);
             }
         }
     }
 
     /*************************************** DO NOT EDIT BELOW ***************************************/
-    @Insert abstract Long insertLine(Line line);
+    @Insert(onConflict = OnConflictStrategy.FAIL)
+    abstract Long _insertSong(Song song);
 
-    @Insert abstract Long insertChord(Chord chord);
+    @Insert(onConflict = OnConflictStrategy.FAIL)
+    abstract Long insertVerse(Verse verse);
 
-    @Insert abstract Long _insertSong(Song song);
+    @Insert(onConflict = OnConflictStrategy.FAIL)
+    abstract Long insertLine(Line line);
+
+    @Insert(onConflict = OnConflictStrategy.FAIL)
+    abstract Long insertChord(Chord chord);
 
     @Insert abstract void insertAllChords(List<Chord> chords);
 
@@ -122,8 +140,6 @@ public abstract class SongDao {
     @Insert abstract void insertAllLines(List<Line> line);
 
     @Insert abstract void insertAllSongs(List<Song> song);
-
-    @Insert abstract Long insertVerse(Verse verse);
 
     @Query("SELECT * FROM song where uid=:id")
     abstract Song getSong(int id);
@@ -137,26 +153,32 @@ public abstract class SongDao {
     @Query("SELECT * FROM chord where lineId=:id")
     abstract List<Chord> getLineChords(int id);
 
-    @Update abstract void _updateSong(Song song);
-
-    @Update abstract void updateVerses(List<Verse> verses);
-
-    @Update abstract void updateLines(List<Line> lines);
-
-    @Update abstract void updateChords(List<Chord> chords);
-
-    @Insert(onConflict = OnConflictStrategy.FAIL)
-    abstract void insert(Entity entity);
+    @Update(onConflict = OnConflictStrategy.FAIL)
+    abstract int _updateSong(Song song);
 
     @Update(onConflict = OnConflictStrategy.FAIL)
-    abstract void update(Entity entity);
+    abstract int updateVerse(Verse verse);
 
-    void upsert(Entity entity) {
-        try {
-            insert(entity);
-        } catch (SQLiteConstraintException exception) {
-            update(entity);
-        }
+    @Update(onConflict = OnConflictStrategy.FAIL)
+    abstract int updateLine(Line line);
+
+    @Update(onConflict = OnConflictStrategy.FAIL)
+    abstract int updateChord(Chord chord);
+
+    private Long upsertSong(Song song) {
+        try { long id = _insertSong(song); Log.d("UPDATE","insert song: " + id); return id;} catch (SQLiteConstraintException exception) { long id = song.getUid(); _updateSong(song); Log.d("UPDATE","update song: " + id); return id;}
+    }
+
+    private Long upsertVerse(Verse verse) {
+        try { long id = insertVerse(verse);  Log.d("UPDATE","insert verse: " + id); return id;} catch (SQLiteConstraintException exception) { long id = verse.getUid(); updateVerse(verse); Log.d("UPDATE","update verse: " + id); return id;}
+    }
+
+    private Long upsertLine(Line line) {
+        try { long id = insertLine(line); Log.d("UPDATE","insert line: " + id); return id;} catch (SQLiteConstraintException exception) { long id = line.getId(); updateLine(line); Log.d("UPDATE","update line: " + id); return id;}
+    }
+
+    private Long upsertChord(Chord chord) {
+        try { long id =insertChord(chord); Log.d("UPDATE","insert chord: " + id); return id;} catch (SQLiteConstraintException exception) { long id = chord.getId(); updateChord(chord); Log.d("UPDATE","update chord: " + id); return id;}
     }
 
     /*************************************** DO NOT EDIT ABOVE ***************************************/

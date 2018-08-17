@@ -86,8 +86,8 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
 
                         }
                     }
+                    (new UpdateSongDatabaseTask(song)).execute();
                 }
-                //TODO else updatesongdb
             }
         });
         if(song!=null){
@@ -158,6 +158,26 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
 
         @Override
         protected void onPostExecute(Integer id) {
+        }
+    }
+
+    private class UpdateSongDatabaseTask extends AsyncTask<Void,Void,Void> {
+        Song song;
+
+        public UpdateSongDatabaseTask(Song song){
+            this.song = song;
+        }
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            database.songDao().updateSong(song);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
         }
     }
 }

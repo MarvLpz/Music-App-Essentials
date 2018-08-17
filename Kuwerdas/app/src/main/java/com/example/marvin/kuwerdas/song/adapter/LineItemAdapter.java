@@ -23,6 +23,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
     private boolean onBind;
 
     private int focusPosition;
+    private int currentLineId;
     private int currentPosition;
 
     public LineItemAdapter(Verse data) {
@@ -41,7 +42,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
         onBind = true;
 
         final EditText etLine = holder.getLineLyricsEditText();
-        Line line = verseLines.get(holder.getAdapterPosition());
+        final Line line = verseLines.get(holder.getAdapterPosition());
         etLine.setText(line.getLyrics());
 
         final int pos = holder.getAdapterPosition();
@@ -50,6 +51,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
             public void onFocusChange(View view, boolean focused) {
                 if(focused){
                     currentPosition = pos;
+                    currentLineId = line.getId();
                     Log.d("TAGGY","focused on position: " + pos);
                     Log.d("TAGGY","verselines" + verseLines.size());
                 }
@@ -91,7 +93,8 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                 }*/
                 if (!onBind) {
                     List<String> arr = Arrays.asList(charSequence.toString().split("\n"));
-                    verseLines.set(currentPosition, new Line(arr.get(0)));
+//                    verseLines.set(currentPosition, new Line(arr.get(0)));
+                    line.setLyrics(arr.get(0));
 
                     if (arr.size() > 1) {
                         for (String a : arr.subList(1, arr.size())) {
