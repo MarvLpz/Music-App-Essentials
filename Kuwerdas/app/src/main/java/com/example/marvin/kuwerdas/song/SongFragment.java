@@ -199,6 +199,8 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         boolean delClicked = false;
         @Override
         public void onClick(View v) {
+            Transpose();
+
             if (delClicked == false){
                 ChordItemAdapter triggerClicked = new ChordItemAdapter();
                 delClicked = true;

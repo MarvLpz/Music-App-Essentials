@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.marvin.kuwerdas.R;
+import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemClickCallback;
 import com.example.marvin.kuwerdas.song.model.Chord;
 import com.example.marvin.kuwerdas.song.model.Line;
@@ -67,8 +68,8 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
                     break;
                 case DragEvent.ACTION_DROP:
                     Log.d("TESTING",String.valueOf(DragChord));
-                    myChord.set(positionChord ,new Chord(DragChord));
-
+                    myChord.get(positionChord).setChord(DragChord);
+                    SongFragment.isSongEdited = true;
 //                    ((TextView)v).setText(String.valueOf(DragChord));
                     notifyDataSetChanged();
 
