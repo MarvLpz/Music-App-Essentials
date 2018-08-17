@@ -80,6 +80,12 @@ public abstract class SongDao {
     @Delete
     public abstract void deleteSong(Song song);
 
+    @Delete
+    public abstract void deleteVerse(Verse verse);
+
+    @Delete
+    public abstract void deleteLine(Line line);
+
     @Query("DELETE FROM song")
     public abstract void deleteAllSongs();
 

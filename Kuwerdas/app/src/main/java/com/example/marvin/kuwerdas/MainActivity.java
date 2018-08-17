@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.marvin.kuwerdas.db.DatabaseUtils;
 import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.search.OnChangeFragment;
 import com.example.marvin.kuwerdas.search.SearchFragment;
@@ -180,8 +181,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
     private void init(){
-        //loading the default fragment
-        database = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, DATABASE_NAME).build();
+
+        database = SongDatabase.getSongDatabase(this);
+        DatabaseUtils.initialize(database);
+
+
         Objects.requireNonNull(ViewTools.findActionBarTitle(getWindow().getDecorView())).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -234,25 +238,5 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
 
         super.onBackPressed();
-    }
-
-
-    //TODO delet this
-    private class InsertSongDatabaseTask extends AsyncTask<Void,Void,Integer> {
-        Song song;
-
-        public InsertSongDatabaseTask(Song song){
-            this.song = song;
-        }
-
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            return database.songDao().insertSong(song);
-        }
-
-        @Override
-        protected void onPostExecute(Integer id) {
-        }
     }
 }

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.marvin.kuwerdas.db.DatabaseUtils;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.OnStartDragListener;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabase;
@@ -27,6 +28,8 @@ import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
 import com.example.marvin.kuwerdas.song.util.SongUtil;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 public class SongFragment extends Fragment implements OnStartDragListener,SearchFragment.OnChangeSong {
@@ -34,13 +37,12 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
     private VerseItemAdapter adapter;
     private RecyclerView recyclerView;
     private ItemTouchHelper itemTouchHelper;
-    private final String DATABASE_NAME = "SONG_DATABASE";
     private SongDatabase database;
-    public static Song song;
     private View view;
-    public static boolean isLoadedFromDB = false;
 
-    private FloatingActionButton mFabSaveSong;
+    private static Song song;
+    private static boolean isLoadedFromDB = false;
+    public static boolean isSongEdited = false;
 
     @Nullable
     @Override
@@ -58,38 +60,11 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
 
 
     private void init(){
-        database = Room.databaseBuilder(Objects.requireNonNull(getActivity()), SongDatabase.class, DATABASE_NAME).build();
+        database = SongDatabase.getSongDatabase(getContext());
+
         recyclerView = view.findViewById(R.id.rvSong);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         (view.findViewById(R.id.tvNoSong)).setVisibility(song==null ? View.VISIBLE : View.GONE);
-        mFabSaveSong = view.findViewById(R.id.fabSaveSong);
-        mFabSaveSong.setVisibility(song==null ? View.GONE : View.VISIBLE);
-
-        mFabSaveSong.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!isLoadedFromDB) {
-                    (new InsertSongDatabaseTask(song)).execute();
-                    isLoadedFromDB = true;
-                }
-                else{
-                    Log.d("SONG","song: " + song.getArtist() + " - " + song.getSongTitle());
-                    for(Verse verse : song.getVerses()){
-                        Log.d("SONG","verse " + verse.getUid() + ": " + verse.getTitle());
-                        for(Line line : verse.getLines()){
-                            String chordset = "";
-                            for(Chord chord : line.getChordSet()){
-                                chordset += "[" + chord.getChord() + "]";
-                            }
-                            Log.d("SONG","line: " + line.getLyrics());
-                            Log.d("SONG","chords: " + chordset);
-
-                        }
-                    }
-                    (new UpdateSongDatabaseTask(song)).execute();
-                }
-            }
-        });
         if(song!=null){
             Log.d("SONG","found song" + song);
             if(isLoadedFromDB) {
@@ -102,13 +77,15 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
 
     @Override
     public void onDetach() {
-        song = null;
+        saveSongToDatabase();
+//        song = null;
         super.onDetach();
     }
 
     @Override
     public void onPause() {
-        song = null;
+        saveSongToDatabase();
+//        song = null;
         super.onPause();
     }
 
@@ -124,6 +101,7 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
             isLoadedFromDB = song.getUid()!=0;
             adapter = new VerseItemAdapter(song.getVerses());
             recyclerView.setAdapter(adapter);
+            isSongEdited = false;
         }
         else
             isLoadedFromDB = false;
@@ -143,41 +121,19 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         }
     }
 
-    private class InsertSongDatabaseTask extends AsyncTask<Void,Void,Integer> {
-        Song song;
+    private void saveSongToDatabase() {
+        if (song != null && isSongEdited) {
+            song.setDateModified((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(new Date()));
 
-        public InsertSongDatabaseTask(Song song){
-            this.song = song;
-        }
+            if (!isLoadedFromDB) {
+                (new DatabaseUtils.InsertSongDatabaseTask(song)).execute();
+                isLoadedFromDB = true;
+            } else {
+                (new DatabaseUtils.UpdateSongDatabaseTask(song)).execute();
+            }
 
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            return database.songDao().insertSong(song);
-        }
-
-        @Override
-        protected void onPostExecute(Integer id) {
-        }
-    }
-
-    private class UpdateSongDatabaseTask extends AsyncTask<Void,Void,Void> {
-        Song song;
-
-        public UpdateSongDatabaseTask(Song song){
-            this.song = song;
-        }
-
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            database.songDao().updateSong(song);
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void v) {
+            Toast.makeText(getContext(), "Saved changes to \'" + song.getSongTitle() + "\'", Toast.LENGTH_SHORT).show();
+            isSongEdited = false;
         }
     }
 }

@@ -250,7 +250,7 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
         rvSearchResults = (RecyclerView) view.findViewById(R.id.rvSearchResults);
         setUpItemTouchHelper();
         setUpAnimationDecoratorHelper();
-        database = Room.databaseBuilder(Objects.requireNonNull(getActivity()), SongDatabase.class, DATABASE_NAME).build();
+        database = SongDatabase.getSongDatabase(getActivity());
         mAddSongButton = (FloatingActionButton) view.findViewById(R.id.fabAddSong);
         mAddSongButton.setOnClickListener(new View.OnClickListener() {
             @Override
