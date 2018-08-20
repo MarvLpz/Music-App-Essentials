@@ -122,7 +122,7 @@ public class TunerView extends View {
 
     private void initializeAttributes(AttributeSet attrs) {
             setDotAmount(5);
-            setStartColor(Color.BLACK);
+            setStartColor(Color.DKGRAY);
             setEndColor(Color.parseColor("#FAB36E"));
     }
 

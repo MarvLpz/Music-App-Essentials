@@ -4,14 +4,22 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.db.SongDatabase;
@@ -42,6 +50,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     SongFragment songFragment;
     TunerFragment tunerFragment;
 
+    private DrawerLayout mDrawer;
+    private Toolbar toolbar;
+    private NavigationView nvDrawer;
+    private ActionBarDrawerToggle drawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +66,96 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         init();
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Find our drawer view
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        // Setup drawer view
+        setupDrawerContent(nvDrawer);
+
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+//        getSupportActionBar().setIcon(R.drawable.tuner);
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+//        getSupportActionBar().setLogo(R.mipmap.ic);
+        getSupportActionBar().setLogo(R.mipmap.iconnav);
+
+        View headerLayout = nvDrawer.inflateHeaderView(R.layout.nav_header);
+
+
+/*        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_draw);
+// Inflate the header view at runtime
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
+// We can now look up items within the header if needed
+        ImageView ivHeaderPhoto = headerLayout.findViewById(R.id.imageView);*/
+
+
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                });
+    }
+
+    public void selectDrawerItem(MenuItem menuItem) {
+        // Create a new fragment and specify the fragment to show based on nav item clicked
+        Fragment fragment = null;
+        Class fragmentClass;
+        switch(menuItem.getItemId()) {
+            case R.id.nav_first_fragment:
+                fragmentClass = SongFragment.class;
+                break;
+            case R.id.nav_second_fragment:
+                fragmentClass = TempoFragment.class;
+                break;
+            case R.id.nav_third_fragment:
+                fragmentClass = TunerFragment.class;
+                break;
+            default:
+                fragmentClass = SearchFragment.class;
+        }
+
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
+        // Highlight the selected item has been done by NavigationView
+        menuItem.setChecked(true);
+        // Set action bar title
+        setTitle(menuItem.getTitle());
+        // Close the navigation drawer
+        mDrawer.closeDrawers();
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // The action bar home/up action should open or close the drawer.
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawer.openDrawer(GravityCompat.START);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void init(){
@@ -61,12 +164,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         SongDatabaseUtils.initialize(database);
 
 
-        Objects.requireNonNull(ViewTools.findActionBarTitle(getWindow().getDecorView())).setOnClickListener(new View.OnClickListener() {
+/*        Objects.requireNonNull(ViewTools.findActionBarTitle(getWindow().getDecorView())).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentSwitcher.change(Frags.SEARCH);
             }
-        });
+        });*/
 
         loadFragment(songFragment);
         loadFragment(new SearchFragment());
@@ -74,8 +177,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         FragmentSwitcher = this;
         FragmentSwitcher.change(Frags.SEARCH);
         //getting bottom navigation view and attaching the listener
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(this);
+/*        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(this);*/
 
     }
 

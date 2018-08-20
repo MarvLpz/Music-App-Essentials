@@ -16,12 +16,27 @@
                             <entry key="launcherLegacy">
                               <value>
                                 <PersistentState>
+                                  <option name="children">
+                                    <map>
+                                      <entry key="image">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="paddingPercent" value="-10" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="C:\Users\Marvin\Pictures\Music App Essentials\icon.png" />
-                                      <entry key="outputName" value="kwerdas_icon_final" />
+                                      <entry key="iconShape" value="VRECT" />
+                                      <entry key="imageAsset" value="C:\Users\Marvin\Pictures\Music App Essentials\bg.jpg" />
+                                      <entry key="outputName" value="bg" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -40,6 +55,11 @@
                 </map>
               </option>
             </PersistentState>
+          </value>
+        </entry>
+        <entry key="vectorWizard">
+          <value>
+            <PersistentState />
           </value>
         </entry>
       </map>

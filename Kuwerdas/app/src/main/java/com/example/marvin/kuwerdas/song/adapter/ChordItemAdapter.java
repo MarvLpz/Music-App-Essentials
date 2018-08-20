@@ -15,6 +15,7 @@ import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemClickCallback;
 import com.example.marvin.kuwerdas.song.model.Chord;
 import com.example.marvin.kuwerdas.song.model.Line;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
@@ -36,6 +37,7 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
 
     public ChordItemAdapter(){
     }
+
 
     public void getChord(String Chord){
         DragChord = Chord;
@@ -121,6 +123,7 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
             holder.tv.setText(myChord.get(position).getChord());
             holder.tv.setTag(position);
         }
+
     }
 
     @Override
