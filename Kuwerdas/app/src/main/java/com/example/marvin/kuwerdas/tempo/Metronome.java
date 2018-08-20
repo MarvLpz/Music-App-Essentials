@@ -23,7 +23,7 @@ public class Metronome {
     private long delay;
 
     private Long previousTime = null;
-
+    private BeatListener beatListener;
 
     private List<Beat> userTapList = new ArrayList<>();
     private MediaPlayer mpL;
@@ -32,8 +32,12 @@ public class Metronome {
     private boolean isPlaying;
 
     private Handler handler = new Handler();
-    public int counter;
+    private int counter;
 
+
+    public Metronome(BeatListener beatListener){
+        this.beatListener = beatListener;
+    }
 
     private int getTimeSigMaxCount(){
         if(TimeSig.equals("4/4"))
@@ -51,15 +55,19 @@ public class Metronome {
         public void run() {
             handler.postDelayed(beatRunnable, delay);
 
+
             int maxCount = getTimeSigMaxCount();
 
             if (counter >= maxCount){
                 counter = 0;
                 Log.d("COUNT", "TICK");
                 mpH.start();
+                beatListener.onBeatEnd();
             }
             else
                 mpL.start();
+
+            beatListener.onBeatStart();
 
             counter++;
             Log.d("COUNT", String.valueOf(counter));
@@ -81,6 +89,9 @@ public class Metronome {
     }
     public int getTempo() {
         return tempo;
+    }
+    public long getDelay() {
+        return delay;
     }
 
     public boolean changeTempo(int t){

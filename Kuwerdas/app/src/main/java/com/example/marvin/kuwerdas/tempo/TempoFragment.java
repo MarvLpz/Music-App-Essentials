@@ -1,6 +1,7 @@
 package com.example.marvin.kuwerdas.tempo;
 
 
+import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Color;
 import android.media.AudioManager;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.appolica.flubber.Flubber;
 import com.example.marvin.kuwerdas.R;
 import com.sdsmdg.harjot.crollerTest.Croller;
 import com.sdsmdg.harjot.crollerTest.OnCrollerChangeListener;
@@ -27,8 +29,7 @@ import top.defaults.view.PickerView;
 
 import static android.content.Context.VIBRATOR_SERVICE;
 
-public class TempoFragment extends Fragment {
-
+public class TempoFragment extends Fragment implements BeatListener{
 
     private static final String TAG = "TAGGY";
 
@@ -42,6 +43,7 @@ public class TempoFragment extends Fragment {
 
     private Vibrator mVibrator;
     private View view;
+    private Animator animator;
     private PickerView mPicker;
 
     @Nullable
@@ -59,7 +61,7 @@ public class TempoFragment extends Fragment {
     int crollerPreviousValue = 0;
 
     private void init(){
-        mMetronome = new Metronome();
+        mMetronome = new Metronome(this);
 
         mMetronome.setToneLow(MediaPlayer.create(view.getContext(), R.raw.beeplow));
         mMetronome.setToneHigh(MediaPlayer.create(view.getContext(), R.raw.beephigh));
@@ -81,22 +83,24 @@ public class TempoFragment extends Fragment {
         });
 
         mVibrator = (Vibrator)getActivity().getSystemService(VIBRATOR_SERVICE);
+        animator = Flubber.with().duration(100)
+                .animation(Flubber.AnimationPreset.ZOOM_OUT)
+                .repeatCount(1)
+                .createFor(view.findViewById(R.id.btnFade));
 
         mCroller = (Croller) view.findViewById(R.id.croller);
-//        mCroller.setIndicatorWidth(10);
         mCroller.setBackCircleColor(Color.parseColor("#8CA7A6A7"));
         mCroller.setMainCircleColor(Color.parseColor("#8CA7A6A7"));
         mCroller.setMin(20);
         mCroller.setMax(Metronome.MAX_TEMPO);
-        mCroller.setStartOffset(20);
-        mCroller.setIsContinuous(true);
-//        mCroller.setLabelColor(Color.BLACK);
+        mCroller.setIsContinuous(false);
         mCroller.setProgressPrimaryColor(Color.parseColor("#df8b37"));
         mCroller.setIndicatorColor(Color.parseColor("#FAB36E"));
         mCroller.setProgressSecondaryColor(Color.parseColor("#818181"));
-        mCroller.setProgressRadius(365);
-        mCroller.setBackCircleRadius(400);
+//        mCroller.setProgressRadius(365);
+//        mCroller.setBackCircleRadius(400);
         mCroller.setProgress(0);
+        mCroller.setIndicatorWidth(0);
         mCroller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
             boolean isTouched = false;
             @Override
@@ -136,6 +140,7 @@ public class TempoFragment extends Fragment {
 
     public void onClickButton(){
         mMetronome.tap();
+        onBeatStart();
         mCroller.setProgress(mMetronome.getTempo());
         mButtonTap.setText(String.valueOf(mMetronome.getTempo()));
         mVibrator.vibrate(50);
@@ -163,5 +168,15 @@ public class TempoFragment extends Fragment {
         super.onDetach();
 
         mMetronome.stop();
+    }
+
+    @Override
+    public void onBeatStart() {
+        animator.start();
+    }
+
+    @Override
+    public void onBeatEnd() {
+        mVibrator.vibrate(200);
     }
 }

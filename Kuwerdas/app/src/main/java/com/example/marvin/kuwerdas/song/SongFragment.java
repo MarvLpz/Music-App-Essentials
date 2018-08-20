@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
@@ -28,6 +29,7 @@ import com.example.marvin.kuwerdas.song.model.Chord;
 import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
+import com.example.marvin.kuwerdas.song.util.Transposer;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,6 +42,7 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
     private RecyclerView recyclerView;
     private ItemTouchHelper itemTouchHelper;
     private SongDatabase database;
+    private ProgressBar progressBar;
     private View view;
 
     private static Song song;
@@ -80,7 +83,7 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         init();
         instantiate();
         showPicker();
-        SearchFragment.callback = this;
+        SearchFragment.SongLoader = this;
 
         return view;
     }
@@ -88,7 +91,8 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
     private void init(){
 
         database = SongDatabase.getSongDatabase(getContext());
-
+        progressBar = view.findViewById(R.id.pbSong);
+        showProgressBar(true);
         recyclerView = view.findViewById(R.id.rvSong);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         (view.findViewById(R.id.tvNoSong)).setVisibility(song==null ? View.VISIBLE : View.GONE);
@@ -100,6 +104,10 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
             onChangeSong(song);
         }
 
+    }
+
+    private void showProgressBar(boolean val){
+        progressBar.setVisibility(val ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -375,8 +383,11 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         @Override
         protected void onPostExecute(Song s) {
             super.onPostExecute(s);
-            if(s!=null)
+            if(s!=null) {
                 onChangeSong(s);
+            }
+
+            showProgressBar(false);
         }
     }
     private void saveSongToDatabase() {

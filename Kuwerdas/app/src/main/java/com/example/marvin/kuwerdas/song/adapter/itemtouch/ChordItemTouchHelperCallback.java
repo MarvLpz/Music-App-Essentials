@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+import com.example.marvin.kuwerdas.MainActivity;
+import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.adapter.ChordItemAdapter;
 import com.example.marvin.kuwerdas.song.model.Chord;
 
@@ -13,10 +15,17 @@ public class ChordItemTouchHelperCallback {
     Context con;
     private List<Chord> myChord;
     ChordItemAdapter adapter2;
+    int minId, maxId;
+
     public ChordItemTouchHelperCallback(Context context, List<Chord> _myChord, ChordItemAdapter _adapter2){
         con = context;
         myChord = _myChord;
         adapter2 = _adapter2;
+        if(myChord!=null)
+        {
+            minId = myChord.get(0).getId();
+            maxId = myChord.get(myChord.size()-1).getId();
+        }
     }
 
     public static final float ALPHA_FULL = 1.0f;
@@ -37,7 +46,6 @@ public class ChordItemTouchHelperCallback {
                     }
                     @Override
                     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-
                         moveItem(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                         return true;
                     }
@@ -82,7 +90,6 @@ public class ChordItemTouchHelperCallback {
         return simpleItemTouchCallback;
     }
 
-
     private void moveItem(int oldPos,int newPos){
         Chord item = (Chord) myChord.get(oldPos);
 
@@ -92,7 +99,7 @@ public class ChordItemTouchHelperCallback {
         myChord.remove(oldPos);
         myChord.add(newPos,item);
         adapter2.notifyItemMoved(oldPos,newPos);
-//        adapter2.notifyDataSetChanged();
+        SongFragment.isSongEdited = true;
         /*editText2 = (EditText) findViewById(R.id.fl_tv_id);
         editText2.setFocusable(false);
         editText2.setFocusable(true);

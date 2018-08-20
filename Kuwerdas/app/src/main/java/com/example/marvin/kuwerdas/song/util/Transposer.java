@@ -1,4 +1,4 @@
-package com.example.marvin.kuwerdas.song;
+package com.example.marvin.kuwerdas.song.util;
 
 public class Transposer {
     public static String transposeChordUp(String chord){

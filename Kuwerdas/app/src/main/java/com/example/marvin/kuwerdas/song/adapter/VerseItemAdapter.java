@@ -8,15 +8,21 @@ import android.view.ViewGroup;
 
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
+import com.example.marvin.kuwerdas.db.SongDatabase;
+import com.example.marvin.kuwerdas.search.adapter.HeaderViewHolder;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemTouchHelperAdapter;
+import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
+import com.example.marvin.kuwerdas.song.util.SongUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> implements ItemTouchHelperAdapter {
+public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchHelperAdapter {
     private static final String TAG = "TAGGY";
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_ITEM = 1;
 
     List<Verse> mVerses;
     List<Verse> versesToDelete;
@@ -27,20 +33,60 @@ public class VerseItemAdapter extends RecyclerView.Adapter<VerseItemViewHolder> 
     }
 
     @Override
-    public VerseItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(viewType == TYPE_HEADER){
+            return new HeaderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.create_new_song_layout,parent,false));
+        }
+
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.verse_layout, parent, false);
         return new VerseItemViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(VerseItemViewHolder holder, int position) {
-        holder.setVerseLinesData(mVerses.get(position));
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if(holder instanceof VerseItemViewHolder) {
+            ((VerseItemViewHolder) holder).setVerseLinesData(mVerses.get(position));
+        }
+        else if (holder instanceof HeaderViewHolder){
+            HeaderViewHolder h = (HeaderViewHolder) holder;
+            h.setText("CREATE NEW VERSE");
+            h.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mVerses.addAll(SongUtil.asVerses(""));
+                    notifyDataSetChanged();
+                }
+            });
+        }
+    }
+
+
+    @Override
+    public int getItemViewType(int position) {
+        if (isPositionHeader(position))
+            return TYPE_HEADER;
+
+        return TYPE_ITEM;
+    }
+
+    private boolean isPositionHeader(int position) {
+        return position == mVerses.size();
     }
 
     @Override
     public int getItemCount() {
-        return (mVerses!=null) ? mVerses.size() : -1;
+        if (mVerses == null) {
+            return 0;
+        }
+
+        if (mVerses.size() == 0) {
+            //Return 1 here to show nothing
+            return 1;
+        }
+
+        // Add extra view to show the footer view
+        return mVerses.size() + 1;
     }
 
     @Override

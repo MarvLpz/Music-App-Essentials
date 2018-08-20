@@ -1,4 +1,4 @@
-package com.example.marvin.kuwerdas.search;
+package com.example.marvin.kuwerdas;
 
 import com.example.marvin.kuwerdas.song.model.Song;
 
