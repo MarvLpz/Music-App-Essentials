@@ -27,14 +27,6 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, OnChangeFragment{
 
-    TempoFragment tempoFragment;
-    SongFragment songFragment;
-    TunerFragment tunerFragment;
-
-    public interface OnNewSearchResult {
-        public boolean onNewSearchResult(List<Song> songs);
-    }
-
     private static final String DATABASE_NAME = "SONG_DATABASE";
 
     public static OnNewSearchResult SearchResultListener;
@@ -46,6 +38,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private OnChangeFragment.Frags currentFragment = null;
 
+    TempoFragment tempoFragment;
+    SongFragment songFragment;
+    TunerFragment tunerFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +52,33 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         tunerFragment = new TunerFragment();
 
         init();
+
     }
+
+    private void init(){
+
+        database = SongDatabase.getSongDatabase(this);
+        DatabaseUtils.initialize(database);
+
+
+        Objects.requireNonNull(ViewTools.findActionBarTitle(getWindow().getDecorView())).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentSwitcher.change(Frags.SEARCH);
+            }
+        });
+
+        loadFragment(songFragment);
+        loadFragment(new SearchFragment());
+        currentFragment = Frags.SEARCH;
+        FragmentSwitcher = this;
+        FragmentSwitcher.change(Frags.SEARCH);
+        //getting bottom navigation view and attaching the listener
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(this);
+
+    }
+
 
     @Override
     public void change(OnChangeFragment.Frags frag) {
@@ -172,31 +194,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
 
-    private void init(){
-
-        database = SongDatabase.getSongDatabase(this);
-        DatabaseUtils.initialize(database);
-
-
-        Objects.requireNonNull(ViewTools.findActionBarTitle(getWindow().getDecorView())).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentSwitcher.change(Frags.SEARCH);
-            }
-        });
-
-        loadFragment(songFragment);
-        loadFragment(new SearchFragment());
-        currentFragment = Frags.SEARCH;
-        FragmentSwitcher = this;
-        FragmentSwitcher.change(Frags.SEARCH);
-        //getting bottom navigation view and attaching the listener
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(this);
-
-    }
-
-
     private class SearchSongDatabaseTask extends AsyncTask<Void,Void,List<Song>> {
         String search;
 
@@ -230,5 +227,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
 
         super.onBackPressed();
+    }
+
+    public interface OnNewSearchResult {
+        public boolean onNewSearchResult(List<Song> songs);
     }
 }

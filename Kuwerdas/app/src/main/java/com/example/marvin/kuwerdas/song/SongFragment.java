@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.marvin.kuwerdas.db.DatabaseUtils;
@@ -41,6 +42,7 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
     private RecyclerView recyclerView;
     private ItemTouchHelper itemTouchHelper;
     private SongDatabase database;
+    private ProgressBar progressBar;
     private View view;
 
     private static Song song;
@@ -89,7 +91,8 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
     private void init(){
 
         database = SongDatabase.getSongDatabase(getContext());
-
+        progressBar = view.findViewById(R.id.pbSong);
+        showProgressBar(true);
         recyclerView = view.findViewById(R.id.rvSong);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         (view.findViewById(R.id.tvNoSong)).setVisibility(song==null ? View.VISIBLE : View.GONE);
@@ -101,6 +104,10 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
             onChangeSong(song);
         }
 
+    }
+
+    private void showProgressBar(boolean val){
+        progressBar.setVisibility(val ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -374,6 +381,7 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         protected void onPostExecute(Song s) {
             super.onPostExecute(s);
             onChangeSong(s);
+            showProgressBar(false);
         }
     }
     private void saveSongToDatabase() {

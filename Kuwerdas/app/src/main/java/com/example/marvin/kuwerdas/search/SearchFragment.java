@@ -116,6 +116,7 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
                     return;
 
                 new DeleteSongFromDatabaseTask(adapter.getSong(swipedPosition)).execute();
+
                 Snackbar.make(view,"Deleted song",Snackbar.LENGTH_SHORT).show();
             }
 

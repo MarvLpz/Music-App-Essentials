@@ -12,14 +12,14 @@ import com.example.marvin.kuwerdas.song.util.SongUtil;
 
 
 public class HeaderViewHolder extends RecyclerView.ViewHolder{
-    private CardView cardView;
+//    private CardView cardView;
     private View itemView;
     private TextView textView;
 
     public HeaderViewHolder(View itemView) {
         super(itemView);
         this.itemView = itemView;
-        cardView = itemView.findViewById(R.id.cvNewSong);
+//        cardView = itemView.findViewById(R.id.cvNewSong);
         textView = itemView.findViewById(R.id.tvNewSong);
     }
 
