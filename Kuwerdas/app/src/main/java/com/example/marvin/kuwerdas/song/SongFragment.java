@@ -65,6 +65,7 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
 
     private FloatingActionButton FloatAdd;
     private FloatingActionButton FloatDelete;
+    private FloatingActionButton FloatTranspose;
 
 //    private BottomNavigationView mBottomNavigationView;
 
@@ -160,6 +161,7 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
     }
 
     public void Transpose(){
+
         Log.d("SONG","song: " + song.getArtist() + " - " + song.getSongTitle());
         for(Verse verse : song.getVerses()){
             Log.d("SONG","verse " + verse.getUid() + ": " + verse.getTitle());
@@ -168,6 +170,8 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
                 for(Chord chord : line.getChordSet()){
                     chord.setChord(Transposer.transposeChordUp(chord.getChord()));
                     chordset += "[" + chord.getChord() + "]";
+//                    myChord.get(po).setChord(Chord.EMPTY_CHORD);
+                    SongFragment.isSongEdited = true;
                 }
                 Log.d("SONG","line: " + line.getLyrics());
                 Log.d("SONG","chords: " + chordset);
@@ -177,6 +181,14 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         adapter.notifyDataSetChanged();
     }
 
+    private class floatTransposeBtn implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            Transpose();
+
+        }
+    }
 
     private class floataddBtn implements View.OnClickListener{
 
@@ -205,7 +217,6 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         boolean delClicked = false;
         @Override
         public void onClick(View v) {
-            Transpose();
 
             if (delClicked == false){
                 ChordItemAdapter triggerClicked = new ChordItemAdapter();
@@ -301,6 +312,8 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         FloatAdd.setAlpha(127);
         FloatDelete.setAlpha(80);
 
+        FloatTranspose = (FloatingActionButton) view.findViewById(R.id.floatingTransposeBtn);
+        FloatTranspose.setOnClickListener(new floatTransposeBtn());
         linearLayout = (LinearLayout) view.findViewById(R.id.frame_place);
         linearLayout.setOnTouchListener(new touchMe());
         linearLayout.setVisibility(View.INVISIBLE);
