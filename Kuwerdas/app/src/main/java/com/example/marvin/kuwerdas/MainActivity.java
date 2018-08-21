@@ -27,8 +27,6 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, OnChangeFragment{
 
-    private static final String DATABASE_NAME = "SONG_DATABASE";
-
     public static OnNewSearchResult SearchResultListener;
     public static OnChangeFragment FragmentSwitcher;
     private SongDatabase database;
@@ -52,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         tunerFragment = new TunerFragment();
 
         init();
-
     }
 
     private void init(){
@@ -170,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 if(currentFragment == Frags.SONG)
                     return false;
 
-
                 fragment = new SongFragment();
                 currentFragment = Frags.SONG;
                 break;
@@ -194,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
  
         return loadFragment(fragment); 
     }
-
 
     private class SearchSongDatabaseTask extends AsyncTask<Void,Void,List<Song>> {
         String search;

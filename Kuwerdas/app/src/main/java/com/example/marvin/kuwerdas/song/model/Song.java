@@ -22,6 +22,9 @@ public class Song implements Serializable{
     @ColumnInfo(name = "date_modified")
     private String dateModified;
 
+    @ColumnInfo(name = "key")
+    private int key;
+
     @Ignore
     private List<Verse> verses;
 
@@ -79,5 +82,13 @@ public class Song implements Serializable{
     @Override
     public String toString(){
         return "[" + uid + " - " + songTitle + " - " + artist + " ]";
+    }
+
+    public void setKey(int key) {
+        this.key = key;
+    }
+
+    public int getKey(){
+        return key;
     }
 }

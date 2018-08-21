@@ -16,9 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
+import com.example.marvin.kuwerdas.song.adapter.TitleViewHolder;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.OnStartDragListener;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabase;
@@ -36,13 +38,14 @@ import java.util.Date;
 
 import top.defaults.view.PickerView;
 
-public class SongFragment extends Fragment implements OnStartDragListener,SearchFragment.OnChangeSong {
+public class SongFragment extends Fragment implements OnStartDragListener, SearchFragment.OnChangeSong, TitleViewHolder.ChordTransposer {
 
     private VerseItemAdapter adapter;
     private RecyclerView recyclerView;
     private ItemTouchHelper itemTouchHelper;
     private SongDatabase database;
     private ProgressBar progressBar;
+    private RelativeLayout songContainer;
     private View view;
 
     private static Song song;
@@ -67,11 +70,7 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
     private FloatingActionButton FloatDelete;
     private FloatingActionButton FloatTranspose;
 
-//    private BottomNavigationView mBottomNavigationView;
-
     LinearLayout linearLayout;
-
-    //    private ItemTouchHelper itemTouchHelper;
 
     @Nullable
     @Override
@@ -82,7 +81,7 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         //if it is DashboardFragment it should have R.layout.fragment_dashboard
         view = inflater.inflate(R.layout.fragment_song, null);
         init();
-        instantiate();
+        initChordPanel();
         showPicker();
         SearchFragment.SongLoader = this;
 
@@ -93,36 +92,46 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
 
         database = SongDatabase.getSongDatabase(getContext());
         progressBar = view.findViewById(R.id.pbSong);
+        songContainer = view.findViewById(R.id.songContainer);
         showProgressBar(true);
         recyclerView = view.findViewById(R.id.rvSong);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         (view.findViewById(R.id.tvNoSong)).setVisibility(song==null ? View.VISIBLE : View.GONE);
         if(song!=null){
-            Log.d("SONG","found song" + song);
             if(isLoadedFromDB) {
                 new GetSongDetailsDatabaseTask().execute();
+                return;
             }
-            onChangeSong(song);
+            showProgressBar(false);
         }
 
     }
 
     private void showProgressBar(boolean val){
         progressBar.setVisibility(val ? View.VISIBLE : View.GONE);
+        songContainer.setVisibility(val ? View.GONE : View.VISIBLE);
     }
 
     @Override
     public void onDetach() {
         saveSongToDatabase();
-//        song = null;
         super.onDetach();
     }
 
     @Override
     public void onPause() {
         saveSongToDatabase();
-//        song = null;
         super.onPause();
+    }
+
+    @Override
+    public void transposeUp() {
+        changeKey(true);
+    }
+
+    @Override
+    public void transposeDown() {
+        changeKey(false);
     }
 
     private final class touchMe implements View.OnTouchListener{
@@ -160,33 +169,27 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         }
     }
 
-    public void Transpose(){
-
+    public void changeKey(boolean dir){
+        showProgressBar(true);
         Log.d("SONG","song: " + song.getArtist() + " - " + song.getSongTitle());
         for(Verse verse : song.getVerses()){
             Log.d("SONG","verse " + verse.getUid() + ": " + verse.getTitle());
             for(Line line : verse.getLines()){
-                String chordset = "";
                 for(Chord chord : line.getChordSet()){
-                    chord.setChord(Transposer.transposeChordUp(chord.getChord()));
-                    chordset += "[" + chord.getChord() + "]";
-//                    myChord.get(po).setChord(Chord.EMPTY_CHORD);
+                    chord.setChord(dir ? Transposer.transposeChordUp(chord.getChord()) : Transposer.transposeChordDown(chord.getChord()));
                     SongFragment.isSongEdited = true;
                 }
-                Log.d("SONG","line: " + line.getLyrics());
-                Log.d("SONG","chords: " + chordset);
-
             }
         }
         adapter.notifyDataSetChanged();
+        showProgressBar(false);
     }
 
     private class floatTransposeBtn implements View.OnClickListener{
 
         @Override
         public void onClick(View v) {
-            Transpose();
-
+            transposeUp();
         }
     }
 
@@ -287,7 +290,7 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
             }
         }
     }
-    public void instantiate(){
+    public void initChordPanel(){
 
         tv_DragChord1 = (TextView) view.findViewById(R.id.tv_dragChord1);
         tv_DragChord2 = (TextView) view.findViewById(R.id.tv_dragChord2);
@@ -375,12 +378,15 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
         if(item!=null){
             song = item;
             isLoadedFromDB = song.getUid()!=0;
-            adapter = new VerseItemAdapter(song.getVerses());
+            adapter = new VerseItemAdapter(song,this);
             recyclerView.setAdapter(adapter);
+
             isSongEdited = false;
         }
         else
             isLoadedFromDB = false;
+
+        showProgressBar(false);
     }
 
     private class GetSongDetailsDatabaseTask extends AsyncTask<Void,Void,Song> {
@@ -405,7 +411,12 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
     }
     private void saveSongToDatabase() {
         if (song != null && isSongEdited) {
+//            song.setSongTitle(adapter.getSongTitle());
+//            song.setArtist(adapter.getSongArtist());
+//            song.setTempo(adapter.getSongTempo());
+//            song.setKey(adapter.getSongKey());
             song.setDateModified((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(new Date()));
+            Log.d("SEARCH","verse size for " + song.getSongTitle() + ": " + song.getVerses().size());
 
             if (!isLoadedFromDB) {
                 (new SongDatabaseUtils.InsertSongDatabaseTask(song)).execute();
@@ -414,8 +425,11 @@ public class SongFragment extends Fragment implements OnStartDragListener,Search
                 (new SongDatabaseUtils.UpdateSongDatabaseTask(song)).execute();
             }
 
+
             Toast.makeText(getContext(), "Saved changes to \'" + song.getSongTitle() + "\'", Toast.LENGTH_SHORT).show();
             isSongEdited = false;
         }
     }
+
+
 }
