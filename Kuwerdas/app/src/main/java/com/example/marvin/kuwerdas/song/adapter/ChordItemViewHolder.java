@@ -14,11 +14,11 @@ import com.example.marvin.kuwerdas.song.model.Chord;
 public class
 ChordItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
     TextView tv;
-    LinearLayout linearLayout;
+//    LinearLayout linearLayout;
     public ChordItemViewHolder(View itemView) {
         super(itemView);
         tv = (TextView) itemView.findViewById(R.id.etChord);
-        linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayoutChord);
+//        linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayoutChord);
 
     }
 

@@ -10,6 +10,7 @@ import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.search.adapter.HeaderViewHolder;
+import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemTouchHelperAdapter;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
@@ -23,9 +24,13 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final String TAG = "TAGGY";
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
+    private static final int TYPE_TITLE = 2;
 
     List<Verse> mVerses;
     List<Verse> versesToDelete;
+
+    String title, artist;
+    int tempo, key;
 
     public VerseItemAdapter(List<Verse> mVerses){
         this.mVerses = mVerses;
@@ -36,6 +41,8 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType == TYPE_HEADER){
             return new HeaderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.create_new_song_layout,parent,false));
+        } else if (viewType == TYPE_TITLE){
+            return new TitleViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.title_layout,parent,false));
         }
 
         View itemView = LayoutInflater.from(parent.getContext())
@@ -47,6 +54,17 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof VerseItemViewHolder) {
             ((VerseItemViewHolder) holder).setVerseLinesData(mVerses.get(position));
+        }
+        else if(holder instanceof TitleViewHolder) {
+            title = "Kisapmata";
+            artist = "Rivermaya";
+            tempo = 120;
+            key = 0;
+
+            ((TitleViewHolder) holder).setTitle(title);
+            ((TitleViewHolder) holder).setArtist(artist);
+            ((TitleViewHolder) holder).setKey(key);
+            ((TitleViewHolder) holder).setTempo(tempo);
         }
         else if (holder instanceof HeaderViewHolder){
             HeaderViewHolder h = (HeaderViewHolder) holder;
@@ -66,12 +84,17 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public int getItemViewType(int position) {
         if (isPositionHeader(position))
             return TYPE_HEADER;
-
+        if (isPositionTitle(position))
+            return TYPE_TITLE;
         return TYPE_ITEM;
     }
 
     private boolean isPositionHeader(int position) {
-        return position == mVerses.size();
+        return position == mVerses.size() + 1;
+    }
+
+    private boolean isPositionTitle(int position) {
+        return position == 0;
     }
 
     @Override
@@ -82,11 +105,11 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         if (mVerses.size() == 0) {
             //Return 1 here to show nothing
-            return 1;
+            return 2;
         }
 
         // Add extra view to show the footer view
-        return mVerses.size() + 1;
+        return mVerses.size() + 2;
     }
 
     @Override

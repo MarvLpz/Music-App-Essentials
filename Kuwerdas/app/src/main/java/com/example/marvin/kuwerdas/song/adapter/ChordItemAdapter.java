@@ -35,6 +35,7 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
     }
 
     public ChordItemAdapter(){
+
     }
 
     public void getChord(String Chord){
@@ -116,7 +117,6 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
 
     @Override
     public void onBindViewHolder(ChordItemViewHolder holder, int position) {
-//        holder.setChord(myChord.get(position).getChord());
         if(myChord != null) {
             holder.tv.setText(myChord.get(position).getChord());
             holder.tv.setTag(position);
