@@ -16,27 +16,12 @@
                             <entry key="launcherLegacy">
                               <value>
                                 <PersistentState>
-                                  <option name="children">
-                                    <map>
-                                      <entry key="image">
-                                        <value>
-                                          <PersistentState>
-                                            <option name="values">
-                                              <map>
-                                                <entry key="paddingPercent" value="-10" />
-                                              </map>
-                                            </option>
-                                          </PersistentState>
-                                        </value>
-                                      </entry>
-                                    </map>
-                                  </option>
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="iconShape" value="VRECT" />
-                                      <entry key="imageAsset" value="C:\Users\Marvin\Pictures\Music App Essentials\bg.jpg" />
-                                      <entry key="outputName" value="bg" />
+                                      <entry key="iconShape" value="NONE" />
+                                      <entry key="imageAsset" value="C:\Users\Marvin\Pictures\Music App Essentials\iconnew.png" />
+                                      <entry key="outputName" value="iconnew" />
                                     </map>
                                   </option>
                                 </PersistentState>

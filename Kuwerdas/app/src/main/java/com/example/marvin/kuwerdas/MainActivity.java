@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Class fragmentClass;
         switch(menuItem.getItemId()) {
             case R.id.nav_first_fragment:
-                fragmentClass = SongFragment.class;
+                fragmentClass = SearchFragment.class;
                 break;
             case R.id.nav_second_fragment:
                 fragmentClass = TempoFragment.class;

@@ -58,7 +58,6 @@ public class TunerFragment extends Fragment {
         return view;
     }
 
-
     private void init(){
         textLabel = (TextView) view.findViewById(R.id.tvTuner);
         tunerView = (TunerView) view.findViewById(R.id.tunerView);
