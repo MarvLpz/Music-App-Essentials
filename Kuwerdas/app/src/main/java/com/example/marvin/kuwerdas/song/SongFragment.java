@@ -22,12 +22,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.song.adapter.TitleViewHolder;
+import com.example.marvin.kuwerdas.song.adapter.itemtouch.ChordItemTouchHelperCallback;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.OnStartDragListener;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.search.SearchFragment;
 import com.example.marvin.kuwerdas.song.adapter.ChordItemAdapter;
 import com.example.marvin.kuwerdas.song.adapter.VerseItemAdapter;
+import com.example.marvin.kuwerdas.song.adapter.itemtouch.VerseItemTouchHelperCallback;
 import com.example.marvin.kuwerdas.song.model.Chord;
 import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Song;
@@ -36,6 +38,7 @@ import com.example.marvin.kuwerdas.song.util.Transposer;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import top.defaults.view.PickerView;
 
@@ -43,6 +46,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
     private VerseItemAdapter adapter;
     private RecyclerView recyclerView;
+    private VerseItemTouchHelperCallback verseItemTouchHelperCallback;
     private ItemTouchHelper itemTouchHelper;
     private SongDatabase database;
     private ProgressBar progressBar;
@@ -103,6 +107,9 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         songContainer = view.findViewById(R.id.songContainer);
         fabEdit = view.findViewById(R.id.fabToggleEdit);
         recyclerView = view.findViewById(R.id.rvSong);
+        //            ItemTouchHelper.Callback callback = new VerseItemTouchHelperCallback(adapter);
+//        adapter = new VerseItemAdapter(song, this);
+
         fabEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,11 +118,15 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                     mode = SongEditMode.READ_ONLY;
                     fabEdit.setImageResource(R.drawable.edit);
                     Toast.makeText(view.getContext(),"READONLY MODE",Toast.LENGTH_SHORT).show();
-                } else{
+                    SongFragment.isSongEdited = true;
+                }
+
+                else{
                     recyclerView.setClickable(true);
                     mode = SongEditMode.EDIT;
                     fabEdit.setImageResource(R.drawable.back);
                     Toast.makeText(view.getContext(),"EDIT MODE",Toast.LENGTH_SHORT).show();
+                    SongFragment.isSongEdited = true;
                 }
 
                 if (adapter!=null)
@@ -404,7 +415,11 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                 adapter = new VerseItemAdapter(song, this);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setVisibility(View.VISIBLE);
-
+/*                itemTouchHelper = new ItemTouchHelper(new VerseItemTouchHelperCallback(getActivity(),adapter,song.getVerses()).createHelperCallback());
+                itemTouchHelper.attachToRecyclerView(recyclerView);*/
+                verseItemTouchHelperCallback = new VerseItemTouchHelperCallback(getContext(),adapter,song.getVerses());
+                itemTouchHelper = new ItemTouchHelper(verseItemTouchHelperCallback.createHelperCallback());
+                itemTouchHelper.attachToRecyclerView(recyclerView);
                 isSongEdited = false;
             }
         }
