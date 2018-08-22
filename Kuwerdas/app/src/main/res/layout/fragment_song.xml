@@ -14,7 +14,6 @@
         android:layout_centerInParent="true" />
 
     <LinearLayout
-
         android:id="@+id/frame_place"
         android:layout_width="318dp"
         android:layout_height="112dp"
@@ -128,6 +127,22 @@
         android:id="@+id/songContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabToggleEdit"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:clickable="true"
+            android:focusable="true"
+            app:borderWidth="0dp"
+            android:src="@drawable/edit"
+            app:backgroundTint="@null"
+            app:fabSize="mini"
+            app:rippleColor="@null"
+            app:useCompatPadding="true" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvSong"
