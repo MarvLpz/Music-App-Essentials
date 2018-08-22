@@ -2,14 +2,15 @@ package com.example.marvin.kuwerdas.song.adapter;
 
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
-import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.search.adapter.HeaderViewHolder;
+import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemTouchHelperAdapter;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
@@ -21,21 +22,33 @@ import java.util.List;
 
 public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchHelperAdapter {
     private static final String TAG = "TAGGY";
-    private static final int TYPE_HEADER = 0;
-    private static final int TYPE_ITEM = 1;
 
-    List<Verse> mVerses;
-    List<Verse> versesToDelete;
+    private static final int TYPE_FOOTER = 1;
+    private static final int TYPE_ITEM = 2;
+    private static final int TYPE_TITLE = 3;
 
-    public VerseItemAdapter(List<Verse> mVerses){
-        this.mVerses = mVerses;
+    private List<Verse> mVerses;
+    private List<Verse> versesToDelete;
+
+    private SongFragment songFragment;
+
+    private Song songDetails;
+
+    public VerseItemAdapter(Song songDetails, SongFragment songFragment){
+        this.mVerses = songDetails.getVerses();
+        this.songDetails = songDetails;
+        this.songFragment = songFragment;
         versesToDelete = new ArrayList<>();
+
+        Log.d("SONG","verse item count: " + getItemCount());
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == TYPE_HEADER){
+        if(viewType == TYPE_FOOTER){
             return new HeaderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.create_new_song_layout,parent,false));
+        } else if (viewType == TYPE_TITLE){
+            return new TitleViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.title_layout,parent,false),songFragment);
         }
 
         View itemView = LayoutInflater.from(parent.getContext())
@@ -46,7 +59,11 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof VerseItemViewHolder) {
-            ((VerseItemViewHolder) holder).setVerseLinesData(mVerses.get(position));
+            ((VerseItemViewHolder) holder).setVerseLinesData(mVerses.get(position-1));
+        }
+        else if(holder instanceof TitleViewHolder) {
+
+            ((TitleViewHolder) holder).setSongDetails(songDetails);
         }
         else if (holder instanceof HeaderViewHolder){
             HeaderViewHolder h = (HeaderViewHolder) holder;
@@ -64,14 +81,19 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-        if (isPositionHeader(position))
-            return TYPE_HEADER;
-
+        if (isPositionFooter(position))
+            return TYPE_FOOTER;
+        if (isPositionTitle(position))
+            return TYPE_TITLE;
         return TYPE_ITEM;
     }
 
-    private boolean isPositionHeader(int position) {
-        return position == mVerses.size();
+    private boolean isPositionFooter(int position) {
+        return position == mVerses.size() + 1;
+    }
+
+    private boolean isPositionTitle(int position) {
+        return position == 0;
     }
 
     @Override
@@ -82,11 +104,11 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         if (mVerses.size() == 0) {
             //Return 1 here to show nothing
-            return 1;
+            return 2;
         }
 
         // Add extra view to show the footer view
-        return mVerses.size() + 1;
+        return mVerses.size() + 2;
     }
 
     @Override
@@ -114,7 +136,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onItemDismiss(final RecyclerView.ViewHolder viewHolder, final RecyclerView recyclerView) {
         final int adapterPosition = viewHolder.getAdapterPosition();
-        final Verse mVerse = mVerses.get(adapterPosition);
+        final Verse mVerse = mVerses.get(adapterPosition-1);
         Snackbar snackbar = Snackbar
                 .make(recyclerView, "Verse Deleted", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {

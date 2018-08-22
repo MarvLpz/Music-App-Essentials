@@ -25,6 +25,7 @@ import com.example.marvin.kuwerdas.MainActivity;
 import com.example.marvin.kuwerdas.OnChangeFragment;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabase;
+import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.search.adapter.HeaderViewHolder;
 import com.example.marvin.kuwerdas.search.adapter.SongItemAdapter;
 import com.example.marvin.kuwerdas.song.model.Song;
@@ -46,11 +47,11 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
     public boolean onNewSearchResult(List<Song> songs) {
         if(adapter!=null) {
             adapter.updateItems(songs);
+            adapter.notifyDataSetChanged();
             return true;
         }
         return false;
     }
-
 
     public interface OnClickSearchItem{
         boolean onClickSearchItem(Song item);
@@ -165,10 +166,6 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
         mItemTouchHelper.attachToRecyclerView(rvSearchResults);
     }
 
-    /**
-     * We're gonna setup another ItemDecorator that will draw the red background in the empty space while the items are animating to thier new positions
-     * after an item is removed.
-     */
     private void setUpAnimationDecoratorHelper() {
         rvSearchResults.addItemDecoration(new RecyclerView.ItemDecoration() {
 
@@ -257,11 +254,12 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
         rvSearchResults.setLayoutManager(new LinearLayoutManager(view.getContext()));
         adapter = new SongItemAdapter(this);
         rvSearchResults.setAdapter(adapter);
+
+        new GetSongsFromDatabaseTask().execute();
     }
 
     @Override
     public void recyclerViewListItemClicked(View v, int position) {
-        Log.d("TAGGY","item clicked at position: " + position);
         if(SongLoader!=null){
             SongLoader.onChangeSong(adapter.getSong(position));
             if(MainActivity.FragmentSwitcher!=null){
@@ -283,6 +281,21 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
         protected List<Song> doInBackground(Void... voids) {
             database.songDao().deleteSong(song);
 
+            return database.songDao().getAllSongs();
+        }
+
+        @Override
+        protected void onPostExecute(List<Song> songs) {
+            super.onPostExecute(songs);
+
+            onNewSearchResult(songs);
+        }
+    }
+
+    private class GetSongsFromDatabaseTask extends AsyncTask<Void,Void,List<Song>>{
+
+        @Override
+        protected List<Song> doInBackground(Void... voids) {
             return database.songDao().getAllSongs();
         }
 

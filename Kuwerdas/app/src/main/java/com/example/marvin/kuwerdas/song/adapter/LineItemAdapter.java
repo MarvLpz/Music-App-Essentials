@@ -17,6 +17,7 @@ import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Verse;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,7 +26,6 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
     private boolean onBind;
 
     private int focusPosition;
-    private int currentLineId;
     private int currentPosition;
 
     public LineItemAdapter(Verse data) {
@@ -53,7 +53,6 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
             public void onFocusChange(View view, boolean focused) {
                 if(focused){
                     currentPosition = pos;
-                    currentLineId = line.getId();
                     Log.d("TAGGY","focused on position: " + pos);
                     Log.d("TAGGY","verselines" + verseLines.size());
                 }
@@ -97,15 +96,33 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                 }*/
                 if (!onBind) {
 
-                    List<String> arr = Arrays.asList(charSequence.toString().split("\n"));
+
+                    etLine.getLayout().getLineStart(1);
+                    List<String> arr = new ArrayList<>();
+
+                    for(int n=0;n<etLine.getLayout().getLineCount();n++){
+
+                        List<String> m = Arrays.asList(etLine.getText().subSequence(etLine.getLayout().getLineStart(n),etLine.getLayout().getLineEnd(n)).toString().split("\n"));
+                        Log.d("CHORDES","text change: " + m);
+                        arr.addAll(m);
+                        Log.d("CHORDES","arr change: " + arr);
+                    }
+//                    List<String> arr = Arrays.asList(charSequence.toString().split("\n"));
 //                    verseLines.set(currentPosition, new Line(arr.get(0)));
                     line.setLyrics(arr.get(0));
 
                     if (arr.size() > 1) {
-                        for (String a : arr.subList(1, arr.size())) {
-                            verseLines.add(currentPosition + 1, new Line(a));
+                        for(int n=1;n<arr.size();n++){
+                            String a = arr.get(n);
+                            Log.d("CHORDES","adding str: " + a);
+                            verseLines.add(currentPosition + n, new Line(a));
                             notifyDataSetChanged();
                         }
+//                        for (String a : arr.subList(1, arr.size())) {
+//                            Log.d("CHORDES","adding str: " + a);
+//                            verseLines.add(currentPosition + 1, new Line(a));
+//                            notifyDataSetChanged();
+//                        }
                         focusPosition = currentPosition + arr.size() - 1;
                     } else
                         focusPosition = -1;

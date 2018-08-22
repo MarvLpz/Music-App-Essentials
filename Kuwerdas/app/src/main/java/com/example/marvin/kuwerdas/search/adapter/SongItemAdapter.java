@@ -44,10 +44,6 @@ public class SongItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
-    public Song getItem(int position){
-        return songList.get(position);
-    }
-
     @Override
     public int getItemViewType(int position) {
         if (isPositionHeader(position))
@@ -88,7 +84,7 @@ public class SongItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             });
 
         } else if (holder instanceof SongItemViewHolder)  {
-            Song song = songList.get(position);
+            Song song = songList.get(position-1);
             ((SongItemViewHolder) holder).setItemData(song.getSongTitle(), song.getArtist(), song.getDateModified());
             //cast holder to VHItem and set data
         }
@@ -106,12 +102,11 @@ public class SongItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         // Add extra view to show the footer view
-        return songList.size();
+        return songList.size() + 1;
     }
 
     public Song getSong(int position){
-        return songList.get(position);
+        return songList.get(position-1);
     }
-
 
 }

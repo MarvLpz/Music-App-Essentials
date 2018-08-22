@@ -177,6 +177,6 @@ public class TempoFragment extends Fragment implements BeatListener{
 
     @Override
     public void onBeatEnd() {
-        mVibrator.vibrate(200);
+//        mVibrator.vibrate(200);
     }
 }

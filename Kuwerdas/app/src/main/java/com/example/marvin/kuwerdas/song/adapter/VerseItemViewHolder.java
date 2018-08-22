@@ -3,10 +3,13 @@ package com.example.marvin.kuwerdas.song.adapter;
 import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
 import com.example.marvin.kuwerdas.R;
+import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemTouchHelperViewHolder;
 import com.example.marvin.kuwerdas.song.model.Verse;
 
@@ -23,10 +26,8 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
 
     public VerseItemViewHolder(View itemView) {
         super(itemView);
-        // initialize the View objects
         recyclerView = (RecyclerView) itemView.findViewById(R.id.rvVerses);
         textView = (EditText) itemView.findViewById(R.id.etTitle);
-
     }
 
     public void setVerseLinesData(Verse data){
@@ -34,6 +35,18 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
         recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
         recyclerView.setAdapter(adapter);
         textView.setText(data.getTitle());
+        textView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                SongFragment.isSongEdited = true;
+            }
+        });
     }
 
     @Override

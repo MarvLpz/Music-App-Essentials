@@ -36,6 +36,8 @@ public class SongUtil {
         song.setSongTitle(title);
         song.setArtist(artist);
         song.setVerses(verses);
+        song.setKey(0);
+        song.setTempo(0);
         song.setDateModified((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(new Date()));
 
         String[] strVerses = lyrics.split("\n\n");

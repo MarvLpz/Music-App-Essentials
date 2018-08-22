@@ -36,6 +36,7 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
     }
 
     public ChordItemAdapter(){
+
     }
 
 
@@ -96,7 +97,7 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         @Override
         public void onClick(View v) {
             if (delClicked){
-                myChord.get((int) v.getTag() ).setChord(Chord.EMPTY_CHORD);
+                myChord.get((int) v.getTag() ).setChord("A");
                 SongFragment.isSongEdited = true;
                 notifyDataSetChanged();
             }
@@ -118,7 +119,6 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
 
     @Override
     public void onBindViewHolder(ChordItemViewHolder holder, int position) {
-//        holder.setChord(myChord.get(position).getChord());
         if(myChord != null) {
             holder.tv.setText(myChord.get(position).getChord());
             holder.tv.setTag(position);
