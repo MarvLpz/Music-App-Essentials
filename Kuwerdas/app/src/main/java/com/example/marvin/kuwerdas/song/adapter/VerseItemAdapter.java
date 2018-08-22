@@ -2,9 +2,12 @@ package com.example.marvin.kuwerdas.song.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,6 +15,7 @@ import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.search.adapter.HeaderViewHolder;
 import com.example.marvin.kuwerdas.song.SongFragment;
+import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemClickCallback;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemTouchHelperAdapter;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
@@ -34,6 +38,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private SongFragment songFragment;
 
     private Song songDetails;
+
 
     public VerseItemAdapter(Song songDetails, SongFragment songFragment){
         this.mVerses = songDetails.getVerses();
@@ -62,16 +67,16 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         Log.d("SONG","Loaded verse");
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.verse_layout, parent, false);
-
         return new VerseItemViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof VerseItemViewHolder) {
             ((VerseItemViewHolder) holder).setVerseLinesData(mVerses.get(position-1));
             ((VerseItemViewHolder) holder).setFocusable(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
         }
+
         else if(holder instanceof TitleViewHolder) {
             ((TitleViewHolder) holder).setSongDetails(songDetails);
             ((TitleViewHolder) holder).setFocusableTitle(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
@@ -116,13 +121,16 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return 0;
         }
 
-        if (mVerses.size() == 0) {
+       else if (mVerses.size() == 0) {
             //Return 1 here to show nothing
             return 2;
         }
 
+        else
+            Log.d("RETURNSIZE",String.valueOf(mVerses.size()));
         // Add extra view to show the footer view
         return mVerses.size() + 2;
+//        return mVerses.size();
     }
 
     @Override
