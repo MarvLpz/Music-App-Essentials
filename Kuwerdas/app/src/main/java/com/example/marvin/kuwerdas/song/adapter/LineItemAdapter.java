@@ -46,7 +46,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
         final EditText etLine = holder.getLineLyricsEditText();
         final Line line = verseLines.get(holder.getAdapterPosition());
         etLine.setText(line.getLyrics());
-        
+
         final int pos = holder.getAdapterPosition();
         etLine.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override

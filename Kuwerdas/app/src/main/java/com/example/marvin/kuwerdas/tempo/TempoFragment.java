@@ -113,6 +113,8 @@ public class TempoFragment extends Fragment implements BeatListener{
                     if (mMetronome.changeTempo(progress)) {
                         mButtonTap.setText(String.valueOf(mMetronome.getTempo()));
                         crollerPreviousValue = progress;
+                        lastTempo = mMetronome.getTempo();
+
                     } else
                         mCroller.setProgress(crollerPreviousValue);
                 }
@@ -160,8 +162,8 @@ public class TempoFragment extends Fragment implements BeatListener{
 
     public void onLongClickButton(){
         if(mMetronome.isPlaying()) {
-            mMetronome.stop();
             lastTempo = mMetronome.getTempo();
+            mMetronome.stop();
             mButtonTap.setText(String.valueOf(mMetronome.getTempo()));
             mVibrator.vibrate(500);
             mCroller.setProgress(mMetronome.getTempo());
@@ -185,7 +187,7 @@ public class TempoFragment extends Fragment implements BeatListener{
     private boolean changeSongTempoValue(){
         if(SongFragment.song!=null)
         {
-            SongFragment.song.setTempo(mMetronome.getTempo());
+            SongFragment.song.setTempo(lastTempo);
             (new SongDatabaseUtils.UpdateSongDatabaseTask(SongFragment.song)).execute();
             return true;
         }
