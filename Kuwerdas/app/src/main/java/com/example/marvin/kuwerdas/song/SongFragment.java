@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -45,7 +46,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     private ItemTouchHelper itemTouchHelper;
     private SongDatabase database;
     private ProgressBar progressBar;
-    private RelativeLayout songContainer;
+    private View songContainer;
     private View view;
 
     private static Song song;
@@ -79,10 +80,10 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         //like if the class is HomeFragment it should have R.layout.home_fragment
         //if it is DashboardFragment it should have R.layout.fragment_dashboard
         view = inflater.inflate(R.layout.fragment_song, null);
+        SearchFragment.SongLoader = this;
         init();
         initChordPanel();
         showPicker();
-        SearchFragment.SongLoader = this;
 
         return view;
     }
@@ -92,15 +93,17 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         database = SongDatabase.getSongDatabase(getContext());
         progressBar = view.findViewById(R.id.pbSong);
         songContainer = view.findViewById(R.id.songContainer);
-        showProgressBar(true);
         recyclerView = view.findViewById(R.id.rvSong);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        (view.findViewById(R.id.tvNoSong)).setVisibility(song==null ? View.VISIBLE : View.GONE);
+        showProgressBar(true);
+        Log.d("SONG","loaded init");
         if(song!=null){
             if(isLoadedFromDB) {
                 new GetSongDetailsDatabaseTask().execute();
                 return;
             }
+            else
+                onChangeSong(song);
             showProgressBar(false);
         }
 
@@ -369,10 +372,13 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         if(item!=null){
             song = item;
             isLoadedFromDB = song.getUid()!=0;
-            adapter = new VerseItemAdapter(song,this);
-            recyclerView.setAdapter(adapter);
+            if(song.getVerses()!=null) {
+                adapter = new VerseItemAdapter(song, this);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setVisibility(View.VISIBLE);
 
-            isSongEdited = false;
+                isSongEdited = false;
+            }
         }
         else
             isLoadedFromDB = false;
@@ -384,7 +390,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
         @Override
         protected Song doInBackground(Void... voids) {
-            if(song!=null)
+            if(song!=null && song.getUid()!=0)
                 return database.songDao().getSongWithVerses(song.getUid());
 
             return null;
@@ -393,7 +399,9 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         @Override
         protected void onPostExecute(Song s) {
             super.onPostExecute(s);
+
             if(s!=null) {
+                Log.d("SONG","onPostExecute getsongdetails");
                 onChangeSong(s);
             }
 

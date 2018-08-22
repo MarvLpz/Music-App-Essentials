@@ -74,7 +74,9 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
                     myChord.get(positionChord).setChord(DragChord);
                     SongFragment.isSongEdited = true;
 //                    ((TextView)v).setText(String.valueOf(DragChord));
-                    notifyDataSetChanged();
+
+//                    notifyDataSetChanged();
+                    notifyItemChanged(positionChord);
 
                     Log.d("DRAG","Drag to Place");
                     Log.d("DRAG",(String.valueOf((TextView)v)  ));
@@ -97,7 +99,8 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         @Override
         public void onClick(View v) {
             if (delClicked){
-                myChord.get((int) v.getTag() ).setChord("A");
+                //TODO fix tag
+                myChord.get((int) v.getTag() ).setChord(Chord.EMPTY_CHORD);
                 SongFragment.isSongEdited = true;
                 notifyDataSetChanged();
             }
@@ -130,5 +133,4 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
     public int getItemCount() {
         return Line.CHORD_SET_LENGTH;
     }
-
 }

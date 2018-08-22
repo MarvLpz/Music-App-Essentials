@@ -116,8 +116,10 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                             String a = arr.get(n);
                             Log.d("CHORDES","adding str: " + a);
                             verseLines.add(currentPosition + n, new Line(a));
-                            notifyDataSetChanged();
                         }
+                        notifyItemChanged(currentPosition);
+                        notifyItemRangeInserted(currentPosition+1,arr.size());
+//                        notifyDataSetChanged();
 //                        for (String a : arr.subList(1, arr.size())) {
 //                            Log.d("CHORDES","adding str: " + a);
 //                            verseLines.add(currentPosition + 1, new Line(a));

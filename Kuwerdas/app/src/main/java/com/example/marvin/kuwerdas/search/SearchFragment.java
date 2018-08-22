@@ -47,7 +47,6 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
     public boolean onNewSearchResult(List<Song> songs) {
         if(adapter!=null) {
             adapter.updateItems(songs);
-            adapter.notifyDataSetChanged();
             return true;
         }
         return false;

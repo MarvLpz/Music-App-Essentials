@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.marvin.kuwerdas.MainActivity;
+import com.example.marvin.kuwerdas.OnChangeFragment;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.model.Song;
@@ -71,6 +73,12 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
 
         //TEMPO
         tempo.setText("Tempo: " + song.getTempo() + " bpm");
+        tempo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.FragmentSwitcher.change(OnChangeFragment.Frags.TEMPO);
+            }
+        });
 
         //KEY (TRANSPOSE)
         key.setText("" +song.getKey());

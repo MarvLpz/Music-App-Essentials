@@ -78,7 +78,7 @@ public class SongItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             h.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    SongLoader.onChangeSong(SongUtil.asSong("", "", ""));
+                    SongLoader.onChangeSong(SongUtil.asSong("","",""));
                     MainActivity.FragmentSwitcher.change(OnChangeFragment.Frags.SONG);
                 }
             });
