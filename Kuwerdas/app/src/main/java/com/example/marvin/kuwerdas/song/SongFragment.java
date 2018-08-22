@@ -49,7 +49,9 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     private View songContainer;
     private View view;
 
-    private static Song song;
+    private FloatingActionButton fabEdit;
+
+    public static Song song;
     private static boolean isLoadedFromDB = false;
     public static boolean isSongEdited = false;
 
@@ -70,7 +72,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     private FloatingActionButton FloatAdd;
     private FloatingActionButton FloatDelete;
 
-    LinearLayout linearLayout;
+    private LinearLayout linearLayout;
 
     @Nullable
     @Override
@@ -88,12 +90,36 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         return view;
     }
 
+    enum SongEditMode{
+        EDIT, READ_ONLY
+    }
+
+    SongEditMode mode;
+
     private void init(){
 
         database = SongDatabase.getSongDatabase(getContext());
         progressBar = view.findViewById(R.id.pbSong);
         songContainer = view.findViewById(R.id.songContainer);
+        fabEdit = view.findViewById(R.id.fabToggleEdit);
         recyclerView = view.findViewById(R.id.rvSong);
+        mode = SongEditMode.READ_ONLY;
+        fabEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mode == SongEditMode.EDIT) {
+                    recyclerView.setClickable(false);
+                    mode = SongEditMode.READ_ONLY;
+                    fabEdit.setImageResource(R.drawable.edit);
+                    Toast.makeText(view.getContext(),"READONLY MODE",Toast.LENGTH_SHORT).show();
+                } else{
+                    recyclerView.setClickable(true);
+                    mode = SongEditMode.EDIT;
+                    fabEdit.setImageResource(R.drawable.back);
+                    Toast.makeText(view.getContext(),"EDIT MODE",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         showProgressBar(true);
         Log.d("SONG","loaded init");
@@ -424,8 +450,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                 (new SongDatabaseUtils.UpdateSongDatabaseTask(song)).execute();
             }
 
-
-            Toast.makeText(getContext(), "Saved changes to \'" + song.getSongTitle() + "\'", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Saved changes to " + (song.getSongTitle().isEmpty() ? "song" : "\'" + song.getSongTitle() + "\'" ), Toast.LENGTH_SHORT).show();
             isSongEdited = false;
         }
     }
