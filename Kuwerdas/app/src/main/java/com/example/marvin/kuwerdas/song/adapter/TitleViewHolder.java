@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.marvin.kuwerdas.MainActivity;
@@ -16,8 +17,8 @@ import com.example.marvin.kuwerdas.song.model.Song;
 
 public class TitleViewHolder extends RecyclerView.ViewHolder {
     private View itemView;
-    private TextView title;
-    private TextView artist;
+    private EditText title;
+    private EditText artist;
     private TextView tempo;
     private TextView key;
     private Button transposeUp;
@@ -25,6 +26,23 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
 
     private ChordTransposer chordTransposer;
     private SongFragment songFragment;
+
+    public void setFocusableTitle(boolean val){
+        if(val)
+        {
+            title.setFocusableInTouchMode(true);
+        }
+        else
+            title.setFocusableInTouchMode(false);
+    }
+    public void setFocusableArtist(boolean val){
+        if(val)
+        {
+            artist.setFocusableInTouchMode(true);
+        }
+        else
+            artist.setFocusableInTouchMode(false);
+    }
 
     public TitleViewHolder(View itemView, SongFragment songFragment) {
         super(itemView);
