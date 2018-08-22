@@ -13,18 +13,21 @@
             android:id="@+id/tvSearchTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title" />
 
         <TextView
             android:id="@+id/tvSearchArtist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle" />
 
         <TextView
             android:id="@+id/tvSearchDateModified"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
     </LinearLayout>
 

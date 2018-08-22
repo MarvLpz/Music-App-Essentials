@@ -186,24 +186,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public void change(Frags frag) {
-        if(!frag.equals(Frags.SONG))
-            if(getSupportActionBar()!=null)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimary)));
-                    getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-                    getSupportActionBar().show();
-                }
         switch(frag){
             case SONG:
                 currentFragment = Frags.SONG;
-                if(getSupportActionBar()!=null) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
-                        getSupportActionBar().hide();
-                        getWindow().setStatusBarColor(Color.WHITE);
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                    }
-                }
                 loadFragment(songFragment);
                 clearSearch();
                 break;
@@ -224,6 +209,18 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
         }
 
+        if(getSupportActionBar()!=null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(frag != Frags.SONG) {
+                getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+                getSupportActionBar().show();
+                getWindow().getDecorView().setSystemUiVisibility(0);
+            }
+            else {
+                getSupportActionBar().hide();
+                getWindow().setStatusBarColor(Color.WHITE);
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+        }
     }
 
     private void clearSearch(){
@@ -283,13 +280,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-     Fragment fragment = null;
         switch (item.getItemId()) {
             case R.id.navigation_song:
                 if(currentFragment == Frags.SONG)
                     return false;
 
-                fragment = new SongFragment();
+//                fragment = new SongFragment();
                 currentFragment = Frags.SONG;
                 break;
  
@@ -297,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 if(currentFragment == Frags.TEMPO)
                     return false;
 
-                fragment = new TempoFragment();
+//                fragment = new TempoFragment();
                 currentFragment = Frags.TEMPO;
                 break;
  
@@ -305,12 +301,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 if(currentFragment == Frags.TUNER)
                     return false;
 
-                fragment = new TunerFragment();
+//                fragment = new TunerFragment();
                 currentFragment = Frags.TUNER;
                 break;
         }
- 
-        return loadFragment(fragment); 
+
+        FragmentSwitcher.change(currentFragment);
+        return true;
     }
 
     private class SearchSongDatabaseTask extends AsyncTask<Void,Void,List<Song>> {

@@ -1,29 +1,30 @@
 package com.example.marvin.kuwerdas.song;
 
 import android.content.ClipData;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appolica.flubber.Flubber;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.song.adapter.TitleViewHolder;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.OnStartDragListener;
@@ -36,13 +37,13 @@ import com.example.marvin.kuwerdas.song.model.Chord;
 import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
+import com.example.marvin.kuwerdas.song.picker.PickerAdapter;
+import com.example.marvin.kuwerdas.song.picker.PickerItems;
 import com.example.marvin.kuwerdas.song.util.Transposer;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
-
-import top.defaults.view.PickerView;
+import java.util.List;
 
 public class SongFragment extends Fragment implements OnStartDragListener, SearchFragment.OnChangeSong, TitleViewHolder.ChordTransposer {
 
@@ -90,7 +91,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 //            getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         SearchFragment.SongLoader = this;
         init();
-        initializeChordEditor();
+        initializeChordMenuToolbar();
 //        showPicker();
 
         return view;
@@ -198,48 +199,49 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     }
 
 
+    private void initializeChordAdder(){
+        View inflatedLayout = getLayoutInflater().inflate(R.layout.chords_list_toolbar,null);
+        toolbar.removeAllViews();
+        toolbar.addView(inflatedLayout);
+        Flubber.with().animation(Flubber.AnimationPreset.FADE_IN).createFor(inflatedLayout).start();
+
+        initChordPanel(inflatedLayout);
+
+        (inflatedLayout.findViewById(R.id.btnBackChords)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initializeChordMenuToolbar();
+            }
+        });
+
+        (inflatedLayout.findViewById(R.id.btnExpandChords)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initializeChordPickerToolbar();
+            }
+        });
+    }
+
     private class AddChordOnClickListener implements View.OnClickListener{
 
         boolean clicked = false;
         @Override
         public void onClick(View v) {
-            isInDeleteMode = false;
-            ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
-            adapter.notifyDataSetChanged();
-            View inflatedLayout = getLayoutInflater().inflate(R.layout.chords_list_toolbar,null);
-            toolbar.removeAllViews();
-            toolbar.addView(inflatedLayout);
-            initChordPanel(inflatedLayout);
-
-            (inflatedLayout.findViewById(R.id.btnBackChords)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    initializeChordEditor();
-                }
-            });
-
-//            if (clicked == false){
-//                linearLayout.setVisibility(View.VISIBLE);
-//                Log.d("Position X and Y",linearLayout.getX() + " " + linearLayout.getY());
-//                linearLayout.setX(16);
-//                linearLayout.setY(880);
-
-//                clicked = true;
-//                FloatDelete.setClickable(false);
-//            }
-//            else {
-////                linearLayout.setVisibility(View.INVISIBLE);
-//                clicked = false;
-////                FloatDelete.setClickable(true);
-//            }
-
+            if(isInDeleteMode) {
+                isInDeleteMode = false;
+                ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
+                adapter.notifyDataSetChanged();
+            }
+            initializeChordAdder();
         }
     }
 
-    private void initializeChordEditor(){
+    private void initializeChordMenuToolbar(){
+
         View chordEditorLayout = getLayoutInflater().inflate(R.layout.chord_editor_toolbar,null);
         toolbar.removeAllViews();
         toolbar.addView(chordEditorLayout);
+        Flubber.with().animation(Flubber.AnimationPreset.FADE_IN).createFor(chordEditorLayout).start();
 
         btnAddChord = chordEditorLayout.findViewById(R.id.btnAddChord);
         btnDeleteChord = chordEditorLayout.findViewById(R.id.btnDeleteChord);
@@ -252,12 +254,17 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         public void onClick(View v) {
             isInDeleteMode =  true;
             ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
-            adapter.notifyDataSetChanged();
+            Toast.makeText(getContext(),"In delete mode",Toast.LENGTH_SHORT).show();
+            notifyDataSetChanged();
 
 //                linearLayout.setVisibility(View.INVISIBLE);
 //                FloatAdd.setAlpha(127);
 
         }
+    }
+
+    public void notifyDataSetChanged(){
+        adapter.notifyDataSetChanged();
     }
     public final class ChoiceTouchListener implements View.OnTouchListener{
 
@@ -330,52 +337,27 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 //        linearLayout.setVisibility(View.INVISIBLE);
     }
 
-//    private void showPicker() {
-//        Picker picker = new Picker();
-//        PickerView accidental = view.findViewById(R.id.accidental);
-//
-//        accidental.setTextSize(40);
-//
-//        accidental.setItems(picker.pickerAccidentals, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
-//            @Override
-//            public void onItemSelected(PickerView.PickerItem item) {
-//                if (item.getText() == "x") { get_accidental = "";}
-//                else {
-//                    get_accidental = item.getText();
-//                }
-//
-////                Toast.makeText(this.getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        PickerView scale = view.findViewById(R.id.scale);
-//        scale.setTextSize(40);
-//
-//        scale.setItems(picker.pickerScale, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
-//            @Override
-//            public void onItemSelected(PickerView.PickerItem item) {
-//                if (item.getText() == "x") {get_scale = ""; }
-//                else {
-//                    get_scale = item.getText();
-//                }
-////                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        PickerView number = view.findViewById(R.id.number);
-//        number.setTextSize(40);
-//        number.setItems(picker.pickerNumber, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
-//            @Override
-//            public void onItemSelected(PickerView.PickerItem item) {
-//
-//                if (item.getText() == "x") { get_number = "";}
-//                else {
-//                    get_number = item.getText();
-//                }
-////                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    private void initializeChordPickerToolbar(){
+        View view = getLayoutInflater().inflate(R.layout.chord_picker_toolbar,null);
+
+        toolbar.removeAllViews();
+        toolbar.addView(view);
+        Flubber.with().animation(Flubber.AnimationPreset.FADE_IN).createFor(view).start();
+
+        (view.findViewById(R.id.btnCollapsePicker)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initializeChordAdder();
+            }
+        });
+        RecyclerView rvAccidental = view.findViewById(R.id.accidental);
+        RecyclerView rvScale = view.findViewById(R.id.scale);
+        RecyclerView rvNumber = view.findViewById(R.id.number);
+
+        initializeRecyclerViewPicker(rvAccidental, PickerItems.pickerAccidentals);
+        initializeRecyclerViewPicker(rvScale,PickerItems.pickerScale);
+        initializeRecyclerViewPicker(rvNumber,PickerItems.pickerNumber);
+    }
 
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
@@ -439,11 +421,65 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                 (new SongDatabaseUtils.UpdateSongDatabaseTask(song)).execute();
             }
 
-
-            Toast.makeText(getContext(), "Saved changes to \'" + song.getSongTitle() + "\'", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Saved changes to \'" +
+                    song.getSongTitle().substring(0,song.getSongTitle().length()<=20 ? song.getSongTitle().length() : 20) +
+                            (song.getSongTitle().length()>25 ? "...\'" : "\'"),
+                    Toast.LENGTH_SHORT).show();
             isSongEdited = false;
         }
     }
 
 
+    public void initializeRecyclerViewPicker(final RecyclerView recyclerView, final List<String> items){
+        int maxItems = 1;
+        int recyclerViewHeight = 0;
+
+        TypedValue tv = new TypedValue();
+
+        if (getActivity().getTheme().resolveAttribute(android.R.attr.listPreferredItemHeight, tv, true)) {
+
+            // Calculating recyclerView height from listItemHeight
+            // we are using in our recyclerView list item.
+            recyclerViewHeight = maxItems * TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
+            Log.d("PICKER","it went in here");
+        }
+
+        PickerAdapter adapter = new PickerAdapter(getContext(),items);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) recyclerView.getLayoutParams();
+        layoutParams.height = recyclerViewHeight;
+        recyclerView.setLayoutParams(layoutParams);
+
+        final LinearLayoutManager manager = new LinearLayoutManager(
+                getContext(),
+                LinearLayoutManager.VERTICAL,
+                false);
+
+        final LinearSnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
+
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setOnFlingListener(snapHelper);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    View centerView = snapHelper.findSnapView(manager);
+
+                    // Getting position of the center/snapped item.
+                    int pos = manager.getPosition(centerView);
+                    Log.d("PICKER", pos + " - " + items.get(pos));
+                }
+            }
+        });
+        recyclerView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                recyclerView.scrollToPosition(0);
+                Log.d("PICKER","naglong click");
+                return true;
+            }
+        });
+    }
 }

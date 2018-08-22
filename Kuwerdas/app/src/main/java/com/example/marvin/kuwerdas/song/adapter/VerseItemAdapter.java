@@ -80,8 +80,8 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             h.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mVerses.addAll(SongUtil.asVerses(""));
-                    notifyDataSetChanged();
+                    mVerses.add(SongUtil.asVerses("").get(0));
+                    notifyItemInserted(mVerses.size());
                 }
             });
         }
