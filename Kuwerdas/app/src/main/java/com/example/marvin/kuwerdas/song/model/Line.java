@@ -37,9 +37,11 @@ public class Line {
 
     private void initializeEmptyChordSet(){
         chordSet = new ArrayList<>();
-        Chord emptyChord = new Chord(Chord.EMPTY_CHORD);
-        for(int i=0;i<CHORD_SET_LENGTH;i++)
-            chordSet.add(emptyChord);
+        for(int i=0;i<CHORD_SET_LENGTH;i++) {
+            Chord chord =  new Chord(Chord.EMPTY_CHORD);
+            chord.setOrder(i);
+            chordSet.add(chord);
+        }
     }
 
     public Line(String lyrics) {
