@@ -9,6 +9,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.example.marvin.kuwerdas.db.SongDatabase;
+import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.model.Song;
 
@@ -102,16 +104,6 @@ public class Metronome {
             tempo = t;
             delay = 60000 / tempo;
             startTimer();
-
-            return true;
-        }
-        return false;
-    }
-
-    private boolean changeSongTempoValue(){
-        if(SongFragment.song!=null)
-        {
-            SongFragment.song.setTempo(tempo);
             return true;
         }
         return false;

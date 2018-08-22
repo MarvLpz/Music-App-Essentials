@@ -70,9 +70,11 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof VerseItemViewHolder) {
             ((VerseItemViewHolder) holder).setVerseLinesData(mVerses.get(position-1));
+            ((VerseItemViewHolder) holder).setFocusable(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
         }
         else if(holder instanceof TitleViewHolder) {
             ((TitleViewHolder) holder).setSongDetails(songDetails);
+            holder.itemView.setFocusable(SongFragment.mode.equals(SongFragment.SongEditMode.READ_ONLY));
         }
         else if (holder instanceof HeaderViewHolder){
             HeaderViewHolder h = (HeaderViewHolder) holder;

@@ -16,6 +16,26 @@ import com.example.marvin.kuwerdas.song.model.Verse;
 public class VerseItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
     // define the View objects
     private RecyclerView recyclerView;
+
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
+    public EditText getTextView() {
+        return textView;
+    }
+
+    public void setFocusable(boolean val){
+        if(val)
+        {
+            textView.setFocusableInTouchMode(true);
+            textView.setFocusable(true);
+            adapter.notifyDataSetChanged();
+        }
+        else
+            textView.setFocusable(false);
+    }
+
     private EditText textView;
 
     public LineItemAdapter getAdapter() {

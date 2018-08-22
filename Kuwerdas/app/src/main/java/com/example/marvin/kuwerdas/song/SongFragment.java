@@ -54,6 +54,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     public static Song song;
     private static boolean isLoadedFromDB = false;
     public static boolean isSongEdited = false;
+    public static SongEditMode mode = SongEditMode.READ_ONLY;
 
     private TextView tv_DragChord1;
     private TextView tv_DragChord2;
@@ -90,11 +91,10 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         return view;
     }
 
-    enum SongEditMode{
+    public enum SongEditMode{
         EDIT, READ_ONLY
     }
 
-    SongEditMode mode;
 
     private void init(){
 
@@ -103,7 +103,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         songContainer = view.findViewById(R.id.songContainer);
         fabEdit = view.findViewById(R.id.fabToggleEdit);
         recyclerView = view.findViewById(R.id.rvSong);
-        mode = SongEditMode.READ_ONLY;
         fabEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +117,9 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                     fabEdit.setImageResource(R.drawable.back);
                     Toast.makeText(view.getContext(),"EDIT MODE",Toast.LENGTH_SHORT).show();
                 }
+
+                if (adapter!=null)
+                    adapter.notifyDataSetChanged();
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));

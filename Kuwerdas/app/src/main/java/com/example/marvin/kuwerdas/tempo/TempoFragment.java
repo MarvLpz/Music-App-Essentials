@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.appolica.flubber.Flubber;
 import com.example.marvin.kuwerdas.R;
+import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
+import com.example.marvin.kuwerdas.song.SongFragment;
 import com.sdsmdg.harjot.crollerTest.Croller;
 import com.sdsmdg.harjot.crollerTest.OnCrollerChangeListener;
 
@@ -46,6 +48,10 @@ public class TempoFragment extends Fragment implements BeatListener{
     private Animator animator;
     private PickerView mPicker;
 
+    private int lastTempo = 0;
+    private int crollerPreviousValue = 0;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,8 +63,6 @@ public class TempoFragment extends Fragment implements BeatListener{
         init();
         return view;
     }
-
-    int crollerPreviousValue = 0;
 
     private void init(){
         mMetronome = new Metronome(this);
@@ -136,11 +140,19 @@ public class TempoFragment extends Fragment implements BeatListener{
                 mMetronome.setTimeSignature(item.getText());
             }
         });
+
+        if(SongFragment.song!=null) {
+            mMetronome.changeTempo(SongFragment.song.getTempo());
+            lastTempo = mMetronome.getTempo();
+            mButtonTap.setText(String.valueOf(lastTempo));
+            mCroller.setProgress(lastTempo);
+        }
     }
 
     public void onClickButton(){
         mMetronome.tap();
         onBeatStart();
+        lastTempo = mMetronome.getTempo();
         mCroller.setProgress(mMetronome.getTempo());
         mButtonTap.setText(String.valueOf(mMetronome.getTempo()));
         mVibrator.vibrate(50);
@@ -149,24 +161,41 @@ public class TempoFragment extends Fragment implements BeatListener{
     public void onLongClickButton(){
         if(mMetronome.isPlaying()) {
             mMetronome.stop();
+            lastTempo = mMetronome.getTempo();
             mButtonTap.setText(String.valueOf(mMetronome.getTempo()));
             mVibrator.vibrate(500);
             mCroller.setProgress(mMetronome.getTempo());
             Toast.makeText(getActivity(), "Stopped playing", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            mVibrator.vibrate(500);
+            mMetronome.changeTempo(lastTempo);
+            mButtonTap.setText(String.valueOf(lastTempo));
+            mCroller.setProgress(lastTempo);
         }
     }
 
     @Override
     public void onPause(){
         super.onPause();
-
+        changeSongTempoValue();
 //        mMetronome.stop();
+    }
+
+    private boolean changeSongTempoValue(){
+        if(SongFragment.song!=null)
+        {
+            SongFragment.song.setTempo(mMetronome.getTempo());
+            (new SongDatabaseUtils.UpdateSongDatabaseTask(SongFragment.song)).execute();
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-
+        changeSongTempoValue();
         mMetronome.stop();
     }
 
