@@ -1,25 +1,29 @@
 package com.example.marvin.kuwerdas.song;
 
 import android.content.ClipData;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.song.adapter.TitleViewHolder;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.OnStartDragListener;
@@ -36,6 +40,7 @@ import com.example.marvin.kuwerdas.song.util.Transposer;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 import top.defaults.view.PickerView;
 
@@ -49,9 +54,13 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     private View songContainer;
     private View view;
 
+    private Button btnAddChord;
+    private Button btnDeleteChord;
+
     private static Song song;
     private static boolean isLoadedFromDB = false;
     public static boolean isSongEdited = false;
+    public static boolean isInDeleteMode = false;
 
     private TextView tv_DragChord1;
     private TextView tv_DragChord2;
@@ -67,10 +76,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     float dY;
     int lastAction;
 
-    private FloatingActionButton FloatAdd;
-    private FloatingActionButton FloatDelete;
-
-    LinearLayout linearLayout;
+//    LinearLayout linearLayout;
 
     @Nullable
     @Override
@@ -80,17 +86,20 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         //like if the class is HomeFragment it should have R.layout.home_fragment
         //if it is DashboardFragment it should have R.layout.fragment_dashboard
         view = inflater.inflate(R.layout.fragment_song, null);
+//        if(getActivity().getActionBar()!=null)
+//            getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         SearchFragment.SongLoader = this;
         init();
-        initChordPanel();
-        showPicker();
+        initializeChordEditor();
+//        showPicker();
 
         return view;
     }
 
+    private Toolbar toolbar;
     private void init(){
-
         database = SongDatabase.getSongDatabase(getContext());
+        toolbar = view.findViewById(R.id.tbChordEditor);
         progressBar = view.findViewById(R.id.pbSong);
         songContainer = view.findViewById(R.id.songContainer);
         recyclerView = view.findViewById(R.id.rvSong);
@@ -189,51 +198,64 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     }
 
 
-    private class floataddBtn implements View.OnClickListener{
+    private class AddChordOnClickListener implements View.OnClickListener{
 
         boolean clicked = false;
         @Override
         public void onClick(View v) {
-            if (clicked == false){
-                linearLayout.setVisibility(View.VISIBLE);
-                Log.d("Position X and Y",linearLayout.getX() + " " + linearLayout.getY());
-                linearLayout.setX(16);
-                linearLayout.setY(880);
-                FloatAdd.setAlpha(255);
-                clicked = true;
+            isInDeleteMode = false;
+            ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
+            adapter.notifyDataSetChanged();
+            View inflatedLayout = getLayoutInflater().inflate(R.layout.chords_list_toolbar,null);
+            toolbar.removeAllViews();
+            toolbar.addView(inflatedLayout);
+            initChordPanel(inflatedLayout);
+
+            (inflatedLayout.findViewById(R.id.btnBackChords)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    initializeChordEditor();
+                }
+            });
+
+//            if (clicked == false){
+//                linearLayout.setVisibility(View.VISIBLE);
+//                Log.d("Position X and Y",linearLayout.getX() + " " + linearLayout.getY());
+//                linearLayout.setX(16);
+//                linearLayout.setY(880);
+
+//                clicked = true;
 //                FloatDelete.setClickable(false);
-            }
-            else {
-                linearLayout.setVisibility(View.INVISIBLE);
-                clicked = false;
-                FloatAdd.setAlpha(127);
-//                FloatDelete.setClickable(true);
-            }
+//            }
+//            else {
+////                linearLayout.setVisibility(View.INVISIBLE);
+//                clicked = false;
+////                FloatDelete.setClickable(true);
+//            }
 
         }
     }
-    public class floatdelBtn implements View.OnClickListener{
-        boolean delClicked = false;
+
+    private void initializeChordEditor(){
+        View chordEditorLayout = getLayoutInflater().inflate(R.layout.chord_editor_toolbar,null);
+        toolbar.removeAllViews();
+        toolbar.addView(chordEditorLayout);
+
+        btnAddChord = chordEditorLayout.findViewById(R.id.btnAddChord);
+        btnDeleteChord = chordEditorLayout.findViewById(R.id.btnDeleteChord);
+        btnAddChord.setOnClickListener(new AddChordOnClickListener());
+        btnDeleteChord.setOnClickListener(new DeleteChordOnClickListener());
+    }
+
+    public class DeleteChordOnClickListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
+            isInDeleteMode =  true;
+            ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
+            adapter.notifyDataSetChanged();
 
-            if (delClicked == false){
-                ChordItemAdapter triggerClicked = new ChordItemAdapter();
-                delClicked = true;
-                triggerClicked.getTriggerDelBtn(delClicked);
-                FloatDelete.setAlpha(255);
-                linearLayout.setVisibility(View.INVISIBLE);
-                FloatAdd.setClickable(false);
+//                linearLayout.setVisibility(View.INVISIBLE);
 //                FloatAdd.setAlpha(127);
-            }
-            else if (delClicked == true){
-                ChordItemAdapter triggerClicked = new ChordItemAdapter();
-                delClicked = false;
-                triggerClicked.getTriggerDelBtn(delClicked);
-                FloatDelete.setAlpha(80);
-                FloatAdd.setClickable(true);
-//                FloatAdd.setAlpha(255);
-            }
 
         }
     }
@@ -275,6 +297,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                         break;
                 }
 
+                Log.d("BUTTON","pumasok naman dito");
 
                 ClipData data = ClipData.newPlainText("","");
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
@@ -286,8 +309,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             }
         }
     }
-    public void initChordPanel(){
-
+    public void initChordPanel(View view){
         tv_DragChord1 = (TextView) view.findViewById(R.id.tv_dragChord1);
         tv_DragChord2 = (TextView) view.findViewById(R.id.tv_dragChord2);
         tv_DragChord3 = (TextView) view.findViewById(R.id.tv_dragChord3);
@@ -303,65 +325,58 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         tv_DragChord6.setOnTouchListener(new ChoiceTouchListener());
         tv_DragChord7.setOnTouchListener(new ChoiceTouchListener());
 
-        FloatAdd = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
-        FloatDelete = (FloatingActionButton) view.findViewById(R.id.floatingDeleteButton);
-        FloatAdd.setOnClickListener(new floataddBtn());
-        FloatAdd = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
-        FloatDelete.setOnClickListener(new floatdelBtn());
-        FloatAdd.setAlpha(127);
-        FloatDelete.setAlpha(80);
-
-        linearLayout = (LinearLayout) view.findViewById(R.id.frame_place);
-        linearLayout.setOnTouchListener(new touchMe());
-        linearLayout.setVisibility(View.INVISIBLE);
+//        linearLayout = (LinearLayout) view.findViewById(R.id.frame_place);
+//        view.setOnTouchListener(new touchMe());
+//        linearLayout.setVisibility(View.INVISIBLE);
     }
 
-    private void showPicker() {
-        Picker picker = new Picker();
-        PickerView accidental = view.findViewById(R.id.accidental);
+//    private void showPicker() {
+//        Picker picker = new Picker();
+//        PickerView accidental = view.findViewById(R.id.accidental);
+//
+//        accidental.setTextSize(40);
+//
+//        accidental.setItems(picker.pickerAccidentals, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
+//            @Override
+//            public void onItemSelected(PickerView.PickerItem item) {
+//                if (item.getText() == "x") { get_accidental = "";}
+//                else {
+//                    get_accidental = item.getText();
+//                }
+//
+////                Toast.makeText(this.getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        PickerView scale = view.findViewById(R.id.scale);
+//        scale.setTextSize(40);
+//
+//        scale.setItems(picker.pickerScale, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
+//            @Override
+//            public void onItemSelected(PickerView.PickerItem item) {
+//                if (item.getText() == "x") {get_scale = ""; }
+//                else {
+//                    get_scale = item.getText();
+//                }
+////                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        PickerView number = view.findViewById(R.id.number);
+//        number.setTextSize(40);
+//        number.setItems(picker.pickerNumber, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
+//            @Override
+//            public void onItemSelected(PickerView.PickerItem item) {
+//
+//                if (item.getText() == "x") { get_number = "";}
+//                else {
+//                    get_number = item.getText();
+//                }
+////                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
-        accidental.setTextSize(40);
-
-        accidental.setItems(picker.pickerAccidentals, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
-            @Override
-            public void onItemSelected(PickerView.PickerItem item) {
-                if (item.getText() == "x") { get_accidental = "";}
-                else {
-                    get_accidental = item.getText();
-                }
-
-//                Toast.makeText(this.getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        PickerView scale = view.findViewById(R.id.scale);
-        scale.setTextSize(40);
-
-        scale.setItems(picker.pickerScale, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
-            @Override
-            public void onItemSelected(PickerView.PickerItem item) {
-                if (item.getText() == "x") {get_scale = ""; }
-                else {
-                    get_scale = item.getText();
-                }
-//                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        PickerView number = view.findViewById(R.id.number);
-        number.setTextSize(40);
-        number.setItems(picker.pickerNumber, new PickerView.OnItemSelectedListener<PickerView.PickerItem>() {
-            @Override
-            public void onItemSelected(PickerView.PickerItem item) {
-
-                if (item.getText() == "x") { get_number = "";}
-                else {
-                    get_number = item.getText();
-                }
-//                Toast.makeText(getBaseContext(),item.getText() + " is chosen",Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         itemTouchHelper.startDrag(viewHolder);

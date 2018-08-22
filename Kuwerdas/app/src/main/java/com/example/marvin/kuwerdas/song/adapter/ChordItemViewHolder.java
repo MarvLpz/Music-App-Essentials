@@ -22,6 +22,10 @@ ChordItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperVi
 
     }
 
+    public void setColor(int color){
+        tv.setTextColor(color);
+    }
+
 
     public void getTV(TextView view) {
         tv = view;

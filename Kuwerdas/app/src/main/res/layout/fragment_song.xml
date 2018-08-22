@@ -25,145 +25,23 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/plus"
-            app:backgroundTint="#76d177"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:useCompatPadding="true" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatingDeleteButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="69dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/delete"
-            app:backgroundTint="#f57777"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:useCompatPadding="true" />
-
     </RelativeLayout>
 
-    <LinearLayout
-
-        android:id="@+id/frame_place"
-        android:layout_width="318dp"
-        android:layout_height="112dp"
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="11dp"
-        android:background="#641f378e"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints">
+        android:layout_gravity="bottom|end">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tbChordEditor"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:paddingVertical="10dp">
-
-            <TextView
-                android:id="@+id/tv_dragChord1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:paddingVertical="3dp"
-                android:text="E"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/tv_dragChord2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:paddingVertical="3dp"
-                android:text="F"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/tv_dragChord3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:paddingVertical="3dp"
-                android:text="G"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/tv_dragChord4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:paddingVertical="3dp"
-                android:text="A"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/tv_dragChord5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:paddingVertical="3dp"
-                android:text="B"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/tv_dragChord6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:paddingVertical="3dp"
-                android:text="C"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/tv_dragChord7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:paddingVertical="3dp"
-                android:text="D"
-                android:textSize="20dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <top.defaults.view.PickerView
-                android:id="@+id/accidental"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content" />
-
-            <top.defaults.view.PickerView
-                android:id="@+id/scale"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content" />
-
-            <top.defaults.view.PickerView
-                android:id="@+id/number"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-    </LinearLayout>
+            android:layout_weight="1"
+            android:background="@color/colorToolbarPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme">
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
 </RelativeLayout>

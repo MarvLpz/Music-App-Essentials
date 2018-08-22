@@ -6,4 +6,6 @@
     <color name="colorAccent">#b68061</color>
     <color name="colorNavIcon">#dae9f6</color>
     <color name="colorNavText">#000000</color>
+    <color name="colorToolbarPrimary">#000000</color>
+    <color name="colorToolbarText">#ffffff</color>
 </resources>

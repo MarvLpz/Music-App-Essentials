@@ -1,6 +1,9 @@
 package com.example.marvin.kuwerdas;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -182,10 +185,25 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
     @Override
-    public void change(OnChangeFragment.Frags frag) {
+    public void change(Frags frag) {
+        if(!frag.equals(Frags.SONG))
+            if(getSupportActionBar()!=null)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimary)));
+                    getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+                    getSupportActionBar().show();
+                }
         switch(frag){
             case SONG:
                 currentFragment = Frags.SONG;
+                if(getSupportActionBar()!=null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+                        getSupportActionBar().hide();
+                        getWindow().setStatusBarColor(Color.WHITE);
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    }
+                }
                 loadFragment(songFragment);
                 clearSearch();
                 break;

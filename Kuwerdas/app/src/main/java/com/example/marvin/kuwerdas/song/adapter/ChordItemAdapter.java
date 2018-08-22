@@ -1,6 +1,7 @@
 package com.example.marvin.kuwerdas.song.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.DragEvent;
@@ -45,8 +46,8 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         Log.d("SET CHORD","dragchord: " + DragChord);
     }
 
-    public void getTriggerDelBtn(boolean delClicked){
-        this.delClicked = delClicked;
+    public static void getTriggerDelBtn(boolean d){
+        delClicked = d;
     }
 
     private class ChoiceDragListener implements View.OnDragListener{
@@ -125,6 +126,7 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         if(myChord != null) {
             holder.tv.setText(myChord.get(position).getChord());
             holder.tv.setTag(position);
+            holder.setColor(SongFragment.isInDeleteMode ? Color.RED : Color.DKGRAY);
         }
 
     }
