@@ -39,14 +39,23 @@ public class VerseItemTouchHelperCallback {
                     @Override
                     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                         // Set movement flags based on the layout manager
-                        final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-                        final int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
-                        return makeMovementFlags(dragFlags, swipeFlags);
+                        if (viewHolder.getAdapterPosition() == 0){
+                            return makeMovementFlags(0,0);
+                        }
+                        else if (viewHolder.getAdapterPosition() == myVerse.size() + 1){
+                            return makeMovementFlags(0,0);
+                        }
+                        else {
+                            final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                            final int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                            return makeMovementFlags(dragFlags, swipeFlags);
+                        }
                     }
                     @Override
                     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                         moveItem(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                        return true;
+                            return true;
+
                     }
 
                     @Override
@@ -58,7 +67,7 @@ public class VerseItemTouchHelperCallback {
                     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
                         // We only want the active item to change
 
-                        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+                         if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
                             if (viewHolder instanceof ItemTouchHelperViewHolder) {
                                 // Let the view holder know that this item is being moved or dragged
                                 ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;
@@ -92,18 +101,14 @@ public class VerseItemTouchHelperCallback {
     private void moveItem(int oldPos,int newPos){
         Log.d("RETURNSIZE POS",String.valueOf(oldPos));
         Log.d("RETURNSIZE POS",String.valueOf(newPos));
+        Log.d("RETURNSIZE SIZE",String.valueOf(myVerse.size() + 1));
 
-        if (newPos == 0){
-            Verse item = (Verse) myVerse.get(oldPos + 1);
-            myVerse.remove(oldPos + 1);
-            myVerse.add(newPos + 1,item);
-            adapter2.notifyItemMoved(oldPos,newPos);
+        if (oldPos == 0 || newPos == 0){
+            return;
         }
-        else if (newPos == myVerse.size()){
-            Verse item = (Verse) myVerse.get(oldPos - 3);
-            myVerse.remove(oldPos - 3);
-            myVerse.add(newPos - 3,item);
-            adapter2.notifyItemMoved(oldPos,newPos);
+
+        else if (oldPos == myVerse.size() + 1 || newPos == myVerse.size() +1){
+            return;
         }
 
         else{
@@ -124,7 +129,11 @@ public class VerseItemTouchHelperCallback {
     }
 
     private void deleteItem(final int position) {
-        myVerse.remove(position-1);
-        adapter2.notifyItemRemoved(position);
+        if (position == 0){}
+        else if (position == myVerse.size() + 1){ }
+        else {
+            myVerse.remove(position-1);
+            adapter2.notifyItemRemoved(position);
+        }
     }
 }

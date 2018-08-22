@@ -325,6 +325,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             }
         }
     }
+
+
     public void initChordPanel(){
 
         tv_DragChord1 = (TextView) view.findViewById(R.id.tv_dragChord1);

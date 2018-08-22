@@ -71,6 +71,7 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
 
     @Override
     public void onItemSelected() {
+//        if (itemView. == 0){}
         itemView.setBackgroundColor(Color.LTGRAY);
         recyclerView.clearFocus();
     }
