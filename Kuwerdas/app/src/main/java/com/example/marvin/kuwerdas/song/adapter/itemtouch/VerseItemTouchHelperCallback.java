@@ -19,10 +19,10 @@ public class VerseItemTouchHelperCallback {
     VerseItemAdapter adapter2;
     int minId, maxId;
 
-    public VerseItemTouchHelperCallback(Context context, VerseItemAdapter _adapter2,List<Verse> _myVerse){
+    public VerseItemTouchHelperCallback(Context context, VerseItemAdapter _adapter2){
 /*        con = context;
         myVerse = _myVerse;*/
-        myVerse =_myVerse;
+        myVerse =_adapter2.getItems();
         con = context;
         adapter2 = _adapter2;
     }
@@ -124,7 +124,7 @@ public class VerseItemTouchHelperCallback {
     }
 
     private void deleteItem(final int position) {
-        myVerse.remove(position);
+        myVerse.remove(position-1);
         adapter2.notifyItemRemoved(position);
     }
 }

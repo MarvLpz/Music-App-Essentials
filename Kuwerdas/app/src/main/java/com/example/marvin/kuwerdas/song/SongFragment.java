@@ -417,7 +417,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                 recyclerView.setVisibility(View.VISIBLE);
 /*                itemTouchHelper = new ItemTouchHelper(new VerseItemTouchHelperCallback(getActivity(),adapter,song.getVerses()).createHelperCallback());
                 itemTouchHelper.attachToRecyclerView(recyclerView);*/
-                verseItemTouchHelperCallback = new VerseItemTouchHelperCallback(getContext(),adapter,song.getVerses());
+                verseItemTouchHelperCallback = new VerseItemTouchHelperCallback(getContext(),adapter);
                 itemTouchHelper = new ItemTouchHelper(verseItemTouchHelperCallback.createHelperCallback());
                 itemTouchHelper.attachToRecyclerView(recyclerView);
                 isSongEdited = false;
@@ -452,7 +452,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         }
     }
     private void saveSongToDatabase() {
-        if (song != null && isSongEdited) {
+        if (song != null && mode==SongEditMode.EDIT && isSongEdited) {
 //            song.setSongTitle(adapter.getSongTitle());
 //            song.setArtist(adapter.getSongArtist());
 //            song.setTempo(adapter.getSongTempo());
@@ -469,8 +469,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
             Toast.makeText(getContext(), "Saved changes to " + (song.getSongTitle().isEmpty() ? "song" : "\'" + song.getSongTitle() + "\'" ), Toast.LENGTH_SHORT).show();
             isSongEdited = false;
+            mode = SongEditMode.READ_ONLY;
         }
     }
-
 
 }

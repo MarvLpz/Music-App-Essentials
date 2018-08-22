@@ -25,7 +25,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchHelperAdapter {
+public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+//        implements ItemTouchHelperAdapter
+{
     private static final String TAG = "TAGGY";
 
     private static final int TYPE_FOOTER = 1;
@@ -138,43 +140,43 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    @Override
-    public boolean onItemMove(int fromPosition, int toPosition) {
-        if (fromPosition < mVerses.size() && toPosition < mVerses.size()) {
-            if (fromPosition < toPosition) {
-                for (int i = fromPosition; i < toPosition; i++) {
-                    Collections.swap(mVerses, i, i + 1);
-                }
-            } else {
-                for (int i = fromPosition; i > toPosition; i--) {
-                    Collections.swap(mVerses, i, i - 1);
-                }
-            }
-            notifyItemMoved(fromPosition, toPosition);
-        }
-        return true;
-    }
-
-    @Override
-    public void onItemDismiss(final RecyclerView.ViewHolder viewHolder, final RecyclerView recyclerView) {
-        final int adapterPosition = viewHolder.getAdapterPosition();
-        final Verse mVerse = mVerses.get(adapterPosition-1);
-        Snackbar snackbar = Snackbar
-                .make(recyclerView, "Verse Deleted", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mVerses.add(adapterPosition, mVerse);
-                        notifyItemInserted(adapterPosition);
-                        versesToDelete.remove(mVerse);
-                    }
-                });
-        snackbar.show();
-        mVerses.remove(adapterPosition);
-        notifyItemRemoved(adapterPosition);
-        versesToDelete.add(mVerse);
-        new SongDatabaseUtils.DeleteVerseFromDatabaseTask(mVerse).execute();
-    }
+//    @Override
+//    public boolean onItemMove(int fromPosition, int toPosition) {
+//        if (fromPosition < mVerses.size() && toPosition < mVerses.size()) {
+//            if (fromPosition < toPosition) {
+//                for (int i = fromPosition; i < toPosition; i++) {
+//                    Collections.swap(mVerses, i, i + 1);
+//                }
+//            } else {
+//                for (int i = fromPosition; i > toPosition; i--) {
+//                    Collections.swap(mVerses, i, i - 1);
+//                }
+//            }
+//            notifyItemMoved(fromPosition, toPosition);
+//        }
+//        return true;
+//    }
+//
+//    @Override
+//    public void onItemDismiss(final RecyclerView.ViewHolder viewHolder, final RecyclerView recyclerView) {
+//        final int adapterPosition = viewHolder.getAdapterPosition();
+//        final Verse mVerse = mVerses.get(adapterPosition-1);
+//        Snackbar snackbar = Snackbar
+//                .make(recyclerView, "Verse Deleted", Snackbar.LENGTH_LONG)
+//                .setAction("UNDO", new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        mVerses.add(adapterPosition, mVerse);
+//                        notifyItemInserted(adapterPosition);
+//                        versesToDelete.remove(mVerse);
+//                    }
+//                });
+//        snackbar.show();
+//        mVerses.remove(adapterPosition-1);
+//        notifyItemRemoved(adapterPosition-1);
+//        versesToDelete.add(mVerse);
+//        new SongDatabaseUtils.DeleteVerseFromDatabaseTask(mVerse).execute();
+//    }
 
     public List<Verse> getItems() {
         return mVerses;
