@@ -22,11 +22,12 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
     private Button transposeDown;
 
     private ChordTransposer chordTransposer;
+    private SongFragment songFragment;
 
     public TitleViewHolder(View itemView, SongFragment songFragment) {
         super(itemView);
         this.itemView = itemView;
-
+        this.songFragment = songFragment;
         title = itemView.findViewById(R.id.tvTitle);
         artist = itemView.findViewById(R.id.tvArtist);
         tempo = itemView.findViewById(R.id.tvTempo);
@@ -86,7 +87,7 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
         transposeUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                songFragment.showProgressBar(true);
                 song.setKey(song.getKey() + 1 == 12 ? 0 : song.getKey() + 1);
                 key.setText(Integer.toString(song.getKey()));
                 chordTransposer.transposeUp();
@@ -97,6 +98,7 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
         transposeDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                songFragment.showProgressBar(true);
                 song.setKey(song.getKey() + 1 == -12 ? 0 : song.getKey() - 1);
                 key.setText(Integer.toString(song.getKey()));
                 chordTransposer.transposeDown();

@@ -9,4 +9,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_song_selected">No song selected =(</string>
+    <string name="add_chord">Add Chord</string>
+    <string name="delete_chord">Delete chord</string>
 </resources>

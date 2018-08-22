@@ -52,13 +52,13 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     private static boolean isLoadedFromDB = false;
     public static boolean isSongEdited = false;
 
-    TextView tv_DragChord1;
-    TextView tv_DragChord2;
-    TextView tv_DragChord3;
-    TextView tv_DragChord4;
-    TextView tv_DragChord5;
-    TextView tv_DragChord6;
-    TextView tv_DragChord7;
+    private TextView tv_DragChord1;
+    private TextView tv_DragChord2;
+    private TextView tv_DragChord3;
+    private TextView tv_DragChord4;
+    private TextView tv_DragChord5;
+    private TextView tv_DragChord6;
+    private TextView tv_DragChord7;
 
     String get_accidental = "",get_scale= "",get_number= "";
 
@@ -68,7 +68,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
     private FloatingActionButton FloatAdd;
     private FloatingActionButton FloatDelete;
-    private FloatingActionButton FloatTranspose;
 
     LinearLayout linearLayout;
 
@@ -107,7 +106,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
     }
 
-    private void showProgressBar(boolean val){
+    public void showProgressBar(boolean val){
         progressBar.setVisibility(val ? View.VISIBLE : View.GONE);
         songContainer.setVisibility(val ? View.GONE : View.VISIBLE);
     }
@@ -169,29 +168,23 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         }
     }
 
-    public void changeKey(boolean dir){
-        showProgressBar(true);
+    private void changeKey(boolean dir){
         Log.d("SONG","song: " + song.getArtist() + " - " + song.getSongTitle());
         for(Verse verse : song.getVerses()){
             Log.d("SONG","verse " + verse.getUid() + ": " + verse.getTitle());
             for(Line line : verse.getLines()){
                 for(Chord chord : line.getChordSet()){
-                    chord.setChord(dir ? Transposer.transposeChordUp(chord.getChord()) : Transposer.transposeChordDown(chord.getChord()));
-                    SongFragment.isSongEdited = true;
+                    if(!chord.getChord().equals(Chord.EMPTY_CHORD))
+                        chord.setChord(dir ? Transposer.transposeChordUp(chord.getChord()) : Transposer.transposeChordDown(chord.getChord()));
                 }
             }
         }
+        SongFragment.isSongEdited = true;
         adapter.notifyDataSetChanged();
+
         showProgressBar(false);
     }
 
-    private class floatTransposeBtn implements View.OnClickListener{
-
-        @Override
-        public void onClick(View v) {
-            transposeUp();
-        }
-    }
 
     private class floataddBtn implements View.OnClickListener{
 
@@ -315,14 +308,12 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         FloatAdd.setAlpha(127);
         FloatDelete.setAlpha(80);
 
-        FloatTranspose = (FloatingActionButton) view.findViewById(R.id.floatingTransposeBtn);
-        FloatTranspose.setOnClickListener(new floatTransposeBtn());
         linearLayout = (LinearLayout) view.findViewById(R.id.frame_place);
         linearLayout.setOnTouchListener(new touchMe());
         linearLayout.setVisibility(View.INVISIBLE);
     }
 
-    public void showPicker() {
+    private void showPicker() {
         Picker picker = new Picker();
         PickerView accidental = view.findViewById(R.id.accidental);
 

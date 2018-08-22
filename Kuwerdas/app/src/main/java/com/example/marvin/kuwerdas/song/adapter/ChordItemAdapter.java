@@ -95,7 +95,7 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         @Override
         public void onClick(View v) {
             if (delClicked){
-                myChord.get((int) v.getTag() ).setChord(Chord.EMPTY_CHORD);
+                myChord.get((int) v.getTag() ).setChord("A");
                 SongFragment.isSongEdited = true;
                 notifyDataSetChanged();
             }
