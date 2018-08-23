@@ -184,7 +184,7 @@ public class TempoFragment extends Fragment implements BeatListener{
     public void onPause(){
         super.onPause();
         changeSongTempoValue();
-//        mMetronome.stop();
+        mMetronome.stop();
     }
 
     private boolean changeSongTempoValue(){

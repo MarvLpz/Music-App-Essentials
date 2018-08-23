@@ -401,14 +401,17 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         RecyclerView rvAccidental = view.findViewById(R.id.accidental);
         RecyclerView rvScale = view.findViewById(R.id.scale);
         RecyclerView rvNumber = view.findViewById(R.id.number);
+        RecyclerView rvChord= view.findViewById(R.id.tvSampleChordPicker);
 
         PickerItems itemSet = new PickerItems();
         DetailedChord display = new DetailedChord(Letter.C,Accidental.natural, Scale.major, Number.none);
-        ((TextView)view.findViewById(R.id.tvSampleChordPicker)).setText(display.getChord());
+//        ((TextView)view.findViewById(R.id.tvSampleChordPicker)).setText(display.getChord());
         List<DetailedChord> filterResults = new ArrayList<>();
-        PickerAdapter adapterAccidental = initializeRecyclerViewPicker(rvAccidental, itemSet.pickerAccidentals,display,filterResults);
-        PickerAdapter adapterScale= initializeRecyclerViewPicker(rvScale,itemSet.pickerScale,display,filterResults);
-        PickerAdapter adapterNumber = initializeRecyclerViewPicker(rvNumber,itemSet.pickerNumber,display,filterResults);
+
+        PickerAdapter adapterAccidental = initializeRecyclerViewPicker(rvAccidental, itemSet.pickerAccidentals,filterResults);
+        PickerAdapter adapterScale= initializeRecyclerViewPicker(rvScale,itemSet.pickerScale,filterResults);
+        PickerAdapter adapterNumber = initializeRecyclerViewPicker(rvNumber,itemSet.pickerNumber,filterResults);
+        PickerAdapter chordAdapter = initializeRecyclerViewPicker(rvChord,filterResults,filterResults);
 
     }
 
@@ -488,9 +491,10 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         }
     }
 
-    public PickerAdapter initializeRecyclerViewPicker(final RecyclerView recyclerView, final List items, final DetailedChord displayChord, final List<DetailedChord> results){
+    public PickerAdapter initializeRecyclerViewPicker(final RecyclerView recyclerView, final List items,  final List<DetailedChord> results){
         int maxItems = 1;
         int recyclerViewHeight = 0;
+        final DetailedChord displayChord = new DetailedChord(Letter.C,Accidental.natural,Scale.major,Number.none);
 
         TypedValue tv = new TypedValue();
 
@@ -501,7 +505,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             recyclerViewHeight = maxItems * TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
             Log.d("PICKER","it went in here");
         }
-
 
         final PickerAdapter adapter = new PickerAdapter(getContext(),items,displayChord);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) recyclerView.getLayoutParams();
@@ -531,7 +534,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                     adapter.setSelectedItem(pos);
                     results.clear();
                     results.addAll(DetailedChordIndex.getChords(displayChord));
-                    ((TextView)view.findViewById(R.id.tvSampleChordPicker)).setText(displayChord.getChord());
                     if(results.size()>0)
                         displayChord.setValue(results.get(0));
                     else{

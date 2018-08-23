@@ -15,4 +15,5 @@ public class PickerItems {
     public List<Accidental> pickerAccidentals = DetailedChordIndex.allAccidentals;
     public List<Scale> pickerScale = DetailedChordIndex.allScales;
     public List<Number> pickerNumber = DetailedChordIndex.defaultNumbers;
+//    public List<DetailedChord> pickerChord = DetailedChordIndex.defaultNumbers;
 }

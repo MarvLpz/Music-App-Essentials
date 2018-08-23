@@ -339,10 +339,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         if(currentFragment.equals(Frags.SONG)){
             FragmentSwitcher.change(Frags.SEARCH);
+
             return;
         }
+        if(currentFragment.equals(Frags.TEMPO)){
+            FragmentSwitcher.change(Frags.SONG);
 
-        super.onBackPressed();
+            return;
+        }
+//        super.onBackPressed();
     }
 
     public interface OnNewSearchResult {

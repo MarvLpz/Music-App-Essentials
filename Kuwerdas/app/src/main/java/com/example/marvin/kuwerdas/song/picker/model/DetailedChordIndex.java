@@ -37,10 +37,9 @@ public class DetailedChordIndex {
         else
             letters = new ArrayList<>(DetailedChordIndex.allChords);
 
-
-        if(chord.getScale() == Scale.sus) {
+/*        if(chord.getScale() == Scale.sus) {
             number = Number.none;
-        }
+        }*/
 
         for(Letter letter : letters){
             chords.add(new DetailedChord(letter,chord.getAccidental(),chord.getScale(),number));
