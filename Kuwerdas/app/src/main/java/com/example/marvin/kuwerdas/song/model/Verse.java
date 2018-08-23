@@ -29,6 +29,11 @@ public class Verse{
     private List<Line>
             lines;
 
+
+
+    @ColumnInfo(name = "verseOrder")
+    private int verseOrder;
+
     public Verse(List<Line> lines) {
         this.lines = lines;
         title = "Verse";//TODO fix title
@@ -72,5 +77,13 @@ public class Verse{
 
     public void setSongId(int songId) {
         this.songId = songId;
+    }
+
+    public int getVerseOrder() {
+        return verseOrder;
+    }
+
+    public void setVerseOrder(int verseOrder) {
+        this.verseOrder = verseOrder;
     }
 }

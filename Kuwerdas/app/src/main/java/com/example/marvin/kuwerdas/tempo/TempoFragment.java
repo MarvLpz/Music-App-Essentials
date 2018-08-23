@@ -95,16 +95,18 @@ public class TempoFragment extends Fragment implements BeatListener{
         mCroller = (Croller) view.findViewById(R.id.croller);
         mCroller.setBackCircleColor(Color.parseColor("#8CA7A6A7"));
         mCroller.setMainCircleColor(Color.parseColor("#8CA7A6A7"));
-        mCroller.setMin(20);
+        mCroller.setMin(0);
         mCroller.setMax(Metronome.MAX_TEMPO);
         mCroller.setIsContinuous(false);
         mCroller.setProgressPrimaryColor(Color.parseColor("#df8b37"));
         mCroller.setIndicatorColor(Color.parseColor("#FAB36E"));
         mCroller.setProgressSecondaryColor(Color.parseColor("#818181"));
 //        mCroller.setProgressRadius(365);
-//        mCroller.setBackCircleRadius(400);
+        mCroller.setBackCircleRadius(400);
         mCroller.setProgress(0);
-        mCroller.setIndicatorWidth(0);
+//        mCroller.setProgressPrimaryStrokeWidth(400);
+        mCroller.setProgressSecondaryStrokeWidth(400);
+        mCroller.setIndicatorWidth(10);
         mCroller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
             boolean isTouched = false;
             @Override
@@ -169,6 +171,7 @@ public class TempoFragment extends Fragment implements BeatListener{
             mCroller.setProgress(mMetronome.getTempo());
             Toast.makeText(getActivity(), "Stopped playing", Toast.LENGTH_SHORT).show();
         }
+
         else {
             mVibrator.vibrate(500);
             mMetronome.changeTempo(lastTempo);

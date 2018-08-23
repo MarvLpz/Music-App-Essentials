@@ -7,6 +7,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.song.SongFragment;
@@ -16,6 +18,7 @@ import com.example.marvin.kuwerdas.song.model.Verse;
 public class VerseItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
     // define the View objects
     private RecyclerView recyclerView;
+    public ImageButton dragVerse;
 
     public RecyclerView getRecyclerView() {
         return recyclerView;
@@ -48,6 +51,7 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
         super(itemView);
         recyclerView = (RecyclerView) itemView.findViewById(R.id.rvVerses);
         textView = (EditText) itemView.findViewById(R.id.etTitle);
+        dragVerse = (ImageButton) itemView.findViewById(R.id.ibSwipeVerse);
     }
 
     public void setVerseLinesData(Verse data){
@@ -78,6 +82,6 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
 
     @Override
     public void onItemClear() {
-        itemView.setBackgroundColor(0);
+        itemView.setBackgroundColor(Color.WHITE);
     }
 }

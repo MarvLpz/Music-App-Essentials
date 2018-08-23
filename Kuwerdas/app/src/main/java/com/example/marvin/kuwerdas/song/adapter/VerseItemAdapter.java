@@ -17,6 +17,7 @@ import com.example.marvin.kuwerdas.search.adapter.HeaderViewHolder;
 import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemClickCallback;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemTouchHelperAdapter;
+import com.example.marvin.kuwerdas.song.adapter.itemtouch.OnStartDragListener;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
 import com.example.marvin.kuwerdas.song.util.SongUtil;
@@ -41,11 +42,14 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private Song songDetails;
 
+    private OnStartDragListener mDragStartListener;
 
-    public VerseItemAdapter(Song songDetails, SongFragment songFragment){
+
+    public VerseItemAdapter(Song songDetails, SongFragment songFragment, OnStartDragListener dragStartListener){
         this.mVerses = songDetails.getVerses();
         this.songDetails = songDetails;
         this.songFragment = songFragment;
+        mDragStartListener = dragStartListener;
         versesToDelete = new ArrayList<>();
 
         Log.d("SONG","verse item count: " + getItemCount() + " - " + mVerses.size());
@@ -77,6 +81,15 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if(holder instanceof VerseItemViewHolder) {
             ((VerseItemViewHolder) holder).setVerseLinesData(mVerses.get(position-1));
             ((VerseItemViewHolder) holder).setFocusable(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
+            ((VerseItemViewHolder) holder).dragVerse.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                        mDragStartListener.onStartDrag(holder);
+                    }
+                    return false;
+                }
+            });
         }
 
         else if(holder instanceof TitleViewHolder) {

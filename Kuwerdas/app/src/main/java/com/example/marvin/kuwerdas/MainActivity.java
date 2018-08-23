@@ -78,25 +78,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setupDrawerContent(nvDrawer);
 
 //        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
 //        getSupportActionBar().setIcon(R.drawable.tuner);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 //        getSupportActionBar().setLogo(R.mipmap.ic);
-        getSupportActionBar().setLogo(R.mipmap.iconnav);
+        getSupportActionBar().setLogo(R.mipmap.iconlegit);
 
         View headerLayout = nvDrawer.inflateHeaderView(R.layout.nav_header);
-
 
 /*        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_draw);
 // Inflate the header view at runtime
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
 // We can now look up items within the header if needed
         ImageView ivHeaderPhoto = headerLayout.findViewById(R.id.imageView);*/
-
-
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -116,15 +112,19 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Class fragmentClass;
         switch(menuItem.getItemId()) {
             case R.id.nav_first_fragment:
+                searchViewItem.setVisible(true);
                 fragmentClass = SearchFragment.class;
                 break;
             case R.id.nav_second_fragment:
+                searchViewItem.setVisible(false);
                 fragmentClass = TempoFragment.class;
                 break;
             case R.id.nav_third_fragment:
+                searchViewItem.setVisible(false);;
                 fragmentClass = TunerFragment.class;
                 break;
             default:
+                searchViewItem.setVisible(true);
                 fragmentClass = SearchFragment.class;
         }
 

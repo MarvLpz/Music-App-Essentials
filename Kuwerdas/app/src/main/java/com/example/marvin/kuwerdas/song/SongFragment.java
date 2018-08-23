@@ -98,7 +98,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         init();
         initializeChordMenuToolbar();
 //        showPicker();
-
         return view;
     }
 
@@ -129,6 +128,9 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                     fabEdit.setImageResource(R.drawable.edit);
                     Toast.makeText(view.getContext(),"READONLY MODE",Toast.LENGTH_SHORT).show();
                     SongFragment.isSongEdited = true;
+
+                    saveSongToDatabase();
+
                 }
 
                 else{
@@ -136,7 +138,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                     mode = SongEditMode.EDIT;
                     fabEdit.setImageResource(R.drawable.back);
                     Toast.makeText(view.getContext(),"EDIT MODE",Toast.LENGTH_SHORT).show();
-                    SongFragment.isSongEdited = true;
+//                    SongFragment.isSongEdited = true;
                 }
 
                 if (adapter!=null)
@@ -409,7 +411,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             song = item;
             isLoadedFromDB = song.getUid()!=0;
             if(song.getVerses()!=null) {
-                adapter = new VerseItemAdapter(song, this);
+                adapter = new VerseItemAdapter(song, this,this);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setVisibility(View.VISIBLE);
 /*                itemTouchHelper = new ItemTouchHelper(new VerseItemTouchHelperCallback(getActivity(),adapter,song.getVerses()).createHelperCallback());
@@ -448,6 +450,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             showProgressBar(false);
         }
     }
+
     private void saveSongToDatabase() {
         if (song != null && mode==SongEditMode.EDIT && isSongEdited) {
 //            song.setSongTitle(adapter.getSongTitle());
