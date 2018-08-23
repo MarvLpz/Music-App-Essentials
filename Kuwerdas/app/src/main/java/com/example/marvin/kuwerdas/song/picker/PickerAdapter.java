@@ -1,15 +1,18 @@
 package com.example.marvin.kuwerdas.song.picker;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.marvin.kuwerdas.R;
+import com.example.marvin.kuwerdas.song.adapter.ChordItemAdapter;
 import com.example.marvin.kuwerdas.song.picker.model.Accidental;
 import com.example.marvin.kuwerdas.song.picker.model.DetailedChord;
 import com.example.marvin.kuwerdas.song.picker.model.Number;
@@ -72,6 +75,7 @@ public class PickerAdapter extends RecyclerView.Adapter<PickerAdapter.PickerView
         }
         else if(strings.get(position) instanceof DetailedChord) {
             text  = ((DetailedChord)strings.get(position)).getChord();
+            holder.tvData.setOnTouchListener(new ChoiceTouchListener());
 
         }
         else {
@@ -93,6 +97,28 @@ public class PickerAdapter extends RecyclerView.Adapter<PickerAdapter.PickerView
         PickerViewHolder(View itemView) {
             super(itemView);
             tvData = itemView.findViewById(R.id.tvChordPickerItem);
+        }
+}
+
+
+    public final class ChoiceTouchListener implements View.OnTouchListener{
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN){
+
+                ChordItemAdapter getTheChord = new ChordItemAdapter();
+                getTheChord.getChord(((TextView)v.findViewById(R.id.tvChordPickerItem)).getText().toString());
+//
+
+                ClipData data = ClipData.newPlainText("","");
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+                v.startDrag(data,shadowBuilder,v,0);
+                return true;
+            }
+            else {
+                return false;
+            }
         }
     }
 }

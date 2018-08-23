@@ -86,6 +86,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     private TextView tv_DragChord6;
     private TextView tv_DragChord7;
 
+
+
     String get_accidental = "",get_scale= "",get_number= "";
 
     float dX;
@@ -379,6 +381,9 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         tv_DragChord5 = (TextView) view.findViewById(R.id.tv_dragChord5);
         tv_DragChord6 = (TextView) view.findViewById(R.id.tv_dragChord6);
         tv_DragChord7 = (TextView) view.findViewById(R.id.tv_dragChord7);
+
+
+
         tv_DragChord1.setOnTouchListener(new ChoiceTouchListener());
         tv_DragChord2.setOnTouchListener(new ChoiceTouchListener());
         tv_DragChord3.setOnTouchListener(new ChoiceTouchListener());
@@ -386,6 +391,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         tv_DragChord5.setOnTouchListener(new ChoiceTouchListener());
         tv_DragChord6.setOnTouchListener(new ChoiceTouchListener());
         tv_DragChord7.setOnTouchListener(new ChoiceTouchListener());
+
+
 
 //        linearLayout = (LinearLayout) view.findViewById(R.id.frame_place);
 //        view.setOnTouchListener(new touchMe());
