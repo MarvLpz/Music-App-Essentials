@@ -1,8 +1,6 @@
 package com.example.marvin.kuwerdas.tempo;
 
-import top.defaults.view.PickerView;
-
-public enum TimeSignature implements PickerView.PickerItem {
+public enum TimeSignature{
     four_four("4/4"),
     six_eight("6/8"),
     two_four("2/4");

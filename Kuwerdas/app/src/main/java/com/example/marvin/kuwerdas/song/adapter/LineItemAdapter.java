@@ -43,6 +43,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
     public void onBindViewHolder(@NonNull LineItemViewHolder holder, final int position) {
         onBind = true;
 
+        holder.getRvChords().setAlpha(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT) ? .5f : 1f);
         final EditText etLine = holder.getLineLyricsEditText();
         final Line line = verseLines.get(holder.getAdapterPosition());
         etLine.setText(line.getLyrics());
@@ -50,6 +51,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
 //        ((VerseItemViewHolder) holder).setFocusable(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
 
         final int pos = holder.getAdapterPosition();
+
         etLine.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean focused) {

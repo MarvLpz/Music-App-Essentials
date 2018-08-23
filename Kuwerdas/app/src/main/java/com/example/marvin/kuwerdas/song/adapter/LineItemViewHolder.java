@@ -9,12 +9,6 @@ import android.widget.EditText;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ChordItemTouchHelperCallback;
 import com.example.marvin.kuwerdas.song.model.Chord;
-import com.google.android.flexbox.AlignContent;
-import com.google.android.flexbox.AlignItems;
-import com.google.android.flexbox.FlexWrap;
-import com.google.android.flexbox.FlexboxLayoutManager;
-import com.google.android.flexbox.JustifyContent;
-
 import java.util.List;
 
 public class LineItemViewHolder extends RecyclerView.ViewHolder {

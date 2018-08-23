@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -18,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.Button;
@@ -28,9 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appolica.flubber.Flubber;
+import com.example.marvin.kuwerdas.VibrateListener;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.song.adapter.TitleViewHolder;
-import com.example.marvin.kuwerdas.song.adapter.itemtouch.ChordItemTouchHelperCallback;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.OnStartDragListener;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabase;
@@ -42,7 +42,7 @@ import com.example.marvin.kuwerdas.song.model.Chord;
 import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
-import com.example.marvin.kuwerdas.song.picker.PickerAdapter;
+import com.example.marvin.kuwerdas.song.picker.ChordPickerAdapter;
 import com.example.marvin.kuwerdas.song.picker.PickerItems;
 import com.example.marvin.kuwerdas.song.picker.model.Accidental;
 import com.example.marvin.kuwerdas.song.picker.model.DetailedChord;
@@ -53,11 +53,27 @@ import com.example.marvin.kuwerdas.song.picker.model.Scale;
 import com.example.marvin.kuwerdas.song.util.Transposer;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class SongFragment extends Fragment implements OnStartDragListener, SearchFragment.OnChangeSong, TitleViewHolder.ChordTransposer {
+import static android.content.Context.VIBRATOR_SERVICE;
+
+
+public class SongFragment extends Fragment implements OnStartDragListener, SearchFragment.OnChangeSong, TitleViewHolder.ChordTransposer, VibrateListener{
+
+    private static SongFragment single_instance = null;
+
+    public SongFragment(){
+        single_instance = this;
+    }
+
+    public static SongFragment getInstance()
+    {
+        if (single_instance == null)
+            single_instance = new SongFragment();
+
+        return single_instance;
+    }
 
     private VerseItemAdapter adapter;
     private RecyclerView recyclerView;
@@ -77,6 +93,9 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     public static boolean isSongEdited = false;
     public static boolean isInDeleteMode = false;
     public static SongEditMode mode = SongEditMode.READ_ONLY;
+
+
+    private Vibrator mVibrator;
 
     private TextView tv_DragChord1;
     private TextView tv_DragChord2;
@@ -114,6 +133,12 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
     private Toolbar toolbar;
 
+    @Override
+    public void vibrate(int ms) {
+        if(mVibrator!=null)
+            mVibrator.vibrate(ms);
+    }
+
     public enum SongEditMode{
         EDIT, READ_ONLY
     }
@@ -124,7 +149,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         database = SongDatabase.getSongDatabase(getContext());
         toolbar = view.findViewById(R.id.tbChordEditor);
         toolbar.setVisibility(View.GONE);
-
+        mVibrator = (Vibrator)getActivity().getSystemService(VIBRATOR_SERVICE);
         progressBar = view.findViewById(R.id.pbSong);
         songContainer = view.findViewById(R.id.songContainer);
         fabEdit = view.findViewById(R.id.fabToggleEdit);
@@ -137,12 +162,10 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             public void onClick(View v) {
                 if(mode == SongEditMode.EDIT) {
                     recyclerView.setClickable(false);
-                    mode = SongEditMode.READ_ONLY;
                     fabEdit.setImageResource(R.drawable.edit);
-                    SongFragment.isSongEdited = true;
                     hideKeyboard(getActivity());
-
                     saveSongToDatabase();
+                    mode = SongEditMode.READ_ONLY;
                     toolbar.setVisibility(View.GONE);
                     Flubber.with().animation(Flubber.AnimationPreset.FADE_OUT).createFor(toolbar).start();
                 }
@@ -289,7 +312,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                 ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
                 adapter.notifyDataSetChanged();
             }
-            initializeChordAdder();
+            initializeChordPickerToolbar();
         }
     }
 
@@ -305,16 +328,28 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         btnDeleteChord = chordEditorLayout.findViewById(R.id.btnDeleteChord);
         btnAddChord.setOnClickListener(new AddChordOnClickListener());
         btnDeleteChord.setOnClickListener(new DeleteChordOnClickListener());
+        btnDeleteChord.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(isInDeleteMode) {
+                    ChordItemAdapter.getTriggerDelBtn(isInDeleteMode = false);
+                    Toast.makeText(getContext(), "Exited delete mode", Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
+                }
+                return true;
+            }
+        });
     }
 
     public class DeleteChordOnClickListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            isInDeleteMode =  true;
-            ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
-            Toast.makeText(getContext(),"In delete mode",Toast.LENGTH_SHORT).show();
-            notifyDataSetChanged();
-
+            if(!isInDeleteMode) {
+                isInDeleteMode = true;
+                ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
+                Toast.makeText(getContext(), "In delete mode", Toast.LENGTH_SHORT).show();
+                notifyDataSetChanged();
+            }
 //                linearLayout.setVisibility(View.INVISIBLE);
 //                FloatAdd.setAlpha(127);
 
@@ -406,10 +441,10 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         toolbar.addView(view);
         Flubber.with().animation(Flubber.AnimationPreset.FADE_IN).createFor(view).start();
 
-        (view.findViewById(R.id.btnCollapsePicker)).setOnClickListener(new View.OnClickListener() {
+        (view.findViewById(R.id.btnBackChords)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initializeChordAdder();
+                initializeChordMenuToolbar();
             }
         });
         RecyclerView rvAccidental = view.findViewById(R.id.accidental);
@@ -419,18 +454,17 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
         PickerItems itemSet = new PickerItems();
         DetailedChord display = new DetailedChord(Letter.C,Accidental.natural, Scale.major, Number.none);
-//        ((TextView)view.findViewById(R.id.tvSampleChordPicker)).setText(display.getChord());
 
         DetailedChord displayChord = new DetailedChord(Letter.C,Accidental.natural,Scale.major,Number.none);
         List<DetailedChord> filterResults = DetailedChordIndex.getChords(displayChord);
 
-        PickerAdapter adapterAccidental = initializeRecyclerViewPicker(rvAccidental,displayChord, itemSet.pickerAccidentals,filterResults);
-        PickerAdapter adapterScale= initializeRecyclerViewPicker(rvScale,displayChord,itemSet.pickerScale,filterResults);
-        PickerAdapter adapterNumber = initializeRecyclerViewPicker(rvNumber,displayChord,itemSet.pickerNumber,filterResults);
+        ChordPickerAdapter adapterAccidental = initializeRecyclerViewPicker(rvAccidental,displayChord, itemSet.pickerAccidentals,filterResults);
+        ChordPickerAdapter adapterScale= initializeRecyclerViewPicker(rvScale,displayChord,itemSet.pickerScale,filterResults);
+        ChordPickerAdapter adapterNumber = initializeRecyclerViewPicker(rvNumber,displayChord,itemSet.pickerNumber,filterResults);
         chordAdapter = initializeChordRecyclerViewPicker(rvChord,filterResults);
-
     }
-    PickerAdapter chordAdapter;
+
+    ChordPickerAdapter chordAdapter;
 
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
@@ -484,7 +518,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     }
 
     private void saveSongToDatabase() {
-        if (song != null && mode==SongEditMode.EDIT && isSongEdited) {
+        if (song != null && isSongEdited) {
 //            song.setSongTitle(adapter.getSongTitle());
 //            song.setArtist(adapter.getSongArtist());
 //            song.setTempo(adapter.getSongTempo());
@@ -508,7 +542,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         }
     }
 
-    public PickerAdapter initializeRecyclerViewPicker(final RecyclerView recyclerView, final DetailedChord displayChord, final List items,  final List<DetailedChord> results){
+    public ChordPickerAdapter initializeRecyclerViewPicker(final RecyclerView recyclerView, final DetailedChord displayChord, final List items, final List<DetailedChord> results){
         int maxItems = 1;
         int recyclerViewHeight = 0;
 
@@ -522,7 +556,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             Log.d("PICKER","it went in here");
         }
 
-        final PickerAdapter adapter = new PickerAdapter(getContext(),items,displayChord);
+        final ChordPickerAdapter adapter = new ChordPickerAdapter(getContext(),items,displayChord, ChordPickerAdapter.PickerType.TYPE_PICKER_SELECTOR);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) recyclerView.getLayoutParams();
         layoutParams.height = recyclerViewHeight;
         recyclerView.setLayoutParams(layoutParams);
@@ -576,14 +610,11 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         return adapter;
     }
 
-    public PickerAdapter initializeChordRecyclerViewPicker(final RecyclerView recyclerView, final List<DetailedChord> items){
+    public ChordPickerAdapter initializeChordRecyclerViewPicker(final RecyclerView recyclerView, final List<DetailedChord> items){
         final DetailedChord displayChord = new DetailedChord(Letter.C,Accidental.natural,Scale.major,Number.none);
 
 
-        final PickerAdapter adapter = new PickerAdapter(getContext(),items,displayChord);
-//        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) recyclerView.getLayoutParams();
-//        layoutParams.height = 3;
-//        recyclerView.setLayoutParams(layoutParams);
+        final ChordPickerAdapter adapter = new ChordPickerAdapter(getContext(),items,displayChord, ChordPickerAdapter.PickerType.TYPE_PICKER_CHORD_DISPLAY);
 
         final LinearLayoutManager manager = new LinearLayoutManager(
                 getContext(),
@@ -613,6 +644,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
         return adapter;
     }
+
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
@@ -623,4 +655,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
+
 }

@@ -3,7 +3,6 @@
     package="com.example.marvin.kuwerdas">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-
     <uses-permission android:name="android.permission.VIBRATE" />
 
 
@@ -16,6 +15,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

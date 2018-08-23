@@ -58,7 +58,7 @@ public class VerseItemTouchHelperCallback{
 
                         else {
                             final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-                            final int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                            final int swipeFlags = ItemTouchHelper.START;
                             return makeMovementFlags(dragFlags, swipeFlags);
                         }
                     }
@@ -71,7 +71,7 @@ public class VerseItemTouchHelperCallback{
 
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                        deleteItem(viewHolder.getAdapterPosition());
+                        adapter2.onItemDismiss(viewHolder);
                     }
 
                     @Override
@@ -110,41 +110,8 @@ public class VerseItemTouchHelperCallback{
     }
 
     private void moveItem(int oldPos,int newPos){
-        Log.d("RETURNSIZE POS",String.valueOf(oldPos));
-        Log.d("RETURNSIZE POS",String.valueOf(newPos));
-        Log.d("RETURNSIZE SIZE",String.valueOf(myVerse.size() + 1));
-
-        if (oldPos == 0 || newPos == 0){
-            return;
-        }
-
-        else if (oldPos == myVerse.size() + 1 || newPos == myVerse.size() +1){
-            return;
-        }
-
-        else{
-            Verse item = (Verse) myVerse.get(oldPos - 1);
-            myVerse.remove(oldPos - 1);
-            myVerse.add(newPos - 1,item);
-            adapter2.notifyItemMoved(oldPos,newPos);
-        }
-
-        SongFragment.isSongEdited = true;
-
-        /*editText2 = (EditText) findViewById(R.id.fl_tv_id);
-        editText2.setFocusable(false);
-        editText2.setFocusable(true);
-
-        */
-
+        adapter2.onItemMove(oldPos,newPos);
     }
 
-    private void deleteItem(final int position) {
-        if (position == 0){}
-        else if (position == myVerse.size() + 1){ }
-        else {
-            myVerse.remove(position-1);
-            adapter2.notifyItemRemoved(position);
-        }
-    }
+
 }

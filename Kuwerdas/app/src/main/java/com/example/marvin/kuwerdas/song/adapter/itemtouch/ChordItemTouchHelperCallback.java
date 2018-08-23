@@ -93,8 +93,9 @@ public class ChordItemTouchHelperCallback {
     private void moveItem(int oldPos,int newPos){
         Chord item = (Chord) myChord.get(oldPos);
 
-        if(item.getChord().equals(Chord.EMPTY_CHORD))
+        if(item.getChord().equals(Chord.EMPTY_CHORD) || SongFragment.mode.equals(SongFragment.SongEditMode.READ_ONLY))
             return;
+
 
         myChord.remove(oldPos);
         myChord.add(newPos,item);

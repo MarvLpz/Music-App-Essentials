@@ -6,5 +6,5 @@ public interface ItemTouchHelperAdapter {
 
     boolean onItemMove(int fromPosition, int toPosition);
 
-    void onItemDismiss(RecyclerView.ViewHolder viewHolder, RecyclerView recyclerView);
+    void onItemDismiss(RecyclerView.ViewHolder viewHolder);
 }

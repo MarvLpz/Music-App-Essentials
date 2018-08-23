@@ -12,7 +12,11 @@ import com.example.marvin.kuwerdas.song.util.SongUtil;
 
 
 public class HeaderViewHolder extends RecyclerView.ViewHolder{
-//    private CardView cardView;
+    public View getItemView() {
+        return itemView;
+    }
+
+    //    private CardView cardView;
     private View itemView;
 
     public TextView getTextView() {

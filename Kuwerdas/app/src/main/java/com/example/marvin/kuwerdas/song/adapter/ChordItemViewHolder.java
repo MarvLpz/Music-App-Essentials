@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.marvin.kuwerdas.R;
+import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemTouchHelperViewHolder;
 import com.example.marvin.kuwerdas.song.model.Chord;
 
@@ -37,10 +38,7 @@ ChordItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperVi
 
     @Override
     public void onItemSelected() {
-        if(tv.getText().toString().equals(Chord.EMPTY_CHORD)) {
-        }
-        else{
-            Log.d("CHORD SELECTED","TRUE");
+        if (!tv.getText().toString().equals(Chord.EMPTY_CHORD) || SongFragment.mode.equals(SongFragment.SongEditMode.EDIT)) {
             itemView.setBackgroundColor(Color.LTGRAY);
         }
 

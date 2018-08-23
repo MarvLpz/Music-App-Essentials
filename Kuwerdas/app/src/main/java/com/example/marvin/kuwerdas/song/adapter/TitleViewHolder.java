@@ -125,11 +125,11 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
             public boolean onLongClick(View v) {
                 song.setKey(0);
                 key.setText(Integer.toString(song.getKey()));
-                //todo reset transpose chords
                 return true;
             }
         });
         transposeUp = itemView.findViewById(R.id.btnKeyUp);
+        transposeUp.setVisibility(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT) ? View.VISIBLE : View.GONE);
         transposeUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,6 +141,7 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
         });
 
         transposeDown = itemView.findViewById(R.id.btnKeyDown);
+        transposeDown.setVisibility(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT) ? View.VISIBLE : View.GONE);
         transposeDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

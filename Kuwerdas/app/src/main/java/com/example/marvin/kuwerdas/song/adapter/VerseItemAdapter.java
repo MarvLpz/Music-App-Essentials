@@ -27,7 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-//        implements ItemTouchHelperAdapter
+        implements ItemTouchHelperAdapter
 {
     private static final String TAG = "TAGGY";
 
@@ -100,19 +100,21 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         else if (holder instanceof HeaderViewHolder){
             HeaderViewHolder h = (HeaderViewHolder) holder;
 
-            h.getTextView().setPadding(15,15,15,150);
-            h.setText("CREATE NEW VERSE");
-            h.setClickable(!SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
-            h.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mVerses.add(SongUtil.asVerses("").get(0));
-                    notifyItemInserted(mVerses.size());
-                }
-            });
+            h.getTextView().setVisibility(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT) ? View.VISIBLE: View.GONE);
+            if(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT)) {
+                h.getTextView().setPadding(30, 30, 0, 150);
+                h.setText("CREATE NEW VERSE");
+                h.setClickable(!SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
+                h.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mVerses.add(SongUtil.asVerses("").get(0));
+                        notifyItemInserted(mVerses.size());
+                    }
+                });
+            }
         }
     }
-
 
     @Override
     public int getItemViewType(int position) {
@@ -195,6 +197,50 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public List<Verse> getItems() {
         return mVerses;
+    }
+
+    @Override
+    public boolean onItemMove(int oldPos, int newPos) {
+        if (oldPos == 0 || newPos == 0){
+            return false;
+        }
+
+        else if (oldPos == mVerses.size() + 1 || newPos == mVerses.size() +1){
+            return false;
+        }
+
+        else{
+            Verse item = (Verse) mVerses.get(oldPos - 1);
+            mVerses.remove(oldPos - 1);
+            mVerses.add(newPos - 1,item);
+            notifyItemMoved(oldPos,newPos);
+        }
+
+        SongFragment.isSongEdited = true;
+        return true;
+    }
+
+    @Override
+    public void onItemDismiss(RecyclerView.ViewHolder viewHolder) {
+        final int position = viewHolder.getAdapterPosition();
+        final Verse mVerse =mVerses.get(position-1);
+
+        Snackbar snackbar = Snackbar.make(viewHolder.itemView.getRootView().getRootView().findViewById(R.id.songContainer), "Verse Deleted", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mVerses.add(position-1, mVerse);
+                        notifyItemInserted(position);
+                        versesToDelete.remove(mVerse);
+                    }
+                });
+        snackbar.show();
+
+        if (position != 0  && position != mVerses.size() + 1) {
+                versesToDelete.add(mVerse);
+                mVerses.remove(position-1);
+                notifyItemRemoved(position);
+        }
     }
 }
 

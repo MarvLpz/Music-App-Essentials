@@ -3,8 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/tvTempoTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:inputType="textMultiLine"
+            android:maxLength="50"
+            android:maxLines="3"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <EditText
+            android:id="@+id/tvTempoArtist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:inputType="textMultiLine"
+            android:maxLength="50"
+            android:maxLines="3"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnFade"
@@ -53,7 +81,7 @@
         app:progress_secondary_color="#EDEDED"
         app:start_offset="45" />
 
-    <top.defaults.view.PickerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/pv_timeSig"
         android:layout_width="match_parent"
         android:layout_height="100dp"

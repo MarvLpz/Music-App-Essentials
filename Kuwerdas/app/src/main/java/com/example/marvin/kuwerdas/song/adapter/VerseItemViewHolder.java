@@ -56,6 +56,7 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
         recyclerView = (RecyclerView) itemView.findViewById(R.id.rvVerses);
         textView = (EditText) itemView.findViewById(R.id.etTitle);
         dragVerse = (ImageButton) itemView.findViewById(R.id.ibSwipeVerse);
+
     }
 
     public void setVerseLinesData(final Verse data){

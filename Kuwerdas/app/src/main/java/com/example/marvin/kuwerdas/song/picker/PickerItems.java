@@ -9,8 +9,6 @@ import com.example.marvin.kuwerdas.song.picker.model.Scale;
 import java.util.Arrays;
 import java.util.List;
 
-import top.defaults.view.PickerView;
-
 public class PickerItems {
     public List<Accidental> pickerAccidentals = DetailedChordIndex.allAccidentals;
     public List<Scale> pickerScale = DetailedChordIndex.allScales;

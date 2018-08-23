@@ -11,14 +11,20 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.appolica.flubber.Flubber;
+import com.example.marvin.kuwerdas.MainActivity;
+import com.example.marvin.kuwerdas.OnChangeFragment;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.song.SongFragment;
@@ -26,8 +32,8 @@ import com.sdsmdg.harjot.crollerTest.Croller;
 import com.sdsmdg.harjot.crollerTest.OnCrollerChangeListener;
 
 import java.util.Arrays;
+import java.util.List;
 
-import top.defaults.view.PickerView;
 
 import static android.content.Context.VIBRATOR_SERVICE;
 
@@ -42,11 +48,13 @@ public class TempoFragment extends Fragment implements BeatListener{
     private Button mButtonTap;
     private Croller mCroller;
 
+    private EditText mTitle;
+    private EditText mArtist;
 
     private Vibrator mVibrator;
     private View view;
     private Animator animator;
-    private PickerView mPicker;
+    private RecyclerView mPicker;
 
     private int lastTempo = 0;
     private int crollerPreviousValue = 0;
@@ -133,23 +141,38 @@ public class TempoFragment extends Fragment implements BeatListener{
             }
         });
 
-        mPicker = (PickerView) view.findViewById(R.id.pv_timeSig);
-        mPicker.setItemHeight(100);
-        mPicker.setTextSize(60);
-        mPicker.setTextColor(Color.GRAY);
-        mPicker.setCurved(true);
-        mPicker.setItems(Arrays.asList(TimeSignature.four_four,TimeSignature.six_eight,TimeSignature.two_four), new PickerView.OnItemSelectedListener<TimeSignature>() {
-            @Override
-            public void onItemSelected(TimeSignature item) {
-                mMetronome.setTimeSignature(item.getText());
-            }
-        });
+
+        mPicker = (RecyclerView) view.findViewById(R.id.pv_timeSig);
+        initializeRecyclerViewPicker(mPicker);
+
+
+        mTitle = view.findViewById(R.id.tvTempoTitle);
+        mArtist = view.findViewById(R.id.tvTempoArtist);
 
         if(SongFragment.song!=null) {
+
+            mTitle.setVisibility(View.VISIBLE);
+            mTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainActivity.FragmentSwitcher.change(OnChangeFragment.Frags.SONG);
+                    mMetronome.stop();
+                }
+            });
+            mArtist.setVisibility(View.VISIBLE);
+
+            mTitle.setText(SongFragment.song.getSongTitle());
+            mArtist.setText(SongFragment.song.getArtist());
+            mTitle.setFocusable(false);
+            mArtist.setFocusable(false);
+
             mMetronome.changeTempo(SongFragment.song.getTempo());
             lastTempo = mMetronome.getTempo();
             mButtonTap.setText(String.valueOf(lastTempo));
             mCroller.setProgress(lastTempo);
+        } else {
+            mTitle.setVisibility(View.GONE);
+            mArtist.setVisibility(View.GONE);
         }
     }
 
@@ -207,10 +230,46 @@ public class TempoFragment extends Fragment implements BeatListener{
     @Override
     public void onBeatStart() {
         animator.start();
+        mButtonTap.setBackground(getResources().getDrawable(R.drawable.round_button));
     }
 
     @Override
     public void onBeatEnd() {
 //        mVibrator.vibrate(200);
+        mButtonTap.setBackground(getResources().getDrawable(R.drawable.round_button_end));
+    }
+
+    public TimeSigAdapter initializeRecyclerViewPicker(RecyclerView recyclerView){
+
+        final TimeSigAdapter adapter = new TimeSigAdapter();
+//        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) recyclerView.getLayoutParams();
+//        layoutParams.height = 3;
+//        recyclerView.setLayoutParams(layoutParams);
+
+        final LinearLayoutManager manager = new LinearLayoutManager(
+                getContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false);
+
+        final LinearSnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
+
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setOnFlingListener(snapHelper);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    View centerView = snapHelper.findSnapView(manager);
+                    // Getting position of the center/snapped item.
+                    int pos = manager.getPosition(centerView);
+
+                }
+            }
+        });
+
+        return adapter;
     }
 }
