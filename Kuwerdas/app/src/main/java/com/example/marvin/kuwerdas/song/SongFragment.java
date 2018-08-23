@@ -42,9 +42,16 @@ import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
 import com.example.marvin.kuwerdas.song.picker.PickerAdapter;
 import com.example.marvin.kuwerdas.song.picker.PickerItems;
+import com.example.marvin.kuwerdas.song.picker.model.Accidental;
+import com.example.marvin.kuwerdas.song.picker.model.DetailedChord;
+import com.example.marvin.kuwerdas.song.picker.model.DetailedChordIndex;
+import com.example.marvin.kuwerdas.song.picker.model.Letter;
+import com.example.marvin.kuwerdas.song.picker.model.Number;
+import com.example.marvin.kuwerdas.song.picker.model.Scale;
 import com.example.marvin.kuwerdas.song.util.Transposer;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -393,9 +400,14 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         RecyclerView rvScale = view.findViewById(R.id.scale);
         RecyclerView rvNumber = view.findViewById(R.id.number);
 
-        initializeRecyclerViewPicker(rvAccidental, PickerItems.pickerAccidentals);
-        initializeRecyclerViewPicker(rvScale,PickerItems.pickerScale);
-        initializeRecyclerViewPicker(rvNumber,PickerItems.pickerNumber);
+        PickerItems itemSet = new PickerItems();
+        DetailedChord display = new DetailedChord(Letter.C,Accidental.natural, Scale.major, Number.none);
+        ((TextView)view.findViewById(R.id.tvSampleChordPicker)).setText(display.getChord());
+        List<DetailedChord> filterResults = new ArrayList<>();
+        PickerAdapter adapterAccidental = initializeRecyclerViewPicker(rvAccidental, itemSet.pickerAccidentals,display,filterResults);
+        PickerAdapter adapterScale= initializeRecyclerViewPicker(rvScale,itemSet.pickerScale,display,filterResults);
+        PickerAdapter adapterNumber = initializeRecyclerViewPicker(rvNumber,itemSet.pickerNumber,display,filterResults);
+
     }
 
     @Override
@@ -473,7 +485,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         }
     }
 
-    public void initializeRecyclerViewPicker(final RecyclerView recyclerView, final List<String> items){
+    public PickerAdapter initializeRecyclerViewPicker(final RecyclerView recyclerView, final List items, final DetailedChord displayChord, final List<DetailedChord> results){
         int maxItems = 1;
         int recyclerViewHeight = 0;
 
@@ -487,7 +499,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             Log.d("PICKER","it went in here");
         }
 
-        PickerAdapter adapter = new PickerAdapter(getContext(),items);
+
+        final PickerAdapter adapter = new PickerAdapter(getContext(),items,displayChord);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) recyclerView.getLayoutParams();
         layoutParams.height = recyclerViewHeight;
         recyclerView.setLayoutParams(layoutParams);
@@ -512,6 +525,16 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
                     // Getting position of the center/snapped item.
                     int pos = manager.getPosition(centerView);
+                    adapter.setSelectedItem(pos);
+                    results.clear();
+                    results.addAll(DetailedChordIndex.getChords(displayChord));
+                    ((TextView)view.findViewById(R.id.tvSampleChordPicker)).setText(displayChord.getChord());
+                    if(results.size()>0)
+                        displayChord.setValue(results.get(0));
+                    else{
+                        displayChord.setValue(null);
+                    }
+
                     Log.d("PICKER", pos + " - " + items.get(pos));
                 }
             }
@@ -524,5 +547,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                 return true;
             }
         });
+
+        return adapter;
     }
 }
