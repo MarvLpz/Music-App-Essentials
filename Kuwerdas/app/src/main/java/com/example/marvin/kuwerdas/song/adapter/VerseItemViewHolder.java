@@ -54,7 +54,7 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
         dragVerse = (ImageButton) itemView.findViewById(R.id.ibSwipeVerse);
     }
 
-    public void setVerseLinesData(Verse data){
+    public void setVerseLinesData(final Verse data){
         adapter = new LineItemAdapter(data);
         recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
         recyclerView.setAdapter(adapter);
@@ -68,6 +68,7 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
 
             @Override
             public void afterTextChanged(Editable s) {
+                data.setTitle(s.toString());
                 SongFragment.isSongEdited = true;
             }
         });

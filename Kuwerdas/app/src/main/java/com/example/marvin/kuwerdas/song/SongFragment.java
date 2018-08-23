@@ -119,6 +119,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     private void init(){
         database = SongDatabase.getSongDatabase(getContext());
         toolbar = view.findViewById(R.id.tbChordEditor);
+        toolbar.setVisibility(View.GONE);
+
         progressBar = view.findViewById(R.id.pbSong);
         songContainer = view.findViewById(R.id.songContainer);
         fabEdit = view.findViewById(R.id.fabToggleEdit);
@@ -130,6 +132,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             @Override
             public void onClick(View v) {
                 if(mode == SongEditMode.EDIT) {
+                    toolbar.setVisibility(View.GONE);
+                    Flubber.with().animation(Flubber.AnimationPreset.FADE_OUT).createFor(toolbar).start();
                     recyclerView.setClickable(false);
                     mode = SongEditMode.READ_ONLY;
                     fabEdit.setImageResource(R.drawable.edit);
@@ -142,6 +146,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
                 else{
                     recyclerView.setClickable(true);
+                    toolbar.setVisibility(View.VISIBLE);
+                    Flubber.with().animation(Flubber.AnimationPreset.FADE_IN).createFor(toolbar).start();
                     mode = SongEditMode.EDIT;
                     fabEdit.setImageResource(R.drawable.back);
                     Toast.makeText(view.getContext(),"EDIT MODE",Toast.LENGTH_SHORT).show();
