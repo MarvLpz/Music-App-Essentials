@@ -31,4 +31,8 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder{
         textView.setText(text);
     }
 
+    public void setClickable(boolean val){
+        textView.setClickable(val);
+    }
+
 }

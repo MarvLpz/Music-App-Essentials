@@ -13,7 +13,7 @@ import com.example.marvin.kuwerdas.song.model.Verse;
 
 import java.util.List;
 
-public class VerseItemTouchHelperCallback {
+public class VerseItemTouchHelperCallback{
     Context con;
     private List<Verse> myVerse;
     VerseItemAdapter adapter2;
@@ -35,6 +35,16 @@ public class VerseItemTouchHelperCallback {
                 new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP| ItemTouchHelper.DOWN,
                         ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT)
                 {
+
+                    @Override
+                    public boolean isLongPressDragEnabled() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isItemViewSwipeEnabled() {
+                        return true;
+                    }
 
                     @Override
                     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {

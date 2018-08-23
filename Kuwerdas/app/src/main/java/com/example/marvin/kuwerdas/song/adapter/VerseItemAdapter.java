@@ -91,16 +91,17 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
             });
         }
-
         else if(holder instanceof TitleViewHolder) {
             ((TitleViewHolder) holder).setSongDetails(songDetails);
             ((TitleViewHolder) holder).setFocusableTitle(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
             ((TitleViewHolder) holder).setFocusableArtist(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
+            ((TitleViewHolder) holder).setFocusableTempoAndKey(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
         }
-
         else if (holder instanceof HeaderViewHolder){
             HeaderViewHolder h = (HeaderViewHolder) holder;
+
             h.setText("CREATE NEW VERSE");
+            h.setClickable(!SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
             h.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

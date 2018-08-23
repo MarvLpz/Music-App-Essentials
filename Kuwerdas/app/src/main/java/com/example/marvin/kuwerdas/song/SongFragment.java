@@ -1,5 +1,6 @@
 package com.example.marvin.kuwerdas.song;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -132,16 +134,15 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             @Override
             public void onClick(View v) {
                 if(mode == SongEditMode.EDIT) {
-                    toolbar.setVisibility(View.GONE);
-                    Flubber.with().animation(Flubber.AnimationPreset.FADE_OUT).createFor(toolbar).start();
                     recyclerView.setClickable(false);
                     mode = SongEditMode.READ_ONLY;
                     fabEdit.setImageResource(R.drawable.edit);
-                    Toast.makeText(view.getContext(),"READONLY MODE",Toast.LENGTH_SHORT).show();
                     SongFragment.isSongEdited = true;
+                    hideKeyboard(getActivity());
 
                     saveSongToDatabase();
-
+                    toolbar.setVisibility(View.GONE);
+                    Flubber.with().animation(Flubber.AnimationPreset.FADE_OUT).createFor(toolbar).start();
                 }
 
                 else{
@@ -560,5 +561,16 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         });
 
         return adapter;
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

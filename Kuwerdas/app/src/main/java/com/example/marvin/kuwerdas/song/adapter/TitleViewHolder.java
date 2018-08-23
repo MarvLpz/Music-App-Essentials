@@ -35,6 +35,26 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
         else
             title.setFocusableInTouchMode(false);
     }
+
+    public void setFocusableTempoAndKey(boolean val){
+        if(val)
+        {
+            tempo.setClickable(true);
+            transposeUp.setClickable(true);
+            transposeDown.setClickable(true);
+            key.setClickable(true);
+            key.setEnabled(true);
+        }
+        else {
+            tempo.setClickable(false);
+            transposeUp.setClickable(false);
+            transposeDown.setClickable(false);
+            key.setClickable(false);
+            key.setEnabled(false);
+
+        }
+    }
+
     public void setFocusableArtist(boolean val){
         if(val)
         {
