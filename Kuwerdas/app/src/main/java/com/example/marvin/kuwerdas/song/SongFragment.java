@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
@@ -27,12 +28,14 @@ import android.widget.Toast;
 import com.appolica.flubber.Flubber;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.song.adapter.TitleViewHolder;
+import com.example.marvin.kuwerdas.song.adapter.itemtouch.ChordItemTouchHelperCallback;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.OnStartDragListener;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.search.SearchFragment;
 import com.example.marvin.kuwerdas.song.adapter.ChordItemAdapter;
 import com.example.marvin.kuwerdas.song.adapter.VerseItemAdapter;
+import com.example.marvin.kuwerdas.song.adapter.itemtouch.VerseItemTouchHelperCallback;
 import com.example.marvin.kuwerdas.song.model.Chord;
 import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Song;
@@ -49,19 +52,22 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
     private VerseItemAdapter adapter;
     private RecyclerView recyclerView;
+    private VerseItemTouchHelperCallback verseItemTouchHelperCallback;
     private ItemTouchHelper itemTouchHelper;
     private SongDatabase database;
     private ProgressBar progressBar;
     private View songContainer;
     private View view;
+    private FloatingActionButton fabEdit;
 
     private Button btnAddChord;
     private Button btnDeleteChord;
 
-    private static Song song;
+    public static Song song;
     private static boolean isLoadedFromDB = false;
     public static boolean isSongEdited = false;
     public static boolean isInDeleteMode = false;
+    public static SongEditMode mode = SongEditMode.READ_ONLY;
 
     private TextView tv_DragChord1;
     private TextView tv_DragChord2;
@@ -77,7 +83,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     float dY;
     int lastAction;
 
-//    LinearLayout linearLayout;
 
     @Nullable
     @Override
@@ -98,12 +103,46 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     }
 
     private Toolbar toolbar;
+
+    public enum SongEditMode{
+        EDIT, READ_ONLY
+    }
+
+
+
     private void init(){
         database = SongDatabase.getSongDatabase(getContext());
         toolbar = view.findViewById(R.id.tbChordEditor);
         progressBar = view.findViewById(R.id.pbSong);
         songContainer = view.findViewById(R.id.songContainer);
+        fabEdit = view.findViewById(R.id.fabToggleEdit);
         recyclerView = view.findViewById(R.id.rvSong);
+        //            ItemTouchHelper.Callback callback = new VerseItemTouchHelperCallback(adapter);
+//        adapter = new VerseItemAdapter(song, this);
+
+        fabEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mode == SongEditMode.EDIT) {
+                    recyclerView.setClickable(false);
+                    mode = SongEditMode.READ_ONLY;
+                    fabEdit.setImageResource(R.drawable.edit);
+                    Toast.makeText(view.getContext(),"READONLY MODE",Toast.LENGTH_SHORT).show();
+                    SongFragment.isSongEdited = true;
+                }
+
+                else{
+                    recyclerView.setClickable(true);
+                    mode = SongEditMode.EDIT;
+                    fabEdit.setImageResource(R.drawable.back);
+                    Toast.makeText(view.getContext(),"EDIT MODE",Toast.LENGTH_SHORT).show();
+                    SongFragment.isSongEdited = true;
+                }
+
+                if (adapter!=null)
+                    adapter.notifyDataSetChanged();
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         showProgressBar(true);
         Log.d("SONG","loaded init");
@@ -236,6 +275,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         }
     }
 
+
     private void initializeChordMenuToolbar(){
 
         View chordEditorLayout = getLayoutInflater().inflate(R.layout.chord_editor_toolbar,null);
@@ -304,7 +344,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                         break;
                 }
 
-                Log.d("BUTTON","pumasok naman dito");
 
                 ClipData data = ClipData.newPlainText("","");
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
@@ -373,7 +412,11 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                 adapter = new VerseItemAdapter(song, this);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setVisibility(View.VISIBLE);
-
+/*                itemTouchHelper = new ItemTouchHelper(new VerseItemTouchHelperCallback(getActivity(),adapter,song.getVerses()).createHelperCallback());
+                itemTouchHelper.attachToRecyclerView(recyclerView);*/
+                verseItemTouchHelperCallback = new VerseItemTouchHelperCallback(getContext(),adapter);
+                itemTouchHelper = new ItemTouchHelper(verseItemTouchHelperCallback.createHelperCallback());
+                itemTouchHelper.attachToRecyclerView(recyclerView);
                 isSongEdited = false;
             }
         }
@@ -406,7 +449,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         }
     }
     private void saveSongToDatabase() {
-        if (song != null && isSongEdited) {
+        if (song != null && mode==SongEditMode.EDIT && isSongEdited) {
 //            song.setSongTitle(adapter.getSongTitle());
 //            song.setArtist(adapter.getSongArtist());
 //            song.setTempo(adapter.getSongTempo());
@@ -426,9 +469,9 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                             (song.getSongTitle().length()>25 ? "...\'" : "\'"),
                     Toast.LENGTH_SHORT).show();
             isSongEdited = false;
+            mode = SongEditMode.READ_ONLY;
         }
     }
-
 
     public void initializeRecyclerViewPicker(final RecyclerView recyclerView, final List<String> items){
         int maxItems = 1;
