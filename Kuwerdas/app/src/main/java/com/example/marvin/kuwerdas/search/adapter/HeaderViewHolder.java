@@ -14,6 +14,11 @@ import com.example.marvin.kuwerdas.song.util.SongUtil;
 public class HeaderViewHolder extends RecyclerView.ViewHolder{
 //    private CardView cardView;
     private View itemView;
+
+    public TextView getTextView() {
+        return textView;
+    }
+
     private TextView textView;
 
     public HeaderViewHolder(View itemView) {
@@ -33,6 +38,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder{
 
     public void setClickable(boolean val){
         textView.setClickable(val);
+        textView.setVisibility(val ? View.INVISIBLE : View.VISIBLE);
     }
 
 }

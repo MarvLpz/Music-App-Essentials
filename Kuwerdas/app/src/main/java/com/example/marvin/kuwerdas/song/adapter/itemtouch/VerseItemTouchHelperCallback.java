@@ -43,7 +43,7 @@ public class VerseItemTouchHelperCallback{
 
                     @Override
                     public boolean isItemViewSwipeEnabled() {
-                        return true;
+                        return SongFragment.mode == SongFragment.SongEditMode.EDIT;
                     }
 
                     @Override

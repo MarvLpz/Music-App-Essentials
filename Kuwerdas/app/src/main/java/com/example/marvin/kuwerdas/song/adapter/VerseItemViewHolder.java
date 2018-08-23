@@ -31,12 +31,16 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
     public void setFocusable(boolean val){
         if(val)
         {
+            dragVerse.setVisibility(View.VISIBLE);
             textView.setFocusableInTouchMode(true);
             textView.setFocusable(true);
             adapter.notifyDataSetChanged();
         }
-        else
+        else {
             textView.setFocusable(false);
+            dragVerse.setVisibility(View.INVISIBLE);
+
+        }
     }
 
     private EditText textView;

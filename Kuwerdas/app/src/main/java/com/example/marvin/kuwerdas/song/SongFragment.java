@@ -413,14 +413,17 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         PickerItems itemSet = new PickerItems();
         DetailedChord display = new DetailedChord(Letter.C,Accidental.natural, Scale.major, Number.none);
 //        ((TextView)view.findViewById(R.id.tvSampleChordPicker)).setText(display.getChord());
-        List<DetailedChord> filterResults = new ArrayList<>();
 
-        PickerAdapter adapterAccidental = initializeRecyclerViewPicker(rvAccidental, itemSet.pickerAccidentals,filterResults);
-        PickerAdapter adapterScale= initializeRecyclerViewPicker(rvScale,itemSet.pickerScale,filterResults);
-        PickerAdapter adapterNumber = initializeRecyclerViewPicker(rvNumber,itemSet.pickerNumber,filterResults);
-        PickerAdapter chordAdapter = initializeRecyclerViewPicker(rvChord,filterResults,filterResults);
+        DetailedChord displayChord = new DetailedChord(Letter.C,Accidental.natural,Scale.major,Number.none);
+        List<DetailedChord> filterResults = DetailedChordIndex.getChords(displayChord);
+
+        PickerAdapter adapterAccidental = initializeRecyclerViewPicker(rvAccidental,displayChord, itemSet.pickerAccidentals,filterResults);
+        PickerAdapter adapterScale= initializeRecyclerViewPicker(rvScale,displayChord,itemSet.pickerScale,filterResults);
+        PickerAdapter adapterNumber = initializeRecyclerViewPicker(rvNumber,displayChord,itemSet.pickerNumber,filterResults);
+        chordAdapter = initializeChordRecyclerViewPicker(rvChord,filterResults);
 
     }
+    PickerAdapter chordAdapter;
 
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
@@ -498,10 +501,9 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         }
     }
 
-    public PickerAdapter initializeRecyclerViewPicker(final RecyclerView recyclerView, final List items,  final List<DetailedChord> results){
+    public PickerAdapter initializeRecyclerViewPicker(final RecyclerView recyclerView, final DetailedChord displayChord, final List items,  final List<DetailedChord> results){
         int maxItems = 1;
         int recyclerViewHeight = 0;
-        final DetailedChord displayChord = new DetailedChord(Letter.C,Accidental.natural,Scale.major,Number.none);
 
         TypedValue tv = new TypedValue();
 
@@ -541,6 +543,10 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                     adapter.setSelectedItem(pos);
                     results.clear();
                     results.addAll(DetailedChordIndex.getChords(displayChord));
+
+                    if(chordAdapter!=null)
+                        chordAdapter.notifyDataSetChanged();
+
                     if(results.size()>0)
                         displayChord.setValue(results.get(0));
                     else{
@@ -563,6 +569,43 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         return adapter;
     }
 
+    public PickerAdapter initializeChordRecyclerViewPicker(final RecyclerView recyclerView, final List<DetailedChord> items){
+        final DetailedChord displayChord = new DetailedChord(Letter.C,Accidental.natural,Scale.major,Number.none);
+
+
+        final PickerAdapter adapter = new PickerAdapter(getContext(),items,displayChord);
+//        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) recyclerView.getLayoutParams();
+//        layoutParams.height = 3;
+//        recyclerView.setLayoutParams(layoutParams);
+
+        final LinearLayoutManager manager = new LinearLayoutManager(
+                getContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false);
+
+        final LinearSnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
+
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setOnFlingListener(snapHelper);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    View centerView = snapHelper.findSnapView(manager);
+
+                    // Getting position of the center/snapped item.
+                    int pos = manager.getPosition(centerView);
+                    adapter.setSelectedItem(pos);
+
+                }
+            }
+        });
+
+        return adapter;
+    }
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.

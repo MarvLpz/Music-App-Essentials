@@ -100,6 +100,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         else if (holder instanceof HeaderViewHolder){
             HeaderViewHolder h = (HeaderViewHolder) holder;
 
+            h.getTextView().setPadding(15,15,15,150);
             h.setText("CREATE NEW VERSE");
             h.setClickable(!SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
             h.setOnClickListener(new View.OnClickListener() {

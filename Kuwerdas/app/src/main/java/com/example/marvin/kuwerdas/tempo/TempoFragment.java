@@ -102,11 +102,11 @@ public class TempoFragment extends Fragment implements BeatListener{
         mCroller.setIndicatorColor(Color.parseColor("#FAB36E"));
         mCroller.setProgressSecondaryColor(Color.parseColor("#818181"));
 //        mCroller.setProgressRadius(365);
-        mCroller.setBackCircleRadius(400);
+//        mCroller.setBackCircleRadius(400);
         mCroller.setProgress(0);
-//        mCroller.setProgressPrimaryStrokeWidth(400);
-        mCroller.setProgressSecondaryStrokeWidth(400);
-        mCroller.setIndicatorWidth(10);
+        mCroller.setProgressPrimaryStrokeWidth(100);
+        mCroller.setProgressSecondaryStrokeWidth(100);
+        mCroller.setIndicatorWidth(5);
         mCroller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
             boolean isTouched = false;
             @Override

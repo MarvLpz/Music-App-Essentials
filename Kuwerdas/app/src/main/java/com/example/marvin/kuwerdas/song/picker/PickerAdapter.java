@@ -1,6 +1,7 @@
 package com.example.marvin.kuwerdas.song.picker;
 
 import android.content.Context;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -69,11 +70,16 @@ public class PickerAdapter extends RecyclerView.Adapter<PickerAdapter.PickerView
         else if(strings.get(position) instanceof Number) {
             text  = ((Number)strings.get(position)).getLabel();
         }
+        else if(strings.get(position) instanceof DetailedChord) {
+            text  = ((DetailedChord)strings.get(position)).getChord();
+
+        }
         else {
-            text = strings.get(position).toString();
-            Log.d("OBJECT","INSTANCE IS " + strings.get(position).getClass().getName());
+                text = strings.get(position).toString();
+                Log.d("OBJECT","INSTANCE IS " + strings.get(position).getClass().getName());
         }
         holder.tvData.setText(text);
+        holder.tvData.setTextSize(strings.get(position) instanceof DetailedChord ? 25 : 18);
     }
 
     @Override
