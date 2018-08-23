@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.util.Log;
 
 import com.example.marvin.kuwerdas.song.adapter.ChordOrderComparator;
+import com.example.marvin.kuwerdas.song.adapter.VerseOrderComparator;
 import com.example.marvin.kuwerdas.song.model.Chord;
 import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Song;
@@ -29,8 +30,10 @@ public abstract class SongDao {
         int id = _insertSong(song).intValue();
         List<Verse> verses = song.getVerses();
 
-        for(Verse verse : verses){
+        for(int h=0;h<verses.size();h++){
+            Verse verse = verses.get(h);
             verse.setSongId(id);
+            verse.setVerseOrder(h);
             int verseId = insertVerse(verse).intValue();
             for(Line line : verse.getLines()){
                 line.setVerseId(verseId);
@@ -58,6 +61,7 @@ public abstract class SongDao {
         Song song = getSong(id);
         Log.d("RETRIEVE SONG", "song id: " + id);
         List<Verse> verses = getSongVerses(song.getUid());
+        Collections.sort(verses,new VerseOrderComparator());
         for(Verse verse :verses){
             List<Line> lines = getVerseLines(verse.getUid());
             for(Line line :lines){

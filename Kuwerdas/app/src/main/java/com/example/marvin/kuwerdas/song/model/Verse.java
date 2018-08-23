@@ -26,13 +26,12 @@ public class Verse{
     private String title;
 
     @Ignore
-    private List<Line>
-            lines;
+    private List<Line> lines;
 
 
 
     @ColumnInfo(name = "verseOrder")
-    private int verseOrder;
+    private int verseOrder = -1;
 
     public Verse(List<Line> lines) {
         this.lines = lines;
