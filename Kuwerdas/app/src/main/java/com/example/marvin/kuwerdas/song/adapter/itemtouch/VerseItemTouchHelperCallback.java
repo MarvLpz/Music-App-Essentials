@@ -45,17 +45,18 @@ public class VerseItemTouchHelperCallback {
                         else if (viewHolder.getAdapterPosition() == myVerse.size() + 1){
                             return makeMovementFlags(0,0);
                         }
+
                         else {
                             final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
                             final int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
                             return makeMovementFlags(dragFlags, swipeFlags);
                         }
                     }
+
                     @Override
                     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                         moveItem(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                             return true;
-
                     }
 
                     @Override
