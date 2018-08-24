@@ -1,6 +1,10 @@
 package com.example.marvin.kuwerdas.search.adapter;
 
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,7 @@ import com.example.marvin.kuwerdas.song.util.SongUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.example.marvin.kuwerdas.search.SearchFragment.SongLoader;
 
 public class SongItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -74,12 +79,11 @@ public class SongItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HeaderViewHolder) {
             HeaderViewHolder h = (HeaderViewHolder) holder;
-            h.setText("CREATE NEW SONG");
+            h.setText("INSERT NEW SONG");
             h.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    SongLoader.onChangeSong(SongUtil.asSong("","",""));
-                    MainActivity.FragmentSwitcher.change(OnChangeFragment.Frags.SONG);
+                    buildDialog(v.getContext()).show();
                 }
             });
 
@@ -88,6 +92,31 @@ public class SongItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ((SongItemViewHolder) holder).setItemData(song.getSongTitle(), song.getArtist(), song.getDateModified());
             //cast holder to VHItem and set data
         }
+    }
+
+    public AlertDialog.Builder buildDialog(final Context c) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle("Insert New Song");
+
+
+        builder.setPositiveButton("New blank song", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SongLoader.onChangeSong(SongUtil.asSong("","",""));
+                MainActivity.FragmentSwitcher.change(OnChangeFragment.Frags.SONG);
+            }
+        });
+        builder.setNegativeButton("Generate from clipboard", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String lyrics = ((ClipboardManager) c.getSystemService(CLIPBOARD_SERVICE)).getText().toString() ;
+                SongLoader.onChangeSong(SongUtil.asSong("","",lyrics));
+                MainActivity.FragmentSwitcher.change(OnChangeFragment.Frags.SONG);
+            }
+        });
+
+        return builder;
     }
 
     @Override

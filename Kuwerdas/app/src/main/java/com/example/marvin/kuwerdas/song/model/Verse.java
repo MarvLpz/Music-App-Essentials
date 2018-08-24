@@ -36,7 +36,7 @@ public class Verse{
 
     public Verse(List<Line> lines) {
         this.lines = lines;
-        title = "Verse";//TODO fix title
+        title = "";//TODO fix title
     }
 
     public Verse() {

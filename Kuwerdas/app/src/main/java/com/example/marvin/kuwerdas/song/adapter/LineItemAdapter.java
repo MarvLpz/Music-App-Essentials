@@ -101,7 +101,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                 if (!onBind) {
 
                     List<String> arr = new ArrayList<>();
-                    
+
                     for(int n=0;n<etLine.getLayout().getLineCount();n++){
 
                         List<String> m = Arrays.asList(etLine.getText().subSequence(etLine.getLayout().getLineStart(n),etLine.getLayout().getLineEnd(n)).toString().split("\n"));
@@ -121,6 +121,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                         }
                         notifyItemChanged(currentPosition);
                         notifyItemRangeInserted(currentPosition+1,arr.size());
+
 //                        notifyDataSetChanged();
 //                        for (String a : arr.subList(1, arr.size())) {
 //                            Log.d("CHORDES","adding str: " + a);
