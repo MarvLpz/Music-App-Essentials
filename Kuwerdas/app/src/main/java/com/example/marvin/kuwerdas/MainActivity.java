@@ -36,7 +36,7 @@ import com.example.marvin.kuwerdas.tuner.TunerFragment;
 import java.util.List;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, OnChangeFragment{
+public class MainActivity extends AppCompatActivity implements OnChangeFragment{
 
     public static OnNewSearchResult SearchResultListener;
     public static OnChangeFragment FragmentSwitcher;
@@ -237,6 +237,18 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private boolean loadFragment(Fragment fragment) {
         if(searchViewItem!=null)
             searchViewItem.collapseActionView();
+
+        if(fragment instanceof SearchFragment) {
+            setTitle("Song");
+
+        }
+        else if(fragment instanceof TempoFragment) {
+            setTitle("Tempo");
+        }
+        else if(fragment instanceof TunerFragment) {
+            setTitle("Tuner");
+        }
+
         //switching fragment 
         if (fragment != null) {
             getSupportFragmentManager()
@@ -281,38 +293,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             }
         });
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.navigation_song:
-                if(currentFragment == Frags.SONG)
-                    return false;
-
-//                fragment = new SongFragment();
-                currentFragment = Frags.SONG;
-                break;
- 
-            case R.id.navigation_tempo:
-                if(currentFragment == Frags.TEMPO)
-                    return false;
-
-//                fragment = new TempoFragment();
-                currentFragment = Frags.TEMPO;
-                break;
- 
-            case R.id.navigation_tuner:
-                if(currentFragment == Frags.TUNER)
-                    return false;
-
-//                fragment = new TunerFragment();
-                currentFragment = Frags.TUNER;
-                break;
-        }
-
-        FragmentSwitcher.change(currentFragment);
-        return true;
     }
 
     private class SearchSongDatabaseTask extends AsyncTask<Void,Void,List<Song>> {

@@ -100,10 +100,8 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                 }*/
                 if (!onBind) {
 
-
-                    etLine.getLayout().getLineStart(1);
                     List<String> arr = new ArrayList<>();
-
+                    
                     for(int n=0;n<etLine.getLayout().getLineCount();n++){
 
                         List<String> m = Arrays.asList(etLine.getText().subSequence(etLine.getLayout().getLineStart(n),etLine.getLayout().getLineEnd(n)).toString().split("\n"));

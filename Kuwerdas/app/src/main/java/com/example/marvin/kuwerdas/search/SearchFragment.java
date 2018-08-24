@@ -28,6 +28,7 @@ import com.example.marvin.kuwerdas.db.SongDatabase;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.search.adapter.HeaderViewHolder;
 import com.example.marvin.kuwerdas.search.adapter.SongItemAdapter;
+import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.util.SongUtil;
 
@@ -63,6 +64,7 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
 
     public SearchFragment(){
         MainActivity.SearchResultListener = this;
+        SongFragment.song = null;
     }
 
     @Nullable

@@ -1,5 +1,6 @@
 package com.example.marvin.kuwerdas.song.adapter;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MotionEventCompat;
@@ -235,6 +236,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         versesToDelete.remove(mVerse);
                     }
                 });
+        snackbar.setActionTextColor(Color.WHITE);
         snackbar.show();
 
         if (position != 0  && position != mVerses.size() + 1) {

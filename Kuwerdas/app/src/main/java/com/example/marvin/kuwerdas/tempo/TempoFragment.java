@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -160,7 +161,12 @@ public class TempoFragment extends Fragment implements BeatListener{
             });
             mArtist.setVisibility(View.VISIBLE);
 
-            mTitle.setText(SongFragment.song.getSongTitle());
+            mTitle.setText("");
+            mArtist.setText("");
+            mTitle.setText(String.valueOf(SongFragment.song.getSongTitle()));
+            Log.d("TEMPO","loaded song - " + SongFragment.song.getSongTitle());
+            Log.d("TEMPO","loaded title - " + mTitle.getText());
+
             mArtist.setText(SongFragment.song.getArtist());
             mTitle.setFocusable(false);
             mArtist.setFocusable(false);
@@ -210,7 +216,7 @@ public class TempoFragment extends Fragment implements BeatListener{
     }
 
     private boolean changeSongTempoValue(){
-        if(SongFragment.song!=null)
+        if(SongFragment.song!=null && SongFragment.mode != SongFragment.SongEditMode.READ_ONLY)
         {
             SongFragment.song.setTempo(lastTempo);
             (new SongDatabaseUtils.UpdateSongDatabaseTask(SongFragment.song)).execute();
