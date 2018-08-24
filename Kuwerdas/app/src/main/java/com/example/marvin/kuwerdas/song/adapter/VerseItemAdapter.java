@@ -88,6 +88,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 public boolean onTouch(View v, MotionEvent event) {
                     if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
                         mDragStartListener.onStartDrag(holder);
+//                        mDragStartListener.onStartSwipe(holder);
                     }
                     return false;
                 }
@@ -227,7 +228,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         final int position = viewHolder.getAdapterPosition();
         final Verse mVerse =mVerses.get(position-1);
 
-        TSnackbar snackbar = TSnackbar.make(viewHolder.itemView.getRootView().getRootView().findViewById(R.id.songContainer), "Verse Deleted", Snackbar.LENGTH_LONG)
+        Snackbar snackbar = Snackbar.make(viewHolder.itemView, "Verse Deleted", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

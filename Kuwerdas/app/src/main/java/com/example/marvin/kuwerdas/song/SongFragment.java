@@ -104,6 +104,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     private TextView tv_DragChord6;
     private TextView tv_DragChord7;
 
+    public static boolean isInChords = false;
 
     String get_accidental = "",get_scale= "",get_number= "";
 
@@ -315,6 +316,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         boolean clicked = false;
         @Override
         public void onClick(View v) {
+            isInChords = true;
+
             if(isInDeleteMode) {
                 isInDeleteMode = false;
                 ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
@@ -325,8 +328,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     }
 
 
-    private void initializeChordMenuToolbar(){
-
+    public void initializeChordMenuToolbar(){
+        isInChords = false;
         View chordEditorLayout = getLayoutInflater().inflate(R.layout.chord_editor_toolbar,null);
         toolbar.removeAllViews();
         toolbar.addView(chordEditorLayout);
@@ -476,7 +479,12 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-        itemTouchHelper.startDrag(viewHolder);
+            itemTouchHelper.startDrag(viewHolder);
+    }
+
+    @Override
+    public void onStartSwipe(RecyclerView.ViewHolder viewHolder) {
+            itemTouchHelper.startSwipe(viewHolder);
     }
 
     @Override

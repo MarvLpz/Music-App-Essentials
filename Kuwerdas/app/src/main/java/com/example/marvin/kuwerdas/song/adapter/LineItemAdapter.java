@@ -87,10 +87,12 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                 return false;
             }
         });
-        etLine.addTextChangedListener(new TextWatcher() {
+
+        TextWatcher tw = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -103,28 +105,24 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                     List<String> arr = new ArrayList<>();
 
                     for(int n=0;n<etLine.getLayout().getLineCount();n++){
-
                         List<String> m = Arrays.asList(etLine.getText().subSequence(etLine.getLayout().getLineStart(n),etLine.getLayout().getLineEnd(n)).toString().split("\n"));
                         Log.d("CHORDES","text change: " + m);
                         arr.addAll(m);
                         Log.d("CHORDES","arr change: " + arr);
                     }
+
 //                    List<String> arr = Arrays.asList(charSequence.toString().split("\n"));
 //                    verseLines.set(currentPosition, new Line(arr.get(0)));
-                    Log.d("CHORDESS","verseLines before: " + verseLines);
-                    Log.d("CHORDESS","arr before: " + arr);
                     line.setLyrics(arr.get(0));
 
-                    if (arr.size() >= 1) {
+                    if (arr.size() > 1) {
                         for(int n=1;n<arr.size();n++){
                             String a = arr.get(n);
                             Log.d("CHORDES","adding str: " + a);
                             verseLines.add(currentPosition + n, new Line(a));
                         }
-                        Log.d("CHORDESS","verseLines after: " + verseLines);
-
-
-//                        notifyItemChanged(currentPosition);
+                        Log.d("CHECKTHIS", "Display: " + verseLines);
+                        notifyItemChanged(currentPosition);
 //                        notifyItemRangeInserted(currentPosition+1,arr.size());
 
                         notifyDataSetChanged();
@@ -144,8 +142,9 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
             public void afterTextChanged(Editable editable) {
                 SongFragment.isSongEdited = true;
             }
-        });
+        };
 
+            etLine.addTextChangedListener(tw);
 
         if(position == focusPosition){
             holder.getLineLyricsEditText().requestFocus();

@@ -36,6 +36,8 @@ import com.example.marvin.kuwerdas.tuner.TunerFragment;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.marvin.kuwerdas.song.SongFragment.isInChords;
+
 public class MainActivity extends AppCompatActivity implements OnChangeFragment{
 
     public static OnNewSearchResult SearchResultListener;
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
 // We can now look up items within the header if needed
         ImageView ivHeaderPhoto = headerLayout.findViewById(R.id.imageView);*/
+
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -323,8 +326,11 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
     public void onBackPressed() {
 
         if(currentFragment.equals(Frags.SONG)){
-            FragmentSwitcher.change(Frags.SEARCH);
-
+            if(isInChords) {
+                SongFragment.getInstance().initializeChordMenuToolbar();
+            }
+            else
+                FragmentSwitcher.change(Frags.SEARCH);
             return;
         }
         if(currentFragment.equals(Frags.TEMPO)){

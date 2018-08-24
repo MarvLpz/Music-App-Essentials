@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appolica.flubber.Flubber;
@@ -49,8 +50,8 @@ public class TempoFragment extends Fragment implements BeatListener{
     private Button mButtonTap;
     private Croller mCroller;
 
-    private EditText mTitle;
-    private EditText mArtist;
+    private TextView mTitle;
+    private TextView mArtist;
 
     private Vibrator mVibrator;
     private View view;
@@ -161,15 +162,9 @@ public class TempoFragment extends Fragment implements BeatListener{
             });
             mArtist.setVisibility(View.VISIBLE);
 
-            mTitle.setText("");
-            mArtist.setText("");
-            mTitle.setText(String.valueOf(SongFragment.song.getSongTitle()));
-            Log.d("TEMPO","loaded song - " + SongFragment.song.getSongTitle());
-            Log.d("TEMPO","loaded title - " + mTitle.getText());
 
+            mTitle.setText(String.valueOf(SongFragment.song.getSongTitle()));
             mArtist.setText(SongFragment.song.getArtist());
-            mTitle.setFocusable(false);
-            mArtist.setFocusable(false);
 
             mMetronome.changeTempo(SongFragment.song.getTempo());
             lastTempo = mMetronome.getTempo();
