@@ -162,6 +162,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             public void onClick(View v) {
                 if(mode == SongEditMode.EDIT) {
                     isInDeleteMode = false;
+                    ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
                     recyclerView.setClickable(false);
                     fabEdit.setImageResource(R.drawable.edit);
                     hideKeyboard(getActivity());
