@@ -159,6 +159,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             @Override
             public void onClick(View v) {
                 if(mode == SongEditMode.EDIT) {
+                    isInDeleteMode = false;
+                    ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
                     recyclerView.setClickable(false);
                     fabEdit.setImageResource(R.drawable.edit);
                     hideKeyboard(getActivity());
@@ -182,6 +184,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                     adapter.notifyDataSetChanged();
             }
         });
+
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         showProgressBar(true);
         Log.d("SONG","loaded init");
@@ -224,6 +227,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         changeKey(false);
     }
 
+
     private final class touchMe implements View.OnTouchListener{
 
         @Override
@@ -255,7 +259,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                     return false;
             }
             return true;
-
         }
     }
 

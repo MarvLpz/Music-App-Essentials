@@ -36,6 +36,10 @@ public class ChordItemTouchHelperCallback {
                 new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP| ItemTouchHelper.DOWN,
                         ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT)
                 {
+                    @Override
+                    public boolean isLongPressDragEnabled() {
+                       return SongFragment.mode == SongFragment.SongEditMode.EDIT;
+                    }
 
                     @Override
                     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
