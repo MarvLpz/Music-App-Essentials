@@ -163,7 +163,7 @@ public class ChordPickerAdapter extends RecyclerView.Adapter<ChordPickerAdapter.
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     Log.d("CLICK","ACTIONDOWN");
-                    handler.postDelayed(mLongPressed, 1000);
+                    handler.postDelayed(mLongPressed, 500);
 
                     initialTouchX = event.getRawX();
                     //This is where my code for movement is initialized to get original location.
@@ -202,7 +202,6 @@ public class ChordPickerAdapter extends RecyclerView.Adapter<ChordPickerAdapter.
                 ClipData data = ClipData.newPlainText("", "");
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
                 view.startDrag(data, shadowBuilder, view, 0);
-                Log.d("CLICK","LONG CLICK");
             }
         };
 
