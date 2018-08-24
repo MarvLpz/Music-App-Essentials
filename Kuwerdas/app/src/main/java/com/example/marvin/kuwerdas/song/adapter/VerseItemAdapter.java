@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.androidadvance.topsnackbar.TSnackbar;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.search.adapter.HeaderViewHolder;
@@ -225,7 +226,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         final int position = viewHolder.getAdapterPosition();
         final Verse mVerse =mVerses.get(position-1);
 
-        Snackbar snackbar = Snackbar.make(viewHolder.itemView.getRootView().getRootView().findViewById(R.id.songContainer), "Verse Deleted", Snackbar.LENGTH_LONG)
+        TSnackbar snackbar = TSnackbar.make(viewHolder.itemView.getRootView().getRootView().findViewById(R.id.songContainer), "Verse Deleted", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

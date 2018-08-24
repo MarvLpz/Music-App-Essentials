@@ -100,19 +100,19 @@ public class TempoFragment extends Fragment implements BeatListener{
                 .createFor(view.findViewById(R.id.btnFade));
 
         mCroller = (Croller) view.findViewById(R.id.croller);
-        mCroller.setBackCircleColor(Color.parseColor("#8CA7A6A7"));
-        mCroller.setMainCircleColor(Color.parseColor("#8CA7A6A7"));
+        mCroller.setBackCircleColor(Color.parseColor("#000000"));
+        mCroller.setMainCircleColor(Color.parseColor("#000000"));
         mCroller.setMin(0);
         mCroller.setMax(Metronome.MAX_TEMPO);
-        mCroller.setIsContinuous(false);
-        mCroller.setProgressPrimaryColor(Color.parseColor("#df8b37"));
-        mCroller.setIndicatorColor(Color.parseColor("#FAB36E"));
+        mCroller.setIsContinuous(true);
+        mCroller.setProgressPrimaryColor(Color.parseColor("#dcdcdc"));
+        mCroller.setIndicatorColor(Color.parseColor("#dcdcdc"));
         mCroller.setProgressSecondaryColor(Color.parseColor("#818181"));
 //        mCroller.setProgressRadius(365);
 //        mCroller.setBackCircleRadius(400);
         mCroller.setProgress(0);
-        mCroller.setProgressPrimaryStrokeWidth(100);
-        mCroller.setProgressSecondaryStrokeWidth(100);
+        mCroller.setProgressPrimaryStrokeWidth(20);
+        mCroller.setProgressSecondaryStrokeWidth(20);
         mCroller.setIndicatorWidth(5);
         mCroller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
             boolean isTouched = false;
@@ -123,9 +123,9 @@ public class TempoFragment extends Fragment implements BeatListener{
                         mButtonTap.setText(String.valueOf(mMetronome.getTempo()));
                         crollerPreviousValue = progress;
                         lastTempo = mMetronome.getTempo();
-
-                    } else
-                        mCroller.setProgress(crollerPreviousValue);
+                    }
+//                    } else
+//                        mCroller.setProgress(mMetronome.getTempo());
                 }
             }
 

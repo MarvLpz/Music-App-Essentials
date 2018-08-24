@@ -11,4 +11,9 @@
     <style name="TextColor">
         <item name="android:textColor">#ffffff</item>
     </style>
+
+    <style name="splashScreenTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+
+    </style>
 </resources>

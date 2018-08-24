@@ -1,16 +1,16 @@
 package com.example.marvin.kuwerdas.tuner.frequencynotes;
 public enum Notation {
     C("C"),
-    C_sharp("C#"),
+    C_sharp("C♯"),
     D("D"),
-    E_flat("Eb"),
+    E_flat("E♭"),
     E("E"),
     F("F"),
-    F_sharp("F#"),
+    F_sharp("F♯"),
     G("G"),
-    G_sharp("G#"),
+    G_sharp("G♯"),
     A("A"),
-    B_flat("Bb"),
+    B_flat("B♭"),
     B("B");
 
     private final String name;
