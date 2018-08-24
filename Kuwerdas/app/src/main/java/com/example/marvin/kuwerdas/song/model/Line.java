@@ -83,7 +83,7 @@ public class Line {
 
     @Override
     public String toString(){
-        return "lineId: " + id + " - verseId: " + verseId;
+        return "\""+ lyrics + "\"";
     }
 
     public int getVerseId() {

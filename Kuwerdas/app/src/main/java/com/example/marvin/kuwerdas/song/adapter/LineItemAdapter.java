@@ -111,18 +111,23 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                     }
 //                    List<String> arr = Arrays.asList(charSequence.toString().split("\n"));
 //                    verseLines.set(currentPosition, new Line(arr.get(0)));
+                    Log.d("CHORDESS","verseLines before: " + verseLines);
+                    Log.d("CHORDESS","arr before: " + arr);
                     line.setLyrics(arr.get(0));
 
-                    if (arr.size() > 1) {
+                    if (arr.size() >= 1) {
                         for(int n=1;n<arr.size();n++){
                             String a = arr.get(n);
                             Log.d("CHORDES","adding str: " + a);
                             verseLines.add(currentPosition + n, new Line(a));
                         }
-                        notifyItemChanged(currentPosition);
-                        notifyItemRangeInserted(currentPosition+1,arr.size());
+                        Log.d("CHORDESS","verseLines after: " + verseLines);
 
-//                        notifyDataSetChanged();
+
+//                        notifyItemChanged(currentPosition);
+//                        notifyItemRangeInserted(currentPosition+1,arr.size());
+
+                        notifyDataSetChanged();
 //                        for (String a : arr.subList(1, arr.size())) {
 //                            Log.d("CHORDES","adding str: " + a);
 //                            verseLines.add(currentPosition + 1, new Line(a));
