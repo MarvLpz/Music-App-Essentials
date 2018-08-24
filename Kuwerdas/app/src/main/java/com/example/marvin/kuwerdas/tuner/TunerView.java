@@ -123,7 +123,7 @@ public class TunerView extends View {
     private void initializeAttributes(AttributeSet attrs) {
             setDotAmount(5);
             setStartColor(Color.parseColor("#FFB2B0B0"));
-            setEndColor(Color.parseColor("#FAB36E"));
+            setEndColor(Color.parseColor("#ffffff"));
     }
 
     public void setDotPosition(int dotPosition) {
@@ -164,7 +164,7 @@ public class TunerView extends View {
         canvas.drawCircle(
                 xCoordinate + step,
                 getMeasuredHeight() - 100,
-                dotRadius + 10,
+                dotRadius + 20,
                 endPaint
         );
     }
@@ -185,7 +185,7 @@ public class TunerView extends View {
         canvas.drawCircle(
                 xCoordinate + step,
                 getMeasuredHeight() - 100,
-                bounceDotRadius - 10,
+                bounceDotRadius - 20,
                 primaryPaint
         );
     }
