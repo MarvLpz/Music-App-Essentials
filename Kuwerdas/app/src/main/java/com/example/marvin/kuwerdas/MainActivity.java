@@ -112,15 +112,18 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Class fragmentClass;
         switch(menuItem.getItemId()) {
             case R.id.nav_first_fragment:
+                FragmentSwitcher.change(Frags.SEARCH);
                 searchViewItem.setVisible(true);
                 fragmentClass = SearchFragment.class;
                 break;
             case R.id.nav_second_fragment:
+                FragmentSwitcher.change(Frags.TEMPO);
                 searchViewItem.setVisible(false);
                 fragmentClass = TempoFragment.class;
                 break;
             case R.id.nav_third_fragment:
-                searchViewItem.setVisible(false);;
+                searchViewItem.setVisible(false);
+                FragmentSwitcher.change(Frags.TUNER);
                 fragmentClass = TunerFragment.class;
                 break;
             default:
@@ -128,15 +131,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 fragmentClass = SearchFragment.class;
         }
 
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+//
+//        try {
+//            fragment = (Fragment) fragmentClass.newInstance();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        // Insert the fragment by replacing any existing fragment
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
         // Highlight the selected item has been done by NavigationView
         menuItem.setChecked(true);

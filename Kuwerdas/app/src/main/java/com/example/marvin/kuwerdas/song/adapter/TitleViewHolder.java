@@ -39,14 +39,14 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
     public void setFocusableTempoAndKey(boolean val){
         if(val)
         {
-            tempo.setClickable(true);
+//            tempo.setClickable(true);
             transposeUp.setClickable(true);
             transposeDown.setClickable(true);
             key.setClickable(true);
             key.setEnabled(true);
         }
         else {
-            tempo.setClickable(false);
+//            tempo.setClickable(false);
             transposeUp.setClickable(false);
             transposeDown.setClickable(false);
             key.setClickable(false);

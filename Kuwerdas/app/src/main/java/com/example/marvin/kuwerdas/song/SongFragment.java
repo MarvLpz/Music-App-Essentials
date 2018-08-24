@@ -94,7 +94,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     public static boolean isInDeleteMode = false;
     public static SongEditMode mode = SongEditMode.READ_ONLY;
 
-
     private Vibrator mVibrator;
 
     private TextView tv_DragChord1;
@@ -104,7 +103,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     private TextView tv_DragChord5;
     private TextView tv_DragChord6;
     private TextView tv_DragChord7;
-
 
 
     String get_accidental = "",get_scale= "",get_number= "";
@@ -263,17 +261,24 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
     private void changeKey(boolean dir){
         Log.d("SONG","song: " + song.getArtist() + " - " + song.getSongTitle());
-        for(Verse verse : song.getVerses()){
-            Log.d("SONG","verse " + verse.getUid() + ": " + verse.getTitle());
+        for(int v=0;v<song.getVerses().size();v++){
+            Verse verse = song.getVerses().get(v);
+
+            Boolean hasNoChords = true;
             for(Line line : verse.getLines()){
-                for(Chord chord : line.getChordSet()){
-                    if(!chord.getChord().equals(Chord.EMPTY_CHORD))
+                for(int l=0;l<line.getChordSet().size();l++){
+                    Chord chord = line.getChordSet().get(l);
+
+                    if(!chord.getChord().equals(Chord.EMPTY_CHORD)) {
                         chord.setChord(dir ? Transposer.transposeChordUp(chord.getChord()) : Transposer.transposeChordDown(chord.getChord()));
+                        hasNoChords = false;
+                    }
                 }
             }
+            if(!hasNoChords)
+                adapter.notifyItemChanged(v+1);
         }
         SongFragment.isSongEdited = true;
-        adapter.notifyDataSetChanged();
 
         showProgressBar(false);
     }

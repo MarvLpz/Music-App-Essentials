@@ -59,7 +59,6 @@ public class TempoFragment extends Fragment implements BeatListener{
     private int lastTempo = 0;
     private int crollerPreviousValue = 0;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
