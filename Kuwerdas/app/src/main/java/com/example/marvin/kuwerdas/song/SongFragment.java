@@ -178,7 +178,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                     Flubber.with().animation(Flubber.AnimationPreset.FADE_IN).createFor(toolbar).start();
                     mode = SongEditMode.EDIT;
                     fabEdit.setImageResource(R.drawable.back);
-                    Toast.makeText(view.getContext(),"EDIT MODE",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(),"Edit mode enabled",Toast.LENGTH_SHORT).show();
 //                    SongFragment.isSongEdited = true;
                 }
 

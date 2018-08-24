@@ -1,5 +1,7 @@
 package com.example.marvin.kuwerdas.song.util;
 
+import com.example.marvin.kuwerdas.song.picker.model.Accidental;
+
 public class Transposer {
     public static String transposeChordUp(String chord){
         if(chord.startsWith("A♭"))
