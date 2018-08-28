@@ -26,6 +26,17 @@ public abstract class SongDao {
     //Call this to insert song to database
     public int insertSong(Song song){
 
+        if (song.getSongTitle().equals("") && song.getArtist().equals("")){
+            song.setSongTitle("Unkown Title");
+            song.setArtist("Unknown Artist");
+        }
+        else if (song.getSongTitle().equals("")){
+            song.setSongTitle("Unkown Title");
+        }
+        else if (song.getArtist().equals("")){
+            song.setArtist("Unknown Artist");
+        }
+
         int id = _insertSong(song).intValue();
         List<Verse> verses = song.getVerses();
 
@@ -105,6 +116,7 @@ public abstract class SongDao {
     @Query("SELECT * FROM chord")
     public abstract List<Chord> getAllChords();
 
+
     public void updateSong(Song song){
         int songId = upsertSong(song).intValue();//Update song title, artist, and date modified
         Log.d("UPDATE2","song: " + song.getUid() + " - " + song.getArtist() + " - " + song.getSongTitle());
@@ -127,7 +139,6 @@ public abstract class SongDao {
                     chordset += chord.getId() + "[" + chord.getChord() + "] - ";
                     upsertChord(chord,i);//Insert or update chord
                 }
-
                 Log.d("UPDATE2","chords: " + chordset);
             }
         }

@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appolica.flubber.Flubber;
@@ -49,8 +50,8 @@ public class TempoFragment extends Fragment implements BeatListener{
     private Button mButtonTap;
     private Croller mCroller;
 
-    private EditText mTitle;
-    private EditText mArtist;
+    private TextView mTitle;
+    private TextView mArtist;
 
     private Vibrator mVibrator;
     private View view;
@@ -79,6 +80,10 @@ public class TempoFragment extends Fragment implements BeatListener{
         mMetronome.setToneHigh(MediaPlayer.create(view.getContext(), R.raw.beephigh));
         audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
         mButtonTap = (Button) view.findViewById(R.id.btnTap);
+
+        mTitle = view.findViewById(R.id.tvTempoTitle);
+        mArtist = view.findViewById(R.id.tvTempoArtist);
+
         mButtonTap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,10 +150,6 @@ public class TempoFragment extends Fragment implements BeatListener{
         mPicker = (RecyclerView) view.findViewById(R.id.pv_timeSig);
         initializeRecyclerViewPicker(mPicker);
 
-
-        mTitle = view.findViewById(R.id.tvTempoTitle);
-        mArtist = view.findViewById(R.id.tvTempoArtist);
-
         if(SongFragment.song!=null) {
 
             mTitle.setVisibility(View.VISIBLE);
@@ -161,23 +162,25 @@ public class TempoFragment extends Fragment implements BeatListener{
             });
             mArtist.setVisibility(View.VISIBLE);
 
-            mTitle.setText("");
-            mArtist.setText("");
-            mTitle.setText(String.valueOf(SongFragment.song.getSongTitle()));
+
+           /* mTitle.setText(String.valueOf(SongFragment.song.getSongTitle()));
+            mArtist.setText(String.valueOf(SongFragment.song.getArtist()));*/
             Log.d("TEMPO","loaded song - " + SongFragment.song.getSongTitle());
             Log.d("TEMPO","loaded title - " + mTitle.getText());
 
-            mArtist.setText(SongFragment.song.getArtist());
-            mTitle.setFocusable(false);
-            mArtist.setFocusable(false);
+//            mArtist.setText(SongFragment.song.getArtist());
+/*            mTitle.setFocusable(false);
+            mArtist.setFocusable(false);*/
 
             mMetronome.changeTempo(SongFragment.song.getTempo());
             lastTempo = mMetronome.getTempo();
             mButtonTap.setText(String.valueOf(lastTempo));
+            mTitle.setText(SongFragment.song.getSongTitle());
+            mArtist.setText(SongFragment.song.getArtist());
             mCroller.setProgress(lastTempo);
         } else {
-            mTitle.setVisibility(View.GONE);
-            mArtist.setVisibility(View.GONE);
+            mTitle.setVisibility(View.INVISIBLE);
+            mArtist.setVisibility(View.INVISIBLE);
         }
     }
 
