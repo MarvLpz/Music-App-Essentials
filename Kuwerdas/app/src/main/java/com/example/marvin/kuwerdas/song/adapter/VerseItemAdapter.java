@@ -105,7 +105,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             h.getTextView().setVisibility(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT) ? View.VISIBLE: View.GONE);
             if(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT)) {
                 h.getTextView().setPadding(30, 30, 0, 150);
-                h.setText("CREATE NEW VERSE");
+                h.setText("CREATE NEW STANZA");
                 h.setClickable(!SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
                 h.setOnClickListener(new View.OnClickListener() {
                     @Override
