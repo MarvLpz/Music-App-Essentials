@@ -98,7 +98,6 @@ public class SongItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle("Insert New Song");
 
-
         builder.setPositiveButton("New blank song", new DialogInterface.OnClickListener() {
 
             @Override
@@ -107,6 +106,7 @@ public class SongItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 MainActivity.FragmentSwitcher.change(OnChangeFragment.Frags.SONG);
             }
         });
+
         builder.setNegativeButton("Generate from clipboard", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

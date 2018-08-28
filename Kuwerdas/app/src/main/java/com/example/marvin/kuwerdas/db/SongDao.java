@@ -26,6 +26,19 @@ public abstract class SongDao {
     //Call this to insert song to database
     public int insertSong(Song song){
 
+        if (song.getSongTitle().equals("") && song.getArtist().equals("")){
+            song.setSongTitle("Unkown Title");
+            song.setArtist("Unknown Artist");
+        }
+        else if (song.getSongTitle().equals("")){
+            song.setSongTitle("Unkown Title");
+
+        }
+
+        else if (song.getArtist().equals("")){
+            song.setArtist("Unknown Artist");
+        }
+
         int id = _insertSong(song).intValue();
         List<Verse> verses = song.getVerses();
 

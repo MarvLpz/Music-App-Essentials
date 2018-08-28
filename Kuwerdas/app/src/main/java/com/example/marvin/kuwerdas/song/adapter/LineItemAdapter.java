@@ -53,6 +53,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
         final int pos = holder.getAdapterPosition();
 
         etLine.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
             @Override
             public void onFocusChange(View view, boolean focused) {
                 if(focused){
@@ -103,12 +104,12 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                     List<String> arr = new ArrayList<>();
 
                     for(int n=0;n<etLine.getLayout().getLineCount();n++){
-
                         List<String> m = Arrays.asList(etLine.getText().subSequence(etLine.getLayout().getLineStart(n),etLine.getLayout().getLineEnd(n)).toString().split("\n"));
                         Log.d("CHORDES","text change: " + m);
                         arr.addAll(m);
                         Log.d("CHORDES","arr change: " + arr);
                     }
+
 //                    List<String> arr = Arrays.asList(charSequence.toString().split("\n"));
 //                    verseLines.set(currentPosition, new Line(arr.get(0)));
                     line.setLyrics(arr.get(0));
@@ -119,6 +120,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                             Log.d("CHORDES","adding str: " + a);
                             verseLines.add(currentPosition + n, new Line(a));
                         }
+                        Log.d("CHECKTHIS", "Display: " + verseLines);
                         notifyItemChanged(currentPosition);
                         notifyItemRangeInserted(currentPosition+1,arr.size());
 
