@@ -54,25 +54,17 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         mDragStartListener = dragStartListener;
         versesToDelete = new ArrayList<>();
 
-        Log.d("SONG","verse item count: " + getItemCount() + " - " + mVerses.size());
-        for(Verse v : mVerses){
-            Log.d("SONG","verse: " + v.getUid() + " - " + v.getTitle());
-        }
-        Log.d("SONG","---------------------------------------------");
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if(viewType == TYPE_FOOTER){
-            Log.d("SONG","Loaded footer");
             return new HeaderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.create_new_song_layout,parent,false));
         } else if (viewType == TYPE_TITLE){
-            Log.d("SONG","Loaded title");
             return new TitleViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.title_layout,parent,false),songFragment);
         }
 
-        Log.d("SONG","Loaded verse");
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.verse_layout, parent, false);
         return new VerseItemViewHolder(itemView);
@@ -121,7 +113,6 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-        Log.d("SONG","Called getItemViewType");
         if (isPositionFooter(position))
             return TYPE_FOOTER;
         if (isPositionTitle(position))
@@ -148,8 +139,6 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return 2;
         }
 
-        else
-            Log.d("RETURNSIZE",String.valueOf(mVerses.size()));
         // Add extra view to show the footer view
         return mVerses.size() + 2;
 //        return mVerses.size();

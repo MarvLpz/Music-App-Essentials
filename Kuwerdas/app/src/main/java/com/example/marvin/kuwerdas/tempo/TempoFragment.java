@@ -210,6 +210,14 @@ public class TempoFragment extends Fragment implements BeatListener{
         mMetronome.stop();
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        if(mMetronome!=null)
+            mMetronome.changeTempo(lastTempo);
+    }
+
     private boolean changeSongTempoValue(){
         if(SongFragment.song!=null && SongFragment.mode != SongFragment.SongEditMode.READ_ONLY)
         {

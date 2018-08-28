@@ -65,7 +65,6 @@ public class Metronome {
 
             if (counter >= maxCount){
                 counter = 0;
-                Log.d("COUNT", "TICK");
                 mpH.start();
                 beatListener.onBeatEnd();
             }
@@ -75,7 +74,6 @@ public class Metronome {
             beatListener.onBeatStart();
 
             counter++;
-            Log.d("COUNT", String.valueOf(counter));
         }
 
     };

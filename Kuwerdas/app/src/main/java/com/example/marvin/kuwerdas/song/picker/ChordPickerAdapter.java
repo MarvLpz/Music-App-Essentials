@@ -103,7 +103,6 @@ public class ChordPickerAdapter extends RecyclerView.Adapter<ChordPickerAdapter.
         }
         else {
                 text = strings.get(position).toString();
-                Log.d("OBJECT","INSTANCE IS " + strings.get(position).getClass().getName());
         }
         holder.tvData.setText(text);
         holder.tvData.setTextSize(strings.get(position) instanceof DetailedChord ? 25 : 18);
@@ -140,11 +139,9 @@ public class ChordPickerAdapter extends RecyclerView.Adapter<ChordPickerAdapter.
                 public boolean onSwipe(Direction direction) {
                     if (direction == Direction.up || direction == Direction.down) {
                         //do your stuff
-                        Log.d("CLICK", "onSwipe: U D");
 
                     } else if (direction == Direction.right || direction == Direction.left) {
                         //do your stuff
-                        Log.d("CLICK", "onSwipe: L R");
                         handler.removeCallbacks(mLongPressed);
                     }
                     return true;
@@ -159,10 +156,8 @@ public class ChordPickerAdapter extends RecyclerView.Adapter<ChordPickerAdapter.
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             view = v;
-            Log.d("CLICK","ONTOUCH" + event.getAction());
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    Log.d("CLICK","ACTIONDOWN");
                     handler.postDelayed(mLongPressed, 500);
 
                     initialTouchX = event.getRawX();

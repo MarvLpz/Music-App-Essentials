@@ -143,7 +143,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     }
 
 
-
     private void init(){
         database = SongDatabase.getSongDatabase(getContext());
         toolbar = view.findViewById(R.id.tbChordEditor);
@@ -188,7 +187,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         showProgressBar(true);
-        Log.d("SONG","loaded init");
         if(song!=null){
             if(isLoadedFromDB) {
                 new GetSongDetailsDatabaseTask().execute();
@@ -264,7 +262,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     }
 
     private void changeKey(boolean dir){
-        Log.d("SONG","song: " + song.getArtist() + " - " + song.getSongTitle());
         for(int v=0;v<song.getVerses().size();v++){
             Verse verse = song.getVerses().get(v);
 
@@ -525,7 +522,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             super.onPostExecute(s);
 
             if(s!=null) {
-                Log.d("SONG","onPostExecute getsongdetails");
                 onChangeSong(s);
             }
 
@@ -540,7 +536,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 //            song.setTempo(adapter.getSongTempo());
 //            song.setKey(adapter.getSongKey());
             song.setDateModified((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(new Date()));
-            Log.d("SEARCH","verse size for " + song.getSongTitle() + ": " + song.getVerses().size());
 
             if (!isLoadedFromDB) {
                 (new SongDatabaseUtils.InsertSongDatabaseTask(song)).execute();
@@ -569,7 +564,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             // Calculating recyclerView height from listItemHeight
             // we are using in our recyclerView list item.
             recyclerViewHeight = maxItems * TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
-            Log.d("PICKER","it went in here");
         }
 
         final ChordPickerAdapter adapter = new ChordPickerAdapter(getContext(),items,displayChord, ChordPickerAdapter.PickerType.TYPE_PICKER_SELECTOR);
@@ -610,7 +604,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                         displayChord.setValue(null);
                     }
 
-                    Log.d("PICKER", pos + " - " + items.get(pos));
                 }
             }
         });
@@ -618,7 +611,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             @Override
             public boolean onLongClick(View v) {
                 recyclerView.scrollToPosition(0);
-                Log.d("PICKER","naglong click");
                 return true;
             }
         });

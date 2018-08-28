@@ -215,7 +215,6 @@ public class TunerFragment extends Fragment {
     private void setTunerViewDotPosition(int value){
         if(value>=-10 && value<=10){
             tunerView.setDotPosition(2);
-            Log.d("TUNERVIEW","SET DOT AT 2 - VALUE: " + value);
             return;
         }
 

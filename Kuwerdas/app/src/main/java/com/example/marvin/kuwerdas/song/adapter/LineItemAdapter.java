@@ -57,8 +57,6 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
             public void onFocusChange(View view, boolean focused) {
                 if(focused){
                     currentPosition = pos;
-                    Log.d("TAGGY","focused on position: " + pos);
-                    Log.d("TAGGY","verselines" + verseLines.size());
                 }
             }
         });
@@ -67,7 +65,6 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (!onBind) {
-                    Log.d("TAGGY","onKeyPressed: " + currentPosition + " - " + pos);
                     if (i == KeyEvent.KEYCODE_DEL && currentPosition == pos) {
                         //Perform action for backspace
                         int cursorPosition = etLine.getSelectionStart();
@@ -105,29 +102,29 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                     List<String> arr = new ArrayList<>();
 
                     for(int n=0;n<etLine.getLayout().getLineCount();n++){
-                        List<String> m = Arrays.asList(etLine.getText().subSequence(etLine.getLayout().getLineStart(n),etLine.getLayout().getLineEnd(n)).toString().split("\n"));
-                        Log.d("CHORDES","text change: " + m);
+                        List<String> m = Arrays.asList(
+                                etLine.getText().subSequence(
+                                        etLine.getLayout().getLineStart(n),
+                                        etLine.getLayout().getLineEnd(n)
+                                ).toString()
+                                        .split("\n"));
                         arr.addAll(m);
-                        Log.d("CHORDES","arr change: " + arr);
                     }
 
 //                    List<String> arr = Arrays.asList(charSequence.toString().split("\n"));
 //                    verseLines.set(currentPosition, new Line(arr.get(0)));
-                    line.setLyrics(arr.get(0));
+                    verseLines.get(currentPosition).setLyrics(arr.get(0));
 
                     if (arr.size() > 1) {
                         for(int n=1;n<arr.size();n++){
                             String a = arr.get(n);
-                            Log.d("CHORDES","adding str: " + a);
                             verseLines.add(currentPosition + n, new Line(a));
                         }
-                        Log.d("CHECKTHIS", "Display: " + verseLines);
                         notifyItemChanged(currentPosition);
-//                        notifyItemRangeInserted(currentPosition+1,arr.size());
+                        notifyItemRangeInserted(currentPosition+1,arr.size());
 
-                        notifyDataSetChanged();
+//                        notifyDataSetChanged();
 //                        for (String a : arr.subList(1, arr.size())) {
-//                            Log.d("CHORDES","adding str: " + a);
 //                            verseLines.add(currentPosition + 1, new Line(a));
 //                            notifyDataSetChanged();
 //                        }

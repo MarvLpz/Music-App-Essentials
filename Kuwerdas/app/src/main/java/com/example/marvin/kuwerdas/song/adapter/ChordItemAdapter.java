@@ -43,7 +43,6 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
 
     public void getChord(String Chord){
         DragChord = Chord;
-        Log.d("SET CHORD","dragchord: " + DragChord);
     }
 
     public static void getTriggerDelBtn(boolean d){
@@ -54,24 +53,16 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         int positionChord;
         @Override
         public boolean onDrag( View v, DragEvent event) {
-            Log.d("TAGGY","chord dragged");
-            Log.d("Drag Chord Value",  DragChord);
 
             switch (event.getAction()){
                 case DragEvent.ACTION_DRAG_STARTED:
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
-                    Log.d("DRAGEVENT", "Drag Entered");
-
-                    Log.d("DRAG TAG", String.valueOf(v.getTag()));
                     positionChord = (int) v.getTag();
-                    Log.d("HEY", String.valueOf(myChord.get(positionChord)));
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
-                    Log.d("DRAGEVENT", "Drag Exited");
                     break;
                 case DragEvent.ACTION_DROP:
-                    Log.d("TESTING",String.valueOf(DragChord));
                     myChord.get(positionChord).setChord(DragChord);
                     SongFragment.isSongEdited = true;
 //                    ((TextView)v).setText(String.valueOf(DragChord));
@@ -79,8 +70,6 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
 //                    notifyDataSetChanged();
                     notifyItemChanged(positionChord);
 
-                    Log.d("DRAG","Drag to Place");
-                    Log.d("DRAG",(String.valueOf((TextView)v)  ));
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
                     break;
@@ -106,7 +95,6 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
                 notifyItemChanged((int)v.getTag());
 
             }
-            Log.d("CHORD CLICKED","TRUE " + delClicked);
         }
     }
 
