@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.db.SongDatabase;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
 
     private SearchView searchViewAndroidActionBar;
     private MenuItem searchViewItem;
+    private MenuItem sortViewItem;
 
     private OnChangeFragment.Frags currentFragment = null;
 
@@ -267,12 +269,20 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_view_menu_item, menu);
         searchViewItem = menu.findItem(R.id.action_search);
-
+        sortViewItem = menu.findItem(R.id.action_sort);
+        sortViewItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText( MainActivity.this, "Clicked Sort", Toast.LENGTH_SHORT ).show();
+                return false;
+            }
+        });
         searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
         searchViewAndroidActionBar.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentSwitcher.change(Frags.SEARCH);
+                sortViewItem.setVisible(false);
             }
         });
         
