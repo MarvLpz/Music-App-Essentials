@@ -56,6 +56,10 @@ public class VerseItemTouchHelperCallback{
                             return makeMovementFlags(0,0);
                         }
 
+                        else if (SongFragment.mode2 == SongFragment.SongEditMode2.MUSIC){
+                            return makeMovementFlags(0,0);
+                        }
+
                         else {
                             final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
                             final int swipeFlags = ItemTouchHelper.START;

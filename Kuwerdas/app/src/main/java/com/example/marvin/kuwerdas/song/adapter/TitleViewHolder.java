@@ -27,38 +27,58 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
     private ChordTransposer chordTransposer;
     private SongFragment songFragment;
 
-    public void setFocusableTitle(boolean val){
+    public void setFocusableTitle(boolean val, boolean val2){
         if(val)
         {
-            title.setFocusableInTouchMode(true);
+            if (val2){
+                title.setFocusableInTouchMode(true);
+            }
+            else {
+                title.setFocusableInTouchMode(false);
+            }
         }
         else
             title.setFocusableInTouchMode(false);
     }
 
-    public void setFocusableTempoAndKey(boolean val){
+    public void setFocusableTempoAndKey(boolean val, boolean val2){
         if(val)
         {
-//            tempo.setClickable(true);
+            if (val2){
+                tempo.setClickable(false);
+                transposeUp.setClickable(false);
+                transposeDown.setClickable(false);
+                key.setClickable(false);
+                key.setEnabled(false);
+            }
+            else {
+                tempo.setClickable(true);
+                transposeUp.setClickable(true);
+                transposeDown.setClickable(true);
+                key.setClickable(true);
+                key.setEnabled(true);
+            }
+//
+        }
+        else {
+            tempo.setClickable(true);
             transposeUp.setClickable(true);
             transposeDown.setClickable(true);
             key.setClickable(true);
             key.setEnabled(true);
-        }
-        else {
-//            tempo.setClickable(false);
-            transposeUp.setClickable(false);
-            transposeDown.setClickable(false);
-            key.setClickable(false);
-            key.setEnabled(false);
 
         }
     }
 
-    public void setFocusableArtist(boolean val){
+    public void setFocusableArtist(boolean val, boolean val2){
         if(val)
         {
-            artist.setFocusableInTouchMode(true);
+            if (val2){
+                artist.setFocusableInTouchMode(true);
+            }
+            else {
+                artist.setFocusableInTouchMode(false);
+            }
         }
         else
             artist.setFocusableInTouchMode(false);

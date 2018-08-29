@@ -47,7 +47,7 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
         final EditText etLine = holder.getLineLyricsEditText();
         final Line line = verseLines.get(holder.getAdapterPosition());
         etLine.setText(line.getLyrics());
-        etLine.setFocusable(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
+        etLine.setFocusable(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT) && SongFragment.mode2.equals(SongFragment.SongEditMode2.LYRICS));
 //        ((VerseItemViewHolder) holder).setFocusable(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
 
         final int pos = holder.getAdapterPosition();

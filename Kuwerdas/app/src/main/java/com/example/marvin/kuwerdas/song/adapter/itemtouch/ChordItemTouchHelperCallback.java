@@ -38,7 +38,8 @@ public class ChordItemTouchHelperCallback {
                 {
                     @Override
                     public boolean isLongPressDragEnabled() {
-                       return SongFragment.mode == SongFragment.SongEditMode.EDIT;
+                       return SongFragment.mode == SongFragment.SongEditMode.EDIT
+                               && SongFragment.mode2 == SongFragment.SongEditMode2.MUSIC;
                     }
 
                     @Override
@@ -99,8 +100,6 @@ public class ChordItemTouchHelperCallback {
 
         if(item.getChord().equals(Chord.EMPTY_CHORD) || SongFragment.mode.equals(SongFragment.SongEditMode.READ_ONLY))
             return;
-
-
         myChord.remove(oldPos);
         myChord.add(newPos,item);
         adapter2.notifyItemMoved(oldPos,newPos);

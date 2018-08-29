@@ -82,7 +82,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof VerseItemViewHolder) {
             ((VerseItemViewHolder) holder).setVerseLinesData(mVerses.get(position-1));
-            ((VerseItemViewHolder) holder).setFocusable(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
+            ((VerseItemViewHolder) holder).setFocusable(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT),SongFragment.mode2.equals(SongFragment.SongEditMode2.LYRICS));
             ((VerseItemViewHolder) holder).dragVerse.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -95,9 +95,12 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
         else if(holder instanceof TitleViewHolder) {
             ((TitleViewHolder) holder).setSongDetails(songDetails);
-            ((TitleViewHolder) holder).setFocusableTitle(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
-            ((TitleViewHolder) holder).setFocusableArtist(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
-            ((TitleViewHolder) holder).setFocusableTempoAndKey(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
+            ((TitleViewHolder) holder).setFocusableTitle(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT),
+                    SongFragment.mode2.equals(SongFragment.SongEditMode2.LYRICS));
+            ((TitleViewHolder) holder).setFocusableArtist(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT),
+                    SongFragment.mode2.equals(SongFragment.SongEditMode2.LYRICS));
+            ((TitleViewHolder) holder).setFocusableTempoAndKey(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT),
+                    SongFragment.mode2.equals(SongFragment.SongEditMode2.LYRICS));
             Log.d("TitleHolder", String.valueOf(SongFragment.mode2));
         }
         else if (holder instanceof HeaderViewHolder){

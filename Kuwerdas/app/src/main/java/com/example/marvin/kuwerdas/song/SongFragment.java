@@ -176,7 +176,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
                 else{
                     recyclerView.setClickable(true);
-                    toolbar.setVisibility(View.VISIBLE);
                     Flubber.with().animation(Flubber.AnimationPreset.FADE_IN).createFor(toolbar).start();
                     mode = SongEditMode.EDIT;
                     fabEdit.setImageResource(R.drawable.t);
@@ -189,12 +188,16 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                             if (mode2 == SongEditMode2.MUSIC){
                                 fabEdit.setImageResource(R.drawable.t);
                                 mode2 = SongEditMode2.LYRICS;
+                                toolbar.setVisibility(View.GONE);
+                                isInDeleteMode = false;
                                 if (adapter!=null)
                                     adapter.notifyDataSetChanged();
                             }
                             else{
                                 fabEdit.setImageResource(R.drawable.m);
                                 mode2 = SongEditMode2.MUSIC;
+                                hideKeyboard(getActivity());
+                                toolbar.setVisibility(View.VISIBLE);
                                 if (adapter!=null)
                                     adapter.notifyDataSetChanged();
                             }

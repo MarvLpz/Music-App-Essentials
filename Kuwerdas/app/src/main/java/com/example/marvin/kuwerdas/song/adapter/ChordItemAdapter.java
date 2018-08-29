@@ -127,9 +127,17 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         if(myChord != null) {
             holder.tv.setText(myChord.get(position).getChord());
             holder.tv.setTag(position);
-            holder.setColor(SongFragment.isInDeleteMode ? Color.RED : Color.DKGRAY);
-        }
+            if (SongFragment.isInDeleteMode) {
+                holder.setColor(Color.RED);
+            }
+            else if (SongFragment.mode2 == SongFragment.SongEditMode2.MUSIC){
+                holder.setColor(Color.DKGRAY);
+            }
+            else{
+                holder.setColor(Color.BLACK);
+            }
 
+        }
     }
 
     @Override
