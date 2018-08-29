@@ -27,11 +27,11 @@ public abstract class SongDao {
     public int insertSong(Song song){
 
         if (song.getSongTitle().equals("") && song.getArtist().equals("")){
-            song.setSongTitle("Unkown Title");
+            song.setSongTitle("Unknown Title");
             song.setArtist("Unknown Artist");
         }
         else if (song.getSongTitle().equals("")){
-            song.setSongTitle("Unkown Title");
+            song.setSongTitle("Unknown Title");
         }
         else if (song.getArtist().equals("")){
             song.setArtist("Unknown Artist");
@@ -196,9 +196,9 @@ public abstract class SongDao {
 /*    private Long upsertVerse(Verse verse) {
         try { long id = insertVerse(verse);  Log.d("UPDATE","insert verse: " + id); return id;} catch (SQLiteConstraintException exception) { long id = verse.getUid(); updateVerse(verse); Log.d("UPDATE","update verse: " + id); return id;}
     }*/
-private Long upsertVerse(Verse verse, int order) {
-    try { long id = insertVerse(verse); setVerseOrder(id,order); Log.d("UPDATE","insert verse: " + id); return id;} catch (SQLiteConstraintException exception) { long id = verse.getUid(); updateVerse(verse);  setVerseOrder(id,order);Log.d("UPDATE","update verse: " + id); return id;}
-}
+    private Long upsertVerse(Verse verse, int order) {
+        try { long id = insertVerse(verse); setVerseOrder(id,order); Log.d("UPDATE","insert verse: " + id); return id;} catch (SQLiteConstraintException exception) { long id = verse.getUid(); updateVerse(verse);  setVerseOrder(id,order);Log.d("UPDATE","update verse: " + id); return id;}
+    }
 
     private Long upsertLine(Line line) {
         try { long id = insertLine(line); Log.d("UPDATE","insert line: " + id); return id;} catch (SQLiteConstraintException exception) { long id = line.getId(); updateLine(line); Log.d("UPDATE","update line: " + id); return id;}
@@ -207,10 +207,6 @@ private Long upsertVerse(Verse verse, int order) {
     private Long upsertChord(Chord chord, int order) {
         try { Long id =insertChord(chord); setChordOrder(id,order); Log.d("UPDATE","insert chord: " + id); return id;} catch (SQLiteConstraintException exception) { long id = chord.getId(); updateChord(chord);  setChordOrder(id,order);Log.d("UPDATE","update chord: " + id); return id;}
     }
-/*
-    private Long upsertVerse(Verse verse, int order) {
-        try { Long id =insertVerse(verse); setVerseOrder(id,order); Log.d("UPDATE","insert chord: " + id); return id;} catch (SQLiteConstraintException exception) { long id = verse.getUid(); updateVerse(verse);  setVerseOrder(id,order);Log.d("UPDATE","update chord: " + id); return id;}
-    }*/
 
     @Query("UPDATE chord set `order`=:mOrder where id=:mChordId")
     abstract void setChordOrder(long mChordId, int mOrder);

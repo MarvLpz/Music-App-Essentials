@@ -112,7 +112,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     float dY;
     int lastAction;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -458,8 +457,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         tv_DragChord6 = (TextView) view.findViewById(R.id.tv_dragChord6);
         tv_DragChord7 = (TextView) view.findViewById(R.id.tv_dragChord7);
 
-
-
         tv_DragChord1.setOnTouchListener(new ChoiceTouchListener());
         tv_DragChord2.setOnTouchListener(new ChoiceTouchListener());
         tv_DragChord3.setOnTouchListener(new ChoiceTouchListener());
@@ -698,5 +695,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    public static boolean isSongEditable(){
+        return mode == SongEditMode.EDIT;
+    }
 
 }

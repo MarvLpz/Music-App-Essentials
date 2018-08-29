@@ -219,7 +219,7 @@ public class TempoFragment extends Fragment implements BeatListener{
     }
 
     private boolean changeSongTempoValue(){
-        if(SongFragment.song!=null && SongFragment.mode != SongFragment.SongEditMode.READ_ONLY)
+        if(SongFragment.song!=null)
         {
             SongFragment.song.setTempo(lastTempo);
             (new SongDatabaseUtils.UpdateSongDatabaseTask(SongFragment.song)).execute();

@@ -1,8 +1,12 @@
 package com.example.marvin.kuwerdas.song.adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -130,13 +134,17 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
         });
 
         //TEMPO
-        tempo.setText("Tempo: " + song.getTempo() + " bpm");
-        tempo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.FragmentSwitcher.change(OnChangeFragment.Frags.TEMPO);
-            }
-        });
+        Spannable word = new SpannableString("Tempo: " + song.getTempo() + " bpm");
+        word.setSpan(new ForegroundColorSpan(SongFragment.isSongEditable() ? Color.GRAY : Color.BLACK), 6, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tempo.setText(word);
+
+            tempo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(SongFragment.isSongEditable())
+                        MainActivity.FragmentSwitcher.change(OnChangeFragment.Frags.TEMPO);
+                }
+              });
 
         //KEY (TRANSPOSE)
         key.setText("" +song.getKey());
