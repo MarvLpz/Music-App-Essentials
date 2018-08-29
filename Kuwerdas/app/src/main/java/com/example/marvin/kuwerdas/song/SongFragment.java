@@ -93,6 +93,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     public static boolean isSongEdited = false;
     public static boolean isInDeleteMode = false;
     public static SongEditMode mode = SongEditMode.READ_ONLY;
+    public static SongEditMode2 mode2 = SongEditMode2.LYRICS;
 
     private Vibrator mVibrator;
 
@@ -140,6 +141,9 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     public enum SongEditMode{
         EDIT, READ_ONLY
     }
+    public enum SongEditMode2{
+        MUSIC, LYRICS
+    }
 
 
 
@@ -155,9 +159,9 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         //            ItemTouchHelper.Callback callback = new VerseItemTouchHelperCallback(adapter);
 //        adapter = new VerseItemAdapter(song, this);
 
-        fabEdit.setOnClickListener(new View.OnClickListener() {
+        fabEdit.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
                 if(mode == SongEditMode.EDIT) {
                     isInDeleteMode = false;
                     ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
@@ -175,13 +179,39 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                     toolbar.setVisibility(View.VISIBLE);
                     Flubber.with().animation(Flubber.AnimationPreset.FADE_IN).createFor(toolbar).start();
                     mode = SongEditMode.EDIT;
-                    fabEdit.setImageResource(R.drawable.back);
+                    fabEdit.setImageResource(R.drawable.t);
+                    mode2 = SongEditMode2.LYRICS;
                     Toast.makeText(view.getContext(),"Edit mode enabled",Toast.LENGTH_SHORT).show();
+
+                    fabEdit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mode2 == SongEditMode2.MUSIC){
+                                fabEdit.setImageResource(R.drawable.t);
+                                mode2 = SongEditMode2.LYRICS;
+                                if (adapter!=null)
+                                    adapter.notifyDataSetChanged();
+                            }
+                            else{
+                                fabEdit.setImageResource(R.drawable.m);
+                                mode2 = SongEditMode2.MUSIC;
+                                if (adapter!=null)
+                                    adapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+
+                    /*if (mode2 == SongEditMode2.MUSIC){
+                    }
+                    else{
+
+                    }*/
 //                    SongFragment.isSongEdited = true;
                 }
 
                 if (adapter!=null)
                     adapter.notifyDataSetChanged();
+                return true;
             }
         });
 

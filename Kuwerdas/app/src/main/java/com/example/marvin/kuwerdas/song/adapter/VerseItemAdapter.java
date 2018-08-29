@@ -98,6 +98,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((TitleViewHolder) holder).setFocusableTitle(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
             ((TitleViewHolder) holder).setFocusableArtist(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
             ((TitleViewHolder) holder).setFocusableTempoAndKey(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
+            Log.d("TitleHolder", String.valueOf(SongFragment.mode2));
         }
         else if (holder instanceof HeaderViewHolder){
             HeaderViewHolder h = (HeaderViewHolder) holder;
