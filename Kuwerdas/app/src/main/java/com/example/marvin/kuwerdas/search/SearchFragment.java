@@ -117,9 +117,21 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
                 if(viewHolder instanceof HeaderViewHolder)
                     return;
 
-                new DeleteSongFromDatabaseTask(adapter.getSong(swipedPosition)).execute();
+//                Snackbar.make(view,"Deleted song",Snackbar.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar.make(view, "Song Deleted", Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Log.d("UNDOTAG","UNDO CLICKED");
+                            }
+                        });
+                snackbar.setActionTextColor(Color.WHITE);
+                snackbar.show();
 
-                Snackbar.make(view,"Deleted song",Snackbar.LENGTH_SHORT).show();
+                new DeleteSongFromDatabaseTask(adapter.getSong(swipedPosition)).execute();
+              /*  if (swipedPosition != 0  && position != mVerses.size() + 1) {
+
+                }*/
             }
 
             @Override

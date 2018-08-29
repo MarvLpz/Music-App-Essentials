@@ -12,7 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.androidadvance.topsnackbar.TSnackbar;
+//import com.androidadvance.topsnackbar.TSnackbar;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.search.adapter.HeaderViewHolder;
@@ -230,8 +230,8 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onItemDismiss(RecyclerView.ViewHolder viewHolder) {
         final int position = viewHolder.getAdapterPosition();
         final Verse mVerse =mVerses.get(position-1);
-
-        TSnackbar snackbar = TSnackbar.make(viewHolder.itemView.getRootView().getRootView().findViewById(R.id.songContainer), "Verse Deleted", Snackbar.LENGTH_LONG)
+        Log.d("SHOW undo", "SHOW");
+        Snackbar snackbar = Snackbar.make(viewHolder.itemView.getRootView().getRootView().findViewById(R.id.songContainer), "Verse Deleted", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
