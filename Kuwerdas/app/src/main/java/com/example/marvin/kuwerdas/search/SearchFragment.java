@@ -61,10 +61,6 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
         return false;
     }
 
-    public interface OnClickSearchItem{
-        boolean onClickSearchItem(Song item);
-    }
-
     public interface OnChangeSong{
         public void onChangeSong(Song song);
     }
@@ -293,7 +289,7 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
     @Override
     public void recyclerViewListItemClicked(View v, int position) {
         if(SongLoader!=null){
-            SongLoader.onChangeSong(adapter.getSong(position));
+            SongLoader.onChangeSong(adapter.getSong(position-1));
             if(MainActivity.FragmentSwitcher!=null){
                 MainActivity.FragmentSwitcher.change(OnChangeFragment.Frags.SONG);
 
