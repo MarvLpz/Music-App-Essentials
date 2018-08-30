@@ -337,12 +337,9 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
                 SongFragment.getInstance().setEditMode(false);
             } else
                 FragmentSwitcher.change(Frags.SEARCH);
-
-            return;
         }
         if(currentFragment.equals(Frags.TEMPO)){
             FragmentSwitcher.change(Frags.SONG);
-
             return;
         }
 //        super.onBackPressed();

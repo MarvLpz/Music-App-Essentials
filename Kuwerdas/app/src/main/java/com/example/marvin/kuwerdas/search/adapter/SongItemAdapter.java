@@ -3,7 +3,9 @@ package com.example.marvin.kuwerdas.search.adapter;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +15,9 @@ import android.view.ViewGroup;
 import com.example.marvin.kuwerdas.MainActivity;
 import com.example.marvin.kuwerdas.OnChangeFragment;
 import com.example.marvin.kuwerdas.R;
+import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemTouchHelperAdapter;
 import com.example.marvin.kuwerdas.song.model.Song;
+import com.example.marvin.kuwerdas.song.model.Verse;
 import com.example.marvin.kuwerdas.song.util.SongUtil;
 
 import java.util.ArrayList;
@@ -22,22 +26,48 @@ import java.util.List;
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.example.marvin.kuwerdas.search.SearchFragment.SongLoader;
 
-public class SongItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-    public List<Song> getSongList() {
-        return songList;
-    }
 
+public class SongItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+implements ItemTouchHelperAdapter {
     List<Song> songList;
-
+    List<Song> deleteContainer;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
 
     static RecyclerViewItemClickListener clickListener;
 
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        return false;
+    }
+
+    @Override
+    public void onItemDismiss(RecyclerView.ViewHolder viewHolder) {
+        final int position = viewHolder.getAdapterPosition();
+        final Song mSong = songList.get(position-1);
+        deleteContainer = new ArrayList<>();
+        Snackbar snackbar = Snackbar.make(viewHolder.itemView.getRootView().findViewById(R.id.id_searchFragment), "Verse Deleted", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        songList.add(position-1, mSong);
+                        notifyItemInserted(position);
+                        deleteContainer.remove(mSong);
+                    }
+                });
+        snackbar.setActionTextColor(Color.WHITE);
+        snackbar.show();
+
+        if (position != 0  && position != songList.size() + 1) {
+            deleteContainer.add(mSong);
+            songList.remove(position-1);
+            notifyItemRemoved(position);
+        }
+    }
+
     public interface RecyclerViewItemClickListener {
         public void recyclerViewListItemClicked(View v, int position);
     }
-
 
     public SongItemAdapter(){
         this.songList = new ArrayList<>();
