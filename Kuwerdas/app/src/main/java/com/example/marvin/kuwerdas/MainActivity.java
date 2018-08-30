@@ -333,7 +333,10 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
     public void onBackPressed() {
 
         if(currentFragment.equals(Frags.SONG)){
-            FragmentSwitcher.change(Frags.SEARCH);
+            if(SongFragment.isSongEditable()){
+                SongFragment.getInstance().setEditMode(false);
+            } else
+                FragmentSwitcher.change(Frags.SEARCH);
 
             return;
         }

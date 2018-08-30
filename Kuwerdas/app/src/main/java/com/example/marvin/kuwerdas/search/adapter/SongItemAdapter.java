@@ -23,6 +23,10 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.example.marvin.kuwerdas.search.SearchFragment.SongLoader;
 
 public class SongItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    public List<Song> getSongList() {
+        return songList;
+    }
+
     List<Song> songList;
 
     private static final int TYPE_HEADER = 0;
@@ -135,7 +139,7 @@ public class SongItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public Song getSong(int position){
-        return songList.get(position-1);
+        return songList.get(position);
     }
 
 }

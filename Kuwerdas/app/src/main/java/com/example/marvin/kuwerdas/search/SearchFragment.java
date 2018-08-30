@@ -32,6 +32,7 @@ import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.util.SongUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFragment extends Fragment implements SongItemAdapter.RecyclerViewItemClickListener, MainActivity.OnNewSearchResult{
@@ -44,9 +45,16 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
     private SongDatabase database;
     private View view;
 
+    private List<Song> mSongsToDelete = new ArrayList<>();
+
     @Override
     public boolean onNewSearchResult(List<Song> songs) {
         if(adapter!=null) {
+
+            if(mSongsToDelete.size() > 0){
+                deleteSongs();
+            }
+
             adapter.updateItems(songs);
             return true;
         }
@@ -65,6 +73,10 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
     public SearchFragment(){
         MainActivity.SearchResultListener = this;
         SongFragment.song = null;
+    }
+
+    private void deleteSongs(){
+        new DeleteSongsFromDatabaseTask(mSongsToDelete).execute();
     }
 
     @Nullable
@@ -112,26 +124,31 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                int swipedPosition = viewHolder.getAdapterPosition();
+                final int swipedPosition = viewHolder.getAdapterPosition();
 
                 if(viewHolder instanceof HeaderViewHolder)
                     return;
 
+                final int songPosition = swipedPosition - 1;
+                final Song mSong = adapter.getSong(songPosition);
+
 //                Snackbar.make(view,"Deleted song",Snackbar.LENGTH_SHORT).show();
-                Snackbar snackbar = Snackbar.make(view, "Song Deleted", Snackbar.LENGTH_LONG)
+                Snackbar snackbar = Snackbar.make(view, mSong.getSongTitle() + " Deleted", Snackbar.LENGTH_LONG)
                         .setAction("UNDO", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                adapter.getSongList().add(songPosition, mSong);
+                                adapter.notifyItemInserted(swipedPosition);
+                                mSongsToDelete.remove(mSong);
                                 Log.d("UNDOTAG","UNDO CLICKED");
                             }
                         });
                 snackbar.setActionTextColor(Color.WHITE);
                 snackbar.show();
 
-                new DeleteSongFromDatabaseTask(adapter.getSong(swipedPosition)).execute();
-              /*  if (swipedPosition != 0  && position != mVerses.size() + 1) {
-
-                }*/
+                mSongsToDelete.add(mSong);
+                adapter.getSongList().remove(songPosition);
+                adapter.notifyItemRemoved(swipedPosition);
             }
 
             @Override
@@ -282,17 +299,19 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
         }
     }
 
-    private class DeleteSongFromDatabaseTask extends AsyncTask<Void,Void,List<Song>>{
+    private class DeleteSongsFromDatabaseTask extends AsyncTask<Void,Void,List<Song>>{
 
-        Song song;
+        List<Song> songs;
 
-        public DeleteSongFromDatabaseTask(Song song){
-            this.song = song;
+        public DeleteSongsFromDatabaseTask(List<Song> songs){
+            this.songs = songs;
         }
 
         @Override
         protected List<Song> doInBackground(Void... voids) {
-            database.songDao().deleteSong(song);
+            for(Song song : songs){
+                database.songDao().deleteSong(song);
+            }
 
             return database.songDao().getAllSongs();
         }

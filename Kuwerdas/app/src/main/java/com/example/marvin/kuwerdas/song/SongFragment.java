@@ -145,7 +145,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     }
 
 
-
     private void init(){
         database = SongDatabase.getSongDatabase(getContext());
         toolbar = view.findViewById(R.id.tbChordEditor);
@@ -161,58 +160,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         fabEdit.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
             public boolean onLongClick(View v) {
-                if(mode == SongEditMode.EDIT) {
-                    isInDeleteMode = false;
-                    ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
-                    recyclerView.setClickable(false);
-                    fabEdit.setImageResource(R.drawable.edit);
-                    hideKeyboard(getActivity());
-                    saveSongToDatabase();
-                    mode = SongEditMode.READ_ONLY;
-                    toolbar.setVisibility(View.GONE);
-                    Flubber.with().animation(Flubber.AnimationPreset.FADE_OUT).createFor(toolbar).start();
-                }
-
-                else{
-                    recyclerView.setClickable(true);
-                    Flubber.with().animation(Flubber.AnimationPreset.FADE_IN).createFor(toolbar).start();
-                    mode = SongEditMode.EDIT;
-                    fabEdit.setImageResource(R.drawable.t);
-                    mode2 = SongEditMode2.LYRICS;
-                    Toast.makeText(view.getContext(),"Edit mode enabled",Toast.LENGTH_SHORT).show();
-
-                    fabEdit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (mode2 == SongEditMode2.MUSIC){
-                                fabEdit.setImageResource(R.drawable.t);
-                                mode2 = SongEditMode2.LYRICS;
-                                toolbar.setVisibility(View.GONE);
-                                isInDeleteMode = false;
-                                if (adapter!=null)
-                                    adapter.notifyDataSetChanged();
-                            }
-                            else{
-                                fabEdit.setImageResource(R.drawable.m);
-                                mode2 = SongEditMode2.MUSIC;
-                                hideKeyboard(getActivity());
-                                toolbar.setVisibility(View.VISIBLE);
-                                if (adapter!=null)
-                                    adapter.notifyDataSetChanged();
-                            }
-                        }
-                    });
-
-                    /*if (mode2 == SongEditMode2.MUSIC){
-                    }
-                    else{
-
-                    }*/
-//                    SongFragment.isSongEdited = true;
-                }
-
-                if (adapter!=null)
-                    adapter.notifyDataSetChanged();
+                setEditMode(mode != SongEditMode.EDIT);
                 return true;
             }
         });
@@ -230,6 +178,54 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             showProgressBar(false);
         }
 
+    }
+
+    public void setEditMode(boolean setToEdit){
+       if(setToEdit){ //Set to Edit mode
+           recyclerView.setClickable(true);
+           Flubber.with().animation(Flubber.AnimationPreset.FADE_IN).createFor(toolbar).start();
+           mode = SongEditMode.EDIT;
+           fabEdit.setImageResource(R.drawable.t);
+           mode2 = SongEditMode2.LYRICS;
+           Toast.makeText(view.getContext(),"Edit mode enabled",Toast.LENGTH_SHORT).show();
+
+           fabEdit.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   if (isSongEditable()) {
+                       if (mode2 == SongEditMode2.MUSIC) {
+                           fabEdit.setImageResource(R.drawable.t);
+                           mode2 = SongEditMode2.LYRICS;
+                           toolbar.setVisibility(View.GONE);
+                           isInDeleteMode = false;
+                           if (adapter != null)
+                               adapter.notifyDataSetChanged();
+                       } else {
+                           fabEdit.setImageResource(R.drawable.m);
+                           mode2 = SongEditMode2.MUSIC;
+                           hideKeyboard(getActivity());
+                           toolbar.setVisibility(View.VISIBLE);
+                           if (adapter != null)
+                               adapter.notifyDataSetChanged();
+                       }
+                   }
+               }
+           });
+
+       } else { //Set to Read Only mode
+           isInDeleteMode = false;
+           ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
+           recyclerView.setClickable(false);
+           fabEdit.setImageResource(R.drawable.edit);
+           hideKeyboard(getActivity());
+           saveSongToDatabase();
+           mode = SongEditMode.READ_ONLY;
+           toolbar.setVisibility(View.GONE);
+           Flubber.with().animation(Flubber.AnimationPreset.FADE_OUT).createFor(toolbar).start();
+
+           if (adapter!=null)
+               adapter.notifyDataSetChanged();
+       }
     }
 
     public void showProgressBar(boolean val){
@@ -465,11 +461,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         tv_DragChord6.setOnTouchListener(new ChoiceTouchListener());
         tv_DragChord7.setOnTouchListener(new ChoiceTouchListener());
 
-
-
-//        linearLayout = (LinearLayout) view.findViewById(R.id.frame_place);
-//        view.setOnTouchListener(new touchMe());
-//        linearLayout.setVisibility(View.INVISIBLE);
     }
 
     private void initializeChordPickerToolbar(){
@@ -651,7 +642,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
     public ChordPickerAdapter initializeChordRecyclerViewPicker(final RecyclerView recyclerView, final List<DetailedChord> items){
         final DetailedChord displayChord = new DetailedChord(Letter.C,Accidental.natural,Scale.major,Number.none);
-
 
         final ChordPickerAdapter adapter = new ChordPickerAdapter(getContext(),items,displayChord, ChordPickerAdapter.PickerType.TYPE_PICKER_CHORD_DISPLAY);
 
