@@ -162,7 +162,7 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 songFragment.showProgressBar(true);
-                song.setKey(song.getKey() + 1 == 12 ? 0 : song.getKey() + 1);
+                song.setKey(song.getKey() + 1 >= 12 ? 0 : song.getKey() + 1);
                 key.setText(Integer.toString(song.getKey()));
                 chordTransposer.transposeUp();
             }
@@ -174,7 +174,7 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 songFragment.showProgressBar(true);
-                song.setKey(song.getKey() + 1 == -12 ? 0 : song.getKey() - 1);
+                song.setKey(song.getKey() + 1 <= -12 ? 0 : song.getKey() - 1);
                 key.setText(Integer.toString(song.getKey()));
                 chordTransposer.transposeDown();
             }

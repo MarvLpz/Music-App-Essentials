@@ -94,6 +94,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     public static boolean isInDeleteMode = false;
     public static SongEditMode mode = SongEditMode.READ_ONLY;
     public static SongEditMode2 mode2 = SongEditMode2.LYRICS;
+    public static SongEditMode3 mode3 = SongEditMode3.NONE;
 
     private Vibrator mVibrator;
 
@@ -143,6 +144,9 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     public enum SongEditMode2{
         MUSIC, LYRICS
     }
+    public enum SongEditMode3{
+        NONE, CHORD_DRAWER_UP,CHORD_DRAWER_DOWN
+    }
 
 
     private void init(){
@@ -187,6 +191,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
            mode = SongEditMode.EDIT;
            fabEdit.setImageResource(R.drawable.t);
            mode2 = SongEditMode2.LYRICS;
+           mode3 = SongEditMode3.CHORD_DRAWER_DOWN;
+
            Toast.makeText(view.getContext(),"Edit mode enabled",Toast.LENGTH_SHORT).show();
 
            fabEdit.setOnClickListener(new View.OnClickListener() {
@@ -214,6 +220,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
        } else { //Set to Read Only mode
            isInDeleteMode = false;
+           mode3 = SongEditMode3.NONE;
            ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
            recyclerView.setClickable(false);
            fabEdit.setImageResource(R.drawable.edit);
@@ -354,7 +361,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
 
     private void initializeChordMenuToolbar(){
-
+        mode3 = SongEditMode3.CHORD_DRAWER_DOWN;
         View chordEditorLayout = getLayoutInflater().inflate(R.layout.chord_editor_toolbar,null);
         toolbar.removeAllViews();
         toolbar.addView(chordEditorLayout);
@@ -464,6 +471,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     }
 
     private void initializeChordPickerToolbar(){
+        mode3 = SongEditMode3.CHORD_DRAWER_UP;
         View view = getLayoutInflater().inflate(R.layout.chord_picker_toolbar,null);
 
         toolbar.removeAllViews();
@@ -688,5 +696,4 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     public static boolean isSongEditable(){
         return mode == SongEditMode.EDIT;
     }
-
 }
