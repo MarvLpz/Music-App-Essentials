@@ -334,12 +334,10 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
 
         if(currentFragment.equals(Frags.SONG)){
             FragmentSwitcher.change(Frags.SEARCH);
-
             return;
         }
         if(currentFragment.equals(Frags.TEMPO)){
             FragmentSwitcher.change(Frags.SONG);
-
             return;
         }
 //        super.onBackPressed();
