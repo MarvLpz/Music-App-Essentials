@@ -334,7 +334,10 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
 
         if(currentFragment.equals(Frags.SONG)){
             if(SongFragment.isSongEditable()){
-                SongFragment.getInstance().setEditMode(false);
+                if(SongFragment.mode3 == SongFragment.SongEditMode3.CHORD_DRAWER_UP)
+                    SongFragment.getInstance().initializeChordMenuToolbar();
+                else
+                    SongFragment.getInstance().setEditMode(false);
             } else
                 FragmentSwitcher.change(Frags.SEARCH);
         }

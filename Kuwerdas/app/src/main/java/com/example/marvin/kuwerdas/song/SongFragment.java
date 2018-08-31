@@ -360,7 +360,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     }
 
 
-    private void initializeChordMenuToolbar(){
+    public void initializeChordMenuToolbar(){
         mode3 = SongEditMode3.CHORD_DRAWER_DOWN;
         View chordEditorLayout = getLayoutInflater().inflate(R.layout.chord_editor_toolbar,null);
         toolbar.removeAllViews();
