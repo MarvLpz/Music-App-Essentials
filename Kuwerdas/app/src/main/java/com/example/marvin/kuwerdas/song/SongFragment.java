@@ -250,6 +250,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
     @Override
     public void onPause() {
+        setEditMode(mode != SongEditMode.EDIT);
         saveSongToDatabase();
         super.onPause();
     }

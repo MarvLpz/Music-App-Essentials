@@ -103,6 +103,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     SongFragment.mode2.equals(SongFragment.SongEditMode2.LYRICS));
             Log.d("TitleHolder", String.valueOf(SongFragment.mode2));
         }
+
         else if (holder instanceof HeaderViewHolder){
             HeaderViewHolder h = (HeaderViewHolder) holder;
 
@@ -116,6 +117,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     public void onClick(View v) {
                         mVerses.add(SongUtil.asVerses("").get(0));
                         notifyItemInserted(mVerses.size());
+
                     }
                 });
             }

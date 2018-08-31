@@ -17,6 +17,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -331,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
 
     @Override
     public void onBackPressed() {
-
+        Log.d("PRESSED", "Pressed back");
         if(currentFragment.equals(Frags.SONG)){
             if(SongFragment.isSongEditable()){
                 if(SongFragment.mode3 == SongFragment.SongEditMode3.CHORD_DRAWER_UP)
@@ -346,6 +348,16 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
             return;
         }
 //        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_HOME)) {
+            Toast.makeText(this, "You pressed the home button!", Toast.LENGTH_LONG).show();
+            Log.d("PRESSED", "Pressed home");
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     public interface OnNewSearchResult {
