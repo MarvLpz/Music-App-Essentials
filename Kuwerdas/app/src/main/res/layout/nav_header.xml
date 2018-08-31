@@ -7,14 +7,12 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:orientation="vertical">
 
-
     <ImageView
         android:layout_height="130dp"
         android:layout_width="130dp"
-        android:src="@drawable/iconlegit"
+        android:src="@drawable/icon1"
         android:layout_gravity="center"
         />
-
 
     <TextView
         android:gravity="center"

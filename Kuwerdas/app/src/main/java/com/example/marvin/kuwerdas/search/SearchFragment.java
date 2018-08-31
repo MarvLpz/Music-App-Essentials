@@ -146,7 +146,6 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
               /*  if (swipedPosition != 0  && position != mVerses.size() + 1) {
 
                 }*/
-
             }
 
             @Override

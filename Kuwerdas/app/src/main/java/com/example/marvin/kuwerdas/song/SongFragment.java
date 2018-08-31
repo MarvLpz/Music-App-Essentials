@@ -165,6 +165,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             @Override
             public boolean onLongClick(View v) {
                 setEditMode(mode != SongEditMode.EDIT);
+
                 return true;
             }
         });
@@ -192,7 +193,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
            fabEdit.setImageResource(R.drawable.t);
            mode2 = SongEditMode2.LYRICS;
            mode3 = SongEditMode3.CHORD_DRAWER_DOWN;
-
+           if (adapter != null)
+               adapter.notifyDataSetChanged();
            Toast.makeText(view.getContext(),"Edit mode enabled",Toast.LENGTH_SHORT).show();
 
            fabEdit.setOnClickListener(new View.OnClickListener() {

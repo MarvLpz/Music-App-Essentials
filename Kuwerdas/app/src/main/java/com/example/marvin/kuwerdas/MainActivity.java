@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 //        getSupportActionBar().setLogo(R.mipmap.ic);
-        getSupportActionBar().setLogo(R.mipmap.iconlegit);
+        getSupportActionBar().setLogo(R.mipmap.iconlatestnav);
 
         View headerLayout = nvDrawer.inflateHeaderView(R.layout.nav_header);
 
