@@ -24,6 +24,7 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
     private EditText title;
     private EditText artist;
     private TextView tempo;
+    private TextView tempoClick;
     private TextView key;
     private Button transposeUp;
     private Button transposeDown;
@@ -49,14 +50,20 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
         if(val)
         {
             if (val2){
-                tempo.setClickable(false);
+                transposeUp.setVisibility(View.GONE);
+                transposeDown.setVisibility(View.GONE);
+                tempoClick.setVisibility(View.GONE);
+//                tempo.setClickable(false);
                 transposeUp.setClickable(false);
                 transposeDown.setClickable(false);
                 key.setClickable(false);
                 key.setEnabled(false);
             }
             else {
-                tempo.setClickable(true);
+                tempoClick.setVisibility(View.VISIBLE);
+                transposeUp.setVisibility(View.VISIBLE);
+                transposeDown.setVisibility(View.VISIBLE);
+//                tempo.setClickable(true);
                 transposeUp.setClickable(true);
                 transposeDown.setClickable(true);
                 key.setClickable(true);
@@ -65,7 +72,10 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
 //
         }
         else {
-            tempo.setClickable(true);
+            tempoClick.setVisibility(View.GONE);
+            transposeUp.setVisibility(View.GONE);
+            transposeDown.setVisibility(View.GONE);
+//            tempo.setClickable(true);
             transposeUp.setClickable(true);
             transposeDown.setClickable(true);
             key.setClickable(true);
@@ -95,6 +105,7 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
         title = itemView.findViewById(R.id.tvTitle);
         artist = itemView.findViewById(R.id.tvArtist);
         tempo = itemView.findViewById(R.id.tvTempo);
+        tempoClick = itemView.findViewById(R.id.tv_tempoSet);
         key = itemView.findViewById(R.id.tvTranspose);
 
         chordTransposer = songFragment;
@@ -138,7 +149,7 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
         word.setSpan(new ForegroundColorSpan(SongFragment.isSongEditable() ? Color.GRAY : Color.BLACK), 6, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tempo.setText(word);
 
-            tempo.setOnClickListener(new View.OnClickListener() {
+            tempoClick.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(SongFragment.isSongEditable())
@@ -158,6 +169,7 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
         });
         transposeUp = itemView.findViewById(R.id.btnKeyUp);
         transposeUp.setVisibility(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT) ? View.VISIBLE : View.GONE);
+
         transposeUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -136,7 +136,6 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
             else{
                 holder.setColor(Color.BLACK);
             }
-
         }
     }
 

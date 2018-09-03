@@ -58,4 +58,16 @@
             app:elevation="0dp"
             app:fabSize="mini"
             app:rippleColor="@null" />
+
+    <TextView
+        android:id="@+id/tv_mode"
+        android:layout_width="77dp"
+        android:layout_height="33dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/fabToggleEdit"
+        android:layout_marginEnd="70dp"
+        android:background="@drawable/button1"
+        android:gravity="center"
+        android:text="TEXT"
+        android:textSize="17dp" />
 </RelativeLayout>
