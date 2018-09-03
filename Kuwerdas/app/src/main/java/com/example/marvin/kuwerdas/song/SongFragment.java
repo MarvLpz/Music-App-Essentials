@@ -229,6 +229,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
            hideKeyboard(getActivity());
            saveSongToDatabase();
            mode = SongEditMode.READ_ONLY;
+           mode2 = SongEditMode2.LYRICS;
            toolbar.setVisibility(View.GONE);
            Flubber.with().animation(Flubber.AnimationPreset.FADE_OUT).createFor(toolbar).start();
 
@@ -405,12 +406,12 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     public void notifyDataSetChanged(){
         adapter.notifyDataSetChanged();
     }
+
     public final class ChoiceTouchListener implements View.OnTouchListener{
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN){
-
                 ChordItemAdapter getTheChord = new ChordItemAdapter();
                 switch(v.getId()) {
                     case R.id.tv_dragChord1:
@@ -443,7 +444,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                         break;
                 }
 
-
                 ClipData data = ClipData.newPlainText("","");
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
                 v.startDrag(data,shadowBuilder,v,0);
@@ -454,6 +454,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             }
         }
     }
+
     public void initChordPanel(View view){
         tv_DragChord1 = (TextView) view.findViewById(R.id.tv_dragChord1);
         tv_DragChord2 = (TextView) view.findViewById(R.id.tv_dragChord2);

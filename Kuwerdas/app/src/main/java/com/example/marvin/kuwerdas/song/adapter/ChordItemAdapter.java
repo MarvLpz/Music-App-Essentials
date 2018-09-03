@@ -1,11 +1,13 @@
 package com.example.marvin.kuwerdas.song.adapter;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -28,9 +30,11 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
     float dY;
     int lastAction;
 
-    TextView testview;
+
     static String DragChord;
     static boolean delClicked;
+    boolean draggedChord = false;
+     static TextView testview;
     public ChordItemAdapter(Context context, List<Chord> _myChord ){
         con = context;
         myChord = _myChord;
@@ -73,6 +77,7 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
                 case DragEvent.ACTION_DROP:
                     Log.d("TESTING",String.valueOf(DragChord));
                     myChord.get(positionChord).setChord(DragChord);
+                    draggedChord = true;
                     SongFragment.isSongEdited = true;
 //                    ((TextView)v).setText(String.valueOf(DragChord));
 
@@ -95,20 +100,42 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         this.itemClickCallback = itemClickCallback;
     }
 
-    private class ChoiceClickListener implements View.OnClickListener{
+    private class ChoiceClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
-            if (delClicked){
+            if (delClicked) {
                 //TODO fix tag
-                myChord.get((int) v.getTag() ).setChord(Chord.EMPTY_CHORD);
+                myChord.get((int) v.getTag()).setChord(Chord.EMPTY_CHORD);
                 SongFragment.isSongEdited = true;
-                notifyItemChanged((int)v.getTag());
-
+                notifyItemChanged((int) v.getTag());
             }
-            Log.d("CHORD CLICKED","TRUE " + delClicked);
+            Log.d("CHORD CLICKED", "TRUE " + delClicked);
         }
     }
+
+    private class ChoiceTouchListener implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+
+            Log.d("CHORD TOUCHED","TRUE");
+            if (event.getAction() == MotionEvent.ACTION_DOWN){
+//                DragChord.equals();
+                getChord(((TextView) v).getText().toString());
+                ((TextView) v).setTextColor(Color.DKGRAY);
+                ClipData data = ClipData.newPlainText("","");
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+                v.startDrag(data,shadowBuilder,v,0);
+                myChord.get((int) v.getTag()).setChord(Chord.EMPTY_CHORD);
+                SongFragment.isSongEdited = true;
+                notifyItemChanged((int) v.getTag());
+                return true;
+            }
+            else {
+            return false;
+        }
+    }}
+
 
     @Override
     public ChordItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -117,8 +144,15 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
         view = inflater.inflate(R.layout.chord_layout,parent,false);
         TextView  ChoiceTextView = (TextView) view.findViewById(R.id.etChord);
         ChoiceTextView.setOnClickListener(new ChoiceClickListener());
-        ChoiceTextView.setOnDragListener(new ChoiceDragListener());
+        if (SongFragment.mode2 == SongFragment.SongEditMode2.MUSIC){
+            ChoiceTextView.setOnTouchListener(new ChoiceTouchListener());
 
+        }
+       else {
+            ChoiceTextView.setOnTouchListener(null);
+        }
+        
+        ChoiceTextView.setOnDragListener(new ChoiceDragListener());
         return new ChordItemViewHolder(view);
     }
 
@@ -131,10 +165,16 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
                 holder.setColor(Color.RED);
             }
             else if (SongFragment.mode2 == SongFragment.SongEditMode2.MUSIC){
-                holder.setColor(Color.DKGRAY);
+                holder.setColor(Color.BLACK);
+                holder.tv.setClickable(true);
+            }
+            else if (SongFragment.mode2 == SongFragment.SongEditMode2.LYRICS){
+                holder.setColor(Color.GRAY);
+                holder.tv.setClickable(false);
             }
             else{
                 holder.setColor(Color.BLACK);
+                holder.tv.setClickable(false);
             }
 
         }

@@ -59,6 +59,4 @@ public class LineItemViewHolder extends RecyclerView.ViewHolder {
     public View getItemView() {
         return itemView;
     }
-
-
 }
