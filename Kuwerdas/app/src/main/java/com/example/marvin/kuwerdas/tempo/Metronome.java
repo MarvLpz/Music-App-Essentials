@@ -64,7 +64,6 @@ public class Metronome {
         public void run() {
             handler.postDelayed(beatRunnable, delay);
 
-
             int maxCount = getTimeSigMaxCount();
 
             if (counter >= maxCount){

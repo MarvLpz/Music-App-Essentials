@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
 
     private SearchView searchViewAndroidActionBar;
     private MenuItem searchViewItem;
-    private MenuItem menuView;
 
     private OnChangeFragment.Frags currentFragment = null;
 
