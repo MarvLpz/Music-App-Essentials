@@ -71,6 +71,7 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
             }
 //
         }
+
         else {
             tempoClick.setVisibility(View.GONE);
             transposeUp.setVisibility(View.GONE);
