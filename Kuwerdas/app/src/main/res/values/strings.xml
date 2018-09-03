@@ -11,4 +11,7 @@
     <string name="no_song_selected">No song selected =(</string>
     <string name="add_chord">Add Chord</string>
     <string name="delete_chord">Delete chord</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>

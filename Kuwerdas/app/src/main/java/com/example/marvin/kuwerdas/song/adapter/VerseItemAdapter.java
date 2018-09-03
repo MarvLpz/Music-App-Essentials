@@ -117,7 +117,6 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     public void onClick(View v) {
                         mVerses.add(SongUtil.asVerses("").get(0));
                         notifyItemInserted(mVerses.size());
-
                     }
                 });
             }

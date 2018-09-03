@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
 
     private SearchView searchViewAndroidActionBar;
     private MenuItem searchViewItem;
-    private MenuItem sortViewItem;
+    private MenuItem menuView;
 
     private OnChangeFragment.Frags currentFragment = null;
 
@@ -81,23 +81,12 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
         // Setup drawer view
         setupDrawerContent(nvDrawer);
-
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        getSupportActionBar().setIcon(R.drawable.tuner);
-
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-//        getSupportActionBar().setLogo(R.mipmap.ic);
-        getSupportActionBar().setLogo(R.mipmap.iconlatestnav);
-
+        drawerToggle = new ActionBarDrawerToggle(this,mDrawer,R.string.drawer_open,R.string.drawer_close);
+        mDrawer.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setLogo(R.mipmap.menu);
         View headerLayout = nvDrawer.inflateHeaderView(R.layout.nav_header);
-
-/*        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_draw);
-// Inflate the header view at runtime
-        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
-// We can now look up items within the header if needed
-        ImageView ivHeaderPhoto = headerLayout.findViewById(R.id.imageView);*/
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -159,10 +148,10 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawer.openDrawer(GravityCompat.START);
-                return true;
+        if (drawerToggle.onOptionsItemSelected(item)){
+            Toast.makeText( MainActivity.this, "Clicked menu", Toast.LENGTH_SHORT ).show();
+//            mDrawer.openDrawer(GravityCompat.START);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -271,20 +260,12 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_view_menu_item, menu);
         searchViewItem = menu.findItem(R.id.action_search);
-        sortViewItem = menu.findItem(R.id.action_sort);
-        sortViewItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText( MainActivity.this, "Clicked Sort", Toast.LENGTH_SHORT ).show();
-                return false;
-            }
-        });
         searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
         searchViewAndroidActionBar.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentSwitcher.change(Frags.SEARCH);
-                sortViewItem.setVisible(false);
+
             }
         });
         
@@ -306,6 +287,8 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
         });
         return super.onCreateOptionsMenu(menu);
     }
+
+
 
     private class SearchSongDatabaseTask extends AsyncTask<Void,Void,List<Song>> {
         String search;
@@ -350,15 +333,6 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
 //        super.onBackPressed();
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_HOME)) {
-            Toast.makeText(this, "You pressed the home button!", Toast.LENGTH_LONG).show();
-            Log.d("PRESSED", "Pressed home");
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 
     public interface OnNewSearchResult {
         public boolean onNewSearchResult(List<Song> songs);
