@@ -18,7 +18,9 @@ class TimeSigAdapter extends RecyclerView.Adapter<TimeSigViewHolder>{
     private List<TimeSignature> timeSignatures;
 
     public TimeSigAdapter() {
-        timeSignatures = Arrays.asList(TimeSignature.four_four,TimeSignature.six_eight,TimeSignature.two_four);
+        timeSignatures = Arrays.asList(TimeSignature.four_four,
+                TimeSignature.two_four,
+                TimeSignature.three_four,TimeSignature.six_eight);
     }
 
     @NonNull

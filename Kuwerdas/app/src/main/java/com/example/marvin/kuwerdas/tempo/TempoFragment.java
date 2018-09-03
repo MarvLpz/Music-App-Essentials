@@ -273,7 +273,9 @@ public class TempoFragment extends Fragment implements BeatListener{
                     View centerView = snapHelper.findSnapView(manager);
                     // Getting position of the center/snapped item.
                     int pos = manager.getPosition(centerView);
-
+                    mMetronome.setTimeSignature(pos);
+                    Log.d("SCROLL","MADE");
+                    Log.d("recyclerview Value",String.valueOf(pos));
                 }
             }
         });

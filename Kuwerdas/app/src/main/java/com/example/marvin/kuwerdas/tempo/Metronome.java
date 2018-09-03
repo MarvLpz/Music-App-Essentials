@@ -23,7 +23,7 @@ public class Metronome {
     private static final int COUNT = 4;
     public static final int MIN_TEMPO = 20;
     public static final int MAX_TEMPO = 400;
-    static String TimeSig = "4/4";
+    static int TimeSig = 0;
     private int tempo;
     private long delay;
 
@@ -45,14 +45,18 @@ public class Metronome {
     }
 
     private int getTimeSigMaxCount(){
-        if(TimeSig.equals("4/4"))
-            return 4;
-        else if (TimeSig.equals("6/8"))
-            return 6;
-        else if (TimeSig.equals("2/4"))
-            return 2;
-        else
-            return -1;
+        switch (TimeSig){
+            case 0:
+                return 4;
+            case 1:
+                return 2;
+            case 2:
+                return 3;
+            case 3:
+                return 6;
+            default:
+                return -1;
+        }
     }
 
     private Runnable beatRunnable = new Runnable() {
@@ -80,7 +84,7 @@ public class Metronome {
 
     };
 
-    public void setTimeSignature(String GetTimeSig){
+    public void setTimeSignature(int GetTimeSig){
         TimeSig = GetTimeSig;
         if(isPlaying)
             startTimer();

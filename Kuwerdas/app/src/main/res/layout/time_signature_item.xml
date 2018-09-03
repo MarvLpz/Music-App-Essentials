@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:textColor="#b7b7b7"
         android:id="@+id/tvTimeSig"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
