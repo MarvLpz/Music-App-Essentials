@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
-            android:name="com.google.android.gms.ads.com.example.marvin.kuwerdas"
+            android:name="com.example.marvin.kuwerdas"
             android:value="ca-app-pub-5758718428750800~3843511820"/>
 
         <activity android:name=".MainActivity"
