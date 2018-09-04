@@ -30,6 +30,9 @@ import com.example.marvin.kuwerdas.OnChangeFragment;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.song.SongFragment;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.sdsmdg.harjot.crollerTest.Croller;
 import com.sdsmdg.harjot.crollerTest.OnCrollerChangeListener;
 
@@ -60,6 +63,7 @@ public class TempoFragment extends Fragment implements BeatListener{
 
     private int lastTempo = 0;
     private int crollerPreviousValue = 0;
+    private AdView mAdView;
 
     @Nullable
     @Override
@@ -75,6 +79,10 @@ public class TempoFragment extends Fragment implements BeatListener{
 
     private void init(){
         mMetronome = new Metronome(this);
+        MobileAds.initialize(getContext(), "ca-app-pub-5758718428750800~3843511820");
+        mAdView = view.findViewById(R.id.adView_tempo);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         mMetronome.setToneLow(MediaPlayer.create(view.getContext(), R.raw.beeplow));
         mMetronome.setToneHigh(MediaPlayer.create(view.getContext(), R.raw.beephigh));

@@ -35,6 +35,9 @@ import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.util.SongUtil;
 import com.example.marvin.kuwerdas.tempo.TempoFragment;
 import com.example.marvin.kuwerdas.tuner.TunerFragment;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.List;
 import java.util.Objects;
@@ -64,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MobileAds.initialize(this, "ca-app-pub-5758718428750800~3843511820");
 
         tempoFragment = new TempoFragment();
         songFragment = new SongFragment();

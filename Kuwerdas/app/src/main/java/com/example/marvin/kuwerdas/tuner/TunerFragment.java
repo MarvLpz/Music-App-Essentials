@@ -21,6 +21,9 @@ import com.example.marvin.kuwerdas.tuner.frequencynotes.Note;
 import com.example.marvin.kuwerdas.tuner.frequencynotes.Octave;
 import com.example.marvin.kuwerdas.tuner.tuning.GuitarTuning;
 import com.example.marvin.kuwerdas.tuner.tuning.Tune;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +47,7 @@ public class TunerFragment extends Fragment {
 
     private AudioDispatcher dispatcher;
     private PitchListener pitchListener;
+    private AdView mAdView;
 
     @Nullable
     @Override
@@ -72,6 +76,11 @@ public class TunerFragment extends Fragment {
     }
 
     private void initializePitchDetector(){
+        MobileAds.initialize(getContext(), "ca-app-pub-5758718428750800~3843511820");
+        mAdView = view.findViewById(R.id.adView_tuner);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         pitchListener = new PitchListener();
         tunerView.setVisibility(View.VISIBLE);
         tunerView.setDotPosition(2);

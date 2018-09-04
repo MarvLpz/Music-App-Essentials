@@ -88,9 +88,16 @@
         android:id="@+id/pv_timeSig"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/adView_tempo"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="32dp"
         />
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView_tempo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-5758718428750800/7179179652"/>
 </RelativeLayout>
