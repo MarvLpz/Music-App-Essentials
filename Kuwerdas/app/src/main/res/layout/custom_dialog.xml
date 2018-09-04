@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_height="350dp"
+        android:layout_width="150dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+        <Button
+            android:id="@+id/id_intro"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/border"
+            android:clickable="true"
+            android:text="Intro"
+            android:textColor="#8c8c8c"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/id_verse"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/border"
+            android:clickable="true"
+            android:text="Verse"
+            android:textColor="#8c8c8c"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/id_precho"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/border"
+            android:clickable="true"
+            android:text="Pre-chorus"
+            android:textColor="#8c8c8c"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/id_chorus"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/border"
+            android:clickable="true"
+            android:text="Chorus"
+            android:textColor="#8c8c8c"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/id_bridge"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/border"
+            android:clickable="true"
+            android:text="Bridge"
+            android:textColor="#8c8c8c"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/id_outro"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/border"
+            android:clickable="true"
+            android:text="Outro"
+            android:textColor="#8c8c8c"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/id_instru"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/border"
+            android:clickable="true"
+            android:text="Instrumental"
+            android:textColor="#8c8c8c"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/id_adlib"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@null"
+            android:clickable="true"
+            android:text="Ad lib"
+            android:textColor="#8c8c8c"
+            android:textStyle="bold" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

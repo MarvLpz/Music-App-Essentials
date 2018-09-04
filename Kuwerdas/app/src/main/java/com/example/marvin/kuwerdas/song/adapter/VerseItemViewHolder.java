@@ -10,8 +10,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.example.marvin.kuwerdas.MainActivity;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.song.SongFragment;
+import com.example.marvin.kuwerdas.song.StanzaDialog;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemTouchHelperViewHolder;
 import com.example.marvin.kuwerdas.song.model.Verse;
 
@@ -51,7 +53,7 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
         }
     }
 
-    private EditText textView;
+    public EditText textView;
 
     public LineItemAdapter getAdapter() {
         return adapter;
@@ -64,7 +66,6 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
         recyclerView = (RecyclerView) itemView.findViewById(R.id.rvVerses);
         textView = (EditText) itemView.findViewById(R.id.etTitle);
         dragVerse = (ImageButton) itemView.findViewById(R.id.ibSwipeVerse);
-
     }
 
     public void setVerseLinesData(final Verse data){
@@ -72,6 +73,7 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
         recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
         recyclerView.setAdapter(adapter);
         textView.setText(data.getTitle());
+
         textView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }

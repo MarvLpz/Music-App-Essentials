@@ -11,12 +11,15 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 //import com.androidadvance.topsnackbar.TSnackbar;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.search.adapter.HeaderViewHolder;
 import com.example.marvin.kuwerdas.song.SongFragment;
+import com.example.marvin.kuwerdas.song.StanzaDialog;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemClickCallback;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemTouchHelperAdapter;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.OnStartDragListener;
@@ -37,7 +40,8 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int TYPE_ITEM = 2;
     private static final int TYPE_TITLE = 3;
 
-    private List<Verse> mVerses;
+    private  List<Verse> mVerses;
+
     private List<Verse> versesToDelete;
 
     private SongFragment songFragment;
@@ -46,7 +50,9 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private OnStartDragListener mDragStartListener;
 
+public VerseItemAdapter(){
 
+}
     public VerseItemAdapter(Song songDetails, SongFragment songFragment, OnStartDragListener dragStartListener){
         this.mVerses = songDetails.getVerses();
         this.songDetails = songDetails;
@@ -78,9 +84,31 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return new VerseItemViewHolder(itemView);
     }
 
+   static String stanzae;
+     int  pos;
+
+    public void setStanza(String stanza){ stanzae = stanza;
+    Log.d("Stanza Value", stanza);
+        mVerses.get(pos).setTitle(stanza);
+        notifyItemChanged(pos);
+    }
+
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof VerseItemViewHolder) {
+            ((VerseItemViewHolder) holder).textView.setTag(position);
+
+            ((VerseItemViewHolder) holder).textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("POS VALUE","INITIAL");
+                    StanzaDialog cdd=new StanzaDialog(v.getContext());
+                    cdd.show();
+                    pos = (int) ((EditText) v).getTag();
+                    Log.d("POS VALUE",String.valueOf(pos));
+                }
+            });
+
             ((VerseItemViewHolder) holder).setVerseLinesData(mVerses.get(position-1));
             ((VerseItemViewHolder) holder).setFocusable(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT),SongFragment.mode2.equals(SongFragment.SongEditMode2.LYRICS));
             ((VerseItemViewHolder) holder).dragVerse.setOnTouchListener(new View.OnTouchListener() {
@@ -93,6 +121,9 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
             });
         }
+
+
+
         else if(holder instanceof TitleViewHolder) {
             ((TitleViewHolder) holder).setSongDetails(songDetails);
             ((TitleViewHolder) holder).setFocusableTitle(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT),
