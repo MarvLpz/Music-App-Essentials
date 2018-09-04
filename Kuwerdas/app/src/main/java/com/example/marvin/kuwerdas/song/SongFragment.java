@@ -99,17 +99,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
     private Vibrator mVibrator;
 
-    private TextView tv_DragChord1;
-    private TextView tv_DragChord2;
-    private TextView tv_DragChord3;
-    private TextView tv_DragChord4;
-    private TextView tv_DragChord5;
-    private TextView tv_DragChord6;
-    private TextView tv_DragChord7;
-
-
-    String get_accidental = "",get_scale= "",get_number= "";
-
     float dX;
     float dY;
     int lastAction;
@@ -269,41 +258,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         changeKey(false);
     }
 
-
-    private final class touchMe implements View.OnTouchListener{
-
-        @Override
-        public boolean onTouch(View view, MotionEvent event) {
-            switch (event.getActionMasked()) {
-                case MotionEvent.ACTION_DOWN:
-                    dX = view.getX() - event.getRawX();
-                    dY = view.getY() - event.getRawY();
-                    lastAction = MotionEvent.ACTION_DOWN;
-
-                    /*LinearLayout.LayoutParams params = new LinearLayout.
-                            LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(10,10,10,10);
-                    view.setLayoutParams(params);*/
-                    break;
-
-                case MotionEvent.ACTION_MOVE:
-                    view.setY(event.getRawY() + dY);
-                    view.setX(event.getRawX() + dX);
-                    lastAction = MotionEvent.ACTION_MOVE;
-                    break;
-
-                case MotionEvent.ACTION_UP:
-                    if (lastAction == MotionEvent.ACTION_DOWN)
-//                        Toast.makeText(con, "Clicked!", Toast.LENGTH_SHORT).show();
-                        break;
-
-                default:
-                    return false;
-            }
-            return true;
-        }
-    }
-
     private void changeKey(boolean dir){
         Log.d("SONG","song: " + song.getArtist() + " - " + song.getSongTitle());
         for(int v=0;v<song.getVerses().size();v++){
@@ -328,29 +282,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         showProgressBar(false);
     }
 
-
-    private void initializeChordAdder(){
-        View inflatedLayout = getLayoutInflater().inflate(R.layout.chords_list_toolbar,null);
-        toolbar.removeAllViews();
-        toolbar.addView(inflatedLayout);
-        Flubber.with().animation(Flubber.AnimationPreset.FADE_IN).createFor(inflatedLayout).start();
-
-        initChordPanel(inflatedLayout);
-
-        (inflatedLayout.findViewById(R.id.btnBackChords)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initializeChordMenuToolbar();
-            }
-        });
-
-        (inflatedLayout.findViewById(R.id.btnExpandChords)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initializeChordPickerToolbar();
-            }
-        });
-    }
 
     private class AddChordOnClickListener implements View.OnClickListener{
 
@@ -400,81 +331,11 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                 Toast.makeText(getContext(), "In delete mode", Toast.LENGTH_SHORT).show();
                 notifyDataSetChanged();
             }
-//                linearLayout.setVisibility(View.INVISIBLE);
-//                FloatAdd.setAlpha(127);
-
         }
     }
 
     public void notifyDataSetChanged(){
         adapter.notifyDataSetChanged();
-    }
-    public final class ChoiceTouchListener implements View.OnTouchListener{
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN){
-
-                ChordItemAdapter getTheChord = new ChordItemAdapter();
-                switch(v.getId()) {
-                    case R.id.tv_dragChord1:
-                        getTheChord.getChord
-                                (tv_DragChord1.getText().toString() + get_accidental + get_scale + get_number);
-                        break;
-                    case R.id.tv_dragChord2:
-                        getTheChord.getChord
-                                (tv_DragChord2.getText().toString() + get_accidental + get_scale + get_number);
-                        break;
-                    case R.id.tv_dragChord3:
-                        getTheChord.getChord
-                                (tv_DragChord3.getText().toString() + get_accidental + get_scale + get_number);
-                        break;
-                    case R.id.tv_dragChord4:
-                        getTheChord.getChord
-                                (tv_DragChord4.getText().toString() + get_accidental + get_scale + get_number);
-                        break;
-                    case R.id.tv_dragChord5:
-                        getTheChord.getChord
-                                (tv_DragChord5.getText().toString() + get_accidental + get_scale + get_number);
-                        break;
-                    case R.id.tv_dragChord6:
-                        getTheChord.getChord
-                                (tv_DragChord6.getText().toString() + get_accidental + get_scale + get_number);
-                        break;
-                    case R.id.tv_dragChord7:
-                        getTheChord.getChord
-                                (tv_DragChord7.getText().toString() + get_accidental + get_scale + get_number);
-                        break;
-                }
-
-
-                ClipData data = ClipData.newPlainText("","");
-                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-                v.startDrag(data,shadowBuilder,v,0);
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-    }
-    public void initChordPanel(View view){
-        tv_DragChord1 = (TextView) view.findViewById(R.id.tv_dragChord1);
-        tv_DragChord2 = (TextView) view.findViewById(R.id.tv_dragChord2);
-        tv_DragChord3 = (TextView) view.findViewById(R.id.tv_dragChord3);
-        tv_DragChord4 = (TextView) view.findViewById(R.id.tv_dragChord4);
-        tv_DragChord5 = (TextView) view.findViewById(R.id.tv_dragChord5);
-        tv_DragChord6 = (TextView) view.findViewById(R.id.tv_dragChord6);
-        tv_DragChord7 = (TextView) view.findViewById(R.id.tv_dragChord7);
-
-        tv_DragChord1.setOnTouchListener(new ChoiceTouchListener());
-        tv_DragChord2.setOnTouchListener(new ChoiceTouchListener());
-        tv_DragChord3.setOnTouchListener(new ChoiceTouchListener());
-        tv_DragChord4.setOnTouchListener(new ChoiceTouchListener());
-        tv_DragChord5.setOnTouchListener(new ChoiceTouchListener());
-        tv_DragChord6.setOnTouchListener(new ChoiceTouchListener());
-        tv_DragChord7.setOnTouchListener(new ChoiceTouchListener());
-
     }
 
     private void initializeChordPickerToolbar(){
@@ -568,7 +429,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 //            song.setTempo(adapter.getSongTempo());
 //            song.setKey(adapter.getSongKey());
             song.setDateModified((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(new Date()));
-            Log.d("SEARCH","verse size for " + song.getSongTitle() + ": " + song.getVerses().size());
 
             if (!isLoadedFromDB) {
                 (new SongDatabaseUtils.InsertSongDatabaseTask(song)).execute();
