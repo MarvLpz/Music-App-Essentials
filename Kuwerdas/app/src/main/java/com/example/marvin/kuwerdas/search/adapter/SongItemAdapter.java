@@ -4,6 +4,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +16,8 @@ import android.view.ViewGroup;
 import com.example.marvin.kuwerdas.MainActivity;
 import com.example.marvin.kuwerdas.OnChangeFragment;
 import com.example.marvin.kuwerdas.R;
+import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
+import com.example.marvin.kuwerdas.search.SearchFragment;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemTouchHelperAdapter;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
@@ -29,8 +32,9 @@ import static com.example.marvin.kuwerdas.search.SearchFragment.SongLoader;
 
 public class SongItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 implements ItemTouchHelperAdapter {
-    List<Song> songList;
-    List<Song> deleteContainer;
+    private List<Song> songList;
+    private List<Song> deleteContainer;
+    private Context context;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
 
@@ -42,39 +46,53 @@ implements ItemTouchHelperAdapter {
     }
 
     @Override
-    public void onItemDismiss(RecyclerView.ViewHolder viewHolder) {
+    public void onItemDismiss(final RecyclerView.ViewHolder viewHolder) {
         final int position = viewHolder.getAdapterPosition();
         final Song mSong = songList.get(position-1);
         deleteContainer = new ArrayList<>();
-        Snackbar snackbar = Snackbar.make(viewHolder.itemView.getRootView().findViewById(R.id.id_searchFragment), "Verse Deleted", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        songList.add(position-1, mSong);
-                        notifyItemInserted(position);
-                        deleteContainer.remove(mSong);
-                    }
-                });
-        snackbar.setActionTextColor(Color.WHITE);
-        snackbar.show();
 
         if (position != 0  && position != songList.size() + 1) {
             deleteContainer.add(mSong);
             songList.remove(position-1);
-            notifyItemRemoved(position);
         }
+
+
+
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(context);
+        builder.setTitle("Delete song")
+                .setMessage("Are you sure you want to delete this song?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                        Snackbar snackbar = Snackbar.make(viewHolder.itemView.getRootView().findViewById(R.id.id_searchFragment), "Verse Deleted", Snackbar.LENGTH_LONG);
+                        snackbar.setActionTextColor(Color.WHITE);
+                        snackbar.show();
+                        (new SongDatabaseUtils.DeleteSongFromDatabaseTask(mSong)).execute();
+                        notifyItemRemoved(position);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                        songList.add(position-1, mSong);
+                        notifyItemRemoved(position);
+                        notifyItemInserted(position);
+                        deleteContainer.remove(mSong);
+                    }
+                })
+                .show();
+
     }
 
     public interface RecyclerViewItemClickListener {
         public void recyclerViewListItemClicked(View v, int position);
     }
 
-    public SongItemAdapter(){
-        this.songList = new ArrayList<>();
-    }
 
-    public SongItemAdapter(RecyclerViewItemClickListener clickListener){
-        this.clickListener = clickListener;
+    public SongItemAdapter(SearchFragment frag){
+        this.clickListener = (RecyclerViewItemClickListener) frag;
+        this.context = frag.getContext();
         this.songList = new ArrayList<>();
     }
 
@@ -94,6 +112,7 @@ implements ItemTouchHelperAdapter {
     private boolean isPositionHeader(int position) {
         return position == 0;
     }
+
 
 
     @NonNull
@@ -117,7 +136,7 @@ implements ItemTouchHelperAdapter {
             h.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    buildDialog(v.getContext()).show();
+                    buildNewSongDialog(v.getContext()).show();
                 }
             });
 
@@ -128,7 +147,7 @@ implements ItemTouchHelperAdapter {
         }
     }
 
-    public AlertDialog.Builder buildDialog(final Context c) {
+    public AlertDialog.Builder buildNewSongDialog(final Context c) {
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle("Insert New Song");
 
