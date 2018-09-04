@@ -43,14 +43,22 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
     public void onBindViewHolder(@NonNull LineItemViewHolder holder, final int position) {
         onBind = true;
 
-        holder.getRvChords().setAlpha(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT) ? .5f : 1f);
+        holder.getRvChords().setAlpha(SongFragment.isSongEditable() ? .5f : 1f);
         final EditText etLine = holder.getLineLyricsEditText();
         final Line line = verseLines.get(holder.getAdapterPosition());
         etLine.setText(line.getLyrics());
-        etLine.setFocusable(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT) && SongFragment.mode2.equals(SongFragment.SongEditMode2.LYRICS));
+        etLine.setFocusable(SongFragment.isSongEditable() && SongFragment.mode.equals(SongFragment.SongEditMode.EDIT_MODE_LYRICS));
 //        ((VerseItemViewHolder) holder).setFocusable(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
 
         final int pos = holder.getAdapterPosition();
+        holder.setChordVisibility(!SongFragment.isSongEditable() || SongFragment.isSongInChordMode());
+
+        //TODO :::: OPTIONAL
+//        if(!SongFragment.isSongEditable())
+//            holder.setChordBackground(true);
+//        else if(SongFragment.isSongInChordMode())
+//            holder.setChordBackground(false);
+
 
         etLine.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
@@ -64,30 +72,6 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
             }
         });
 
-        etLine.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (!onBind) {
-                    Log.d("TAGGY","onKeyPressed: " + currentPosition + " - " + pos);
-                    if (i == KeyEvent.KEYCODE_DEL && currentPosition == pos) {
-                        //Perform action for backspace
-                        int cursorPosition = etLine.getSelectionStart();
-                        if (cursorPosition == 0) {
-                            if(currentPosition>0){
-                                String lineLyrics = verseLines.get(currentPosition).getLyrics();
-
-                                verseLines.get(currentPosition-1).setLyrics(verseLines.get(currentPosition - 1).getLyrics() + " " + lineLyrics);
-                                new SongDatabaseUtils.DeleteLineFromDatabaseTask(verseLines.get(currentPosition)).execute();
-                                verseLines.remove(currentPosition);
-
-                                notifyDataSetChanged();
-                            }
-                        }
-                    }
-                }
-                return false;
-            }
-        });
         etLine.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -100,29 +84,28 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
                     myData.add (new MyList(ss));
                 }*/
                 if (!onBind) {
+                    if (currentPosition == verseLines.size() - 1) {
 
-                    List<String> arr = new ArrayList<>();
+                        List<String> arr = new ArrayList<>();
 
-                    for(int n=0;n<etLine.getLayout().getLineCount();n++){
-                        List<String> m = Arrays.asList(etLine.getText().subSequence(etLine.getLayout().getLineStart(n),etLine.getLayout().getLineEnd(n)).toString().split("\n"));
-                        Log.d("CHORDES","text change: " + m);
-                        arr.addAll(m);
-                        Log.d("CHORDES","arr change: " + arr);
-                    }
+                        for (int n = 0; n < etLine.getLayout().getLineCount(); n++) {
+                            List<String> m = Arrays.asList(etLine.getText().subSequence(etLine.getLayout().getLineStart(n), etLine.getLayout().getLineEnd(n)).toString().split("\n"));
+                            arr.addAll(m);
+                        }
 
 //                    List<String> arr = Arrays.asList(charSequence.toString().split("\n"));
 //                    verseLines.set(currentPosition, new Line(arr.get(0)));
-                    line.setLyrics(arr.get(0));
+                        line.setLyrics(arr.get(0));
 
-                    if (arr.size() > 1) {
-                        for(int n=1;n<arr.size();n++){
-                            String a = arr.get(n);
-                            Log.d("CHORDES","adding str: " + a);
-                            verseLines.add(currentPosition + n, new Line(a));
-                        }
-                        Log.d("CHECKTHIS", "Display: " + verseLines);
-                        notifyItemChanged(currentPosition);
-                        notifyItemRangeInserted(currentPosition+1,arr.size());
+                        if (arr.size() > 1) {
+                            for (int n = 1; n < arr.size(); n++) {
+                                String a = arr.get(n);
+                                Log.d("CHORDES", "adding str: " + a);
+                                verseLines.add(currentPosition + n, new Line(a));
+                            }
+                            Log.d("CHECKTHIS", "Display: " + verseLines);
+                            notifyItemChanged(currentPosition);
+                            notifyItemRangeInserted(currentPosition + 1, arr.size());
 
 //                        notifyDataSetChanged();
 //                        for (String a : arr.subList(1, arr.size())) {
@@ -130,9 +113,16 @@ public class LineItemAdapter extends RecyclerView.Adapter<LineItemViewHolder> {
 //                            verseLines.add(currentPosition + 1, new Line(a));
 //                            notifyDataSetChanged();
 //                        }
-                        focusPosition = currentPosition + arr.size() - 1;
-                    } else
-                        focusPosition = -1;
+                            focusPosition = currentPosition + arr.size() - 1;
+                        } else
+                            focusPosition = -1;
+                    }
+                    else {
+                        if(etLine.getText().toString().contains("\n")) {
+                            line.setLyrics(etLine.getText().toString().replace("\n", ""));
+                            notifyItemChanged(currentPosition);
+                        }
+                    }
                 }
             }
 

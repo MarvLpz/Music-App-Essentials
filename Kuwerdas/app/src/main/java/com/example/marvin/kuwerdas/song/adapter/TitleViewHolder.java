@@ -50,9 +50,9 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
         if(val)
         {
             if (val2){
-                transposeUp.setVisibility(View.GONE);
-                transposeDown.setVisibility(View.GONE);
-                tempoClick.setVisibility(View.GONE);
+                transposeUp.setVisibility(View.INVISIBLE);
+                transposeDown.setVisibility(View.INVISIBLE);
+                tempoClick.setVisibility(View.INVISIBLE);
 //                tempo.setClickable(false);
                 transposeUp.setClickable(false);
                 transposeDown.setClickable(false);
@@ -147,7 +147,8 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
 
         //TEMPO
         Spannable word = new SpannableString("Tempo: " + song.getTempo() + " bpm");
-        word.setSpan(new ForegroundColorSpan(SongFragment.isSongEditable() ? Color.GRAY : Color.BLACK), 6, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        word.setSpan(new ForegroundColorSpan(SongFragment.isSongEditable() ? (SongFragment.isSongInChordMode() ? Color.BLACK : Color.LTGRAY) : Color.BLACK),
+                6, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tempo.setText(word);
 
             tempoClick.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +170,7 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
             }
         });
         transposeUp = itemView.findViewById(R.id.btnKeyUp);
-        transposeUp.setVisibility(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT) ? View.VISIBLE : View.GONE);
+        transposeUp.setVisibility(SongFragment.isSongEditable() ? View.VISIBLE : View.GONE);
 
         transposeUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,7 +183,7 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
         });
 
         transposeDown = itemView.findViewById(R.id.btnKeyDown);
-        transposeDown.setVisibility(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT) ? View.VISIBLE : View.GONE);
+        transposeDown.setVisibility(SongFragment.isSongEditable() ? View.VISIBLE : View.GONE);
         transposeDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

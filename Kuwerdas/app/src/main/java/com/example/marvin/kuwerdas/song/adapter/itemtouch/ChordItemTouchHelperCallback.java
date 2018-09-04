@@ -38,8 +38,8 @@ public class ChordItemTouchHelperCallback {
                 {
                     @Override
                     public boolean isLongPressDragEnabled() {
-                       return SongFragment.mode == SongFragment.SongEditMode.EDIT
-                               && SongFragment.mode2 == SongFragment.SongEditMode2.MUSIC;
+                       return SongFragment.isSongEditable()
+                               && SongFragment.mode == SongFragment.SongEditMode.EDIT_MODE_CHORD_BAR;
                     }
 
                     @Override

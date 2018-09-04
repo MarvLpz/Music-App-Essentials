@@ -17,13 +17,12 @@
 
             <EditText
                 android:id="@+id/etTitle"
-                android:hint="Stanza"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
+                android:hint="Stanza"
                 android:inputType="text"
-                android:text="Text"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
             <ImageButton

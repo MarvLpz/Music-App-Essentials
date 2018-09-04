@@ -38,7 +38,7 @@ ChordItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperVi
 
     @Override
     public void onItemSelected() {
-        if (!tv.getText().toString().equals(Chord.EMPTY_CHORD) || SongFragment.mode.equals(SongFragment.SongEditMode.EDIT)) {
+        if (!tv.getText().toString().equals(Chord.EMPTY_CHORD) && SongFragment.isSongEditable()) {
             itemView.setBackgroundColor(Color.LTGRAY);
         }
 

@@ -1,5 +1,6 @@
 package com.example.marvin.kuwerdas.song.adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -33,6 +34,14 @@ public class LineItemViewHolder extends RecyclerView.ViewHolder {
 //    public GridLayout getGridLayout() {
 //        return gridLayout;
 //    }
+
+    public void setChordVisibility(boolean flag){
+        rvChords.setVisibility(flag ? View.VISIBLE : View.GONE);
+    }
+
+    public void setChordBackground(boolean flag){
+        rvChords.setBackgroundColor(flag ? Color.WHITE: Color.parseColor("#dedfe0"));
+    }
 
     public void setChordList( List<Chord> chordList){
 //        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(itemView.getContext());

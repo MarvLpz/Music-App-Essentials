@@ -106,6 +106,27 @@ public class SongDatabaseUtils {
         }
     }
 
+    public static class UpdateTempoDatabaseTask extends AsyncTask<Void,Void,Void> {
+        Song song;
+
+        public UpdateTempoDatabaseTask(Song song){
+            this.song = song;
+        }
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            database.songDao().updateTempo(song.getUid(),song.getTempo());
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+        }
+    }
+
+
     public static class DeleteSongsDatabaseTask extends AsyncTask<Void,Void,Void> {
         @Override
         protected Void doInBackground(Void... voids) {

@@ -85,6 +85,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     private View view;
     private FloatingActionButton fabEdit;
     private TextView tvMode;
+    private Toolbar toolbar;
 
     private Button btnAddChord;
     private Button btnDeleteChord;
@@ -94,8 +95,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     public static boolean isSongEdited = false;
     public static boolean isInDeleteMode = false;
     public static SongEditMode mode = SongEditMode.READ_ONLY;
-    public static SongEditMode2 mode2 = SongEditMode2.LYRICS;
-    public static SongEditMode3 mode3 = SongEditMode3.NONE;
 
     private Vibrator mVibrator;
 
@@ -116,11 +115,10 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         SearchFragment.SongLoader = this;
         init();
         initializeChordMenuToolbar();
+        setEditMode(false);
 //        showPicker();
         return view;
     }
-
-    private Toolbar toolbar;
 
     @Override
     public void vibrate(int ms) {
@@ -129,26 +127,24 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     }
 
     public enum SongEditMode{
-        EDIT, READ_ONLY
+        READ_ONLY, EDIT_MODE_LYRICS, EDIT_MODE_CHORD_BAR, EDIT_MODE_CHORD_PICKER
     }
-    public enum SongEditMode2{
-        MUSIC, LYRICS
-    }
-    public enum SongEditMode3{
-        NONE, CHORD_DRAWER_UP,CHORD_DRAWER_DOWN
+
+    public static boolean isSongInChordMode(){
+        return mode != null && mode != SongEditMode.READ_ONLY && (mode == SongEditMode.EDIT_MODE_CHORD_PICKER || mode == SongEditMode.EDIT_MODE_CHORD_BAR);
     }
 
 
     private void init(){
         database = SongDatabase.getSongDatabase(getContext());
         toolbar = view.findViewById(R.id.tbChordEditor);
-        toolbar.setVisibility(View.GONE);
         mVibrator = (Vibrator)getActivity().getSystemService(VIBRATOR_SERVICE);
         progressBar = view.findViewById(R.id.pbSong);
         songContainer = view.findViewById(R.id.songContainer);
         fabEdit = view.findViewById(R.id.fabToggleEdit);
         tvMode = view.findViewById(R.id.tv_mode);
-        tvMode.setVisibility(View.GONE);
+//        toolbar.setVisibility(View.GONE);
+//        tvMode.setVisibility(View.GONE);
         recyclerView = view.findViewById(R.id.rvSong);
         //            ItemTouchHelper.Callback callback = new VerseItemTouchHelperCallback(adapter);
 //        adapter = new VerseItemAdapter(song, this);
@@ -156,7 +152,11 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         fabEdit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                setEditMode(mode != SongEditMode.EDIT);
+                if(mode != SongEditMode.READ_ONLY){
+                    saveSongToDatabase();
+                }
+                setEditMode(mode == SongEditMode.READ_ONLY);
+
             }
         });
 
@@ -172,61 +172,60 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                 onChangeSong(song);
             showProgressBar(false);
         }
-
     }
 
     public void setEditMode(boolean setToEdit){
        if(setToEdit){ //Set to Edit mode
            tvMode.setVisibility(View.VISIBLE);
+           tvMode.setText(getString(R.string.edit_mode_1));
            recyclerView.setClickable(true);
            Flubber.with().animation(Flubber.AnimationPreset.FADE_IN).createFor(toolbar).start();
-           mode = SongEditMode.EDIT;
+           mode = SongEditMode.EDIT_MODE_LYRICS;
            fabEdit.setImageResource(R.drawable.back);
-           mode2 = SongEditMode2.LYRICS;
-           mode3 = SongEditMode3.CHORD_DRAWER_DOWN;
            if (adapter != null)
                adapter.notifyDataSetChanged();
            Toast.makeText(view.getContext(),"Edit mode enabled",Toast.LENGTH_SHORT).show();
 
-           tvMode.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                   if (isSongEditable()) {
-                       if (mode2 == SongEditMode2.MUSIC) {
-                           tvMode.setText("TEXT");
-
-                           mode2 = SongEditMode2.LYRICS;
-                           toolbar.setVisibility(View.GONE);
-                           isInDeleteMode = false;
-                           if (adapter != null)
-                               adapter.notifyDataSetChanged();
-                       } else {
-                           tvMode.setText("MUSIC");
-                           mode2 = SongEditMode2.MUSIC;
-                           hideKeyboard(getActivity());
-                           toolbar.setVisibility(View.VISIBLE);
-                           if (adapter != null)
-                               adapter.notifyDataSetChanged();
+           if(!tvMode.hasOnClickListeners()) {
+               tvMode.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       if (isSongEditable()) {
+                           if (mode == SongEditMode.EDIT_MODE_LYRICS) {
+                               tvMode.setText(getString(R.string.edit_mode_2));
+                               toolbar.setVisibility(View.VISIBLE);
+                               mode = SongEditMode.EDIT_MODE_CHORD_BAR;
+                               isInDeleteMode = false;
+                               if (adapter != null)
+                                   adapter.notifyDataSetChanged();
+                           } else {
+                               tvMode.setText(getString(R.string.edit_mode_1));
+                               mode = SongEditMode.EDIT_MODE_LYRICS;
+                               hideKeyboard(getActivity());
+                               toolbar.setVisibility(View.GONE);
+                               if (adapter != null)
+                                   adapter.notifyDataSetChanged();
+                           }
                        }
                    }
-               }
-           });
+               });
+           }
 
        } else { //Set to Read Only mode
            tvMode.setVisibility(View.GONE);
            isInDeleteMode = false;
-           mode3 = SongEditMode3.NONE;
            ChordItemAdapter.getTriggerDelBtn(isInDeleteMode);
            recyclerView.setClickable(false);
            fabEdit.setImageResource(R.drawable.edit);
-           hideKeyboard(getActivity());
-           saveSongToDatabase();
-           mode = SongEditMode.READ_ONLY;
            toolbar.setVisibility(View.GONE);
-           Flubber.with().animation(Flubber.AnimationPreset.FADE_OUT).createFor(toolbar).start();
+           hideKeyboard(getActivity());
 
            if (adapter!=null)
                adapter.notifyDataSetChanged();
+
+           mode = SongEditMode.READ_ONLY;
+
+           Flubber.with().animation(Flubber.AnimationPreset.FADE_OUT).createFor(toolbar).start();
        }
     }
 
@@ -238,13 +237,14 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     @Override
     public void onDetach() {
         saveSongToDatabase();
+        setEditMode(false);
         super.onDetach();
     }
 
     @Override
     public void onPause() {
-        setEditMode(mode != SongEditMode.EDIT);
         saveSongToDatabase();
+        setEditMode(false);
         super.onPause();
     }
 
@@ -277,7 +277,8 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             if(!hasNoChords)
                 adapter.notifyItemChanged(v+1);
         }
-        SongFragment.isSongEdited = true;
+
+        isSongEdited = true;
 
         showProgressBar(false);
     }
@@ -299,7 +300,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
 
 
     public void initializeChordMenuToolbar(){
-        mode3 = SongEditMode3.CHORD_DRAWER_DOWN;
+        mode = SongEditMode.EDIT_MODE_CHORD_BAR;
         View chordEditorLayout = getLayoutInflater().inflate(R.layout.chord_editor_toolbar,null);
         toolbar.removeAllViews();
         toolbar.addView(chordEditorLayout);
@@ -339,7 +340,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     }
 
     private void initializeChordPickerToolbar(){
-        mode3 = SongEditMode3.CHORD_DRAWER_UP;
+        mode = SongEditMode.EDIT_MODE_CHORD_PICKER;
         View view = getLayoutInflater().inflate(R.layout.chord_picker_toolbar,null);
 
         toolbar.removeAllViews();
@@ -443,7 +444,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
                             (song.getSongTitle().length()>25 ? "...\'" : "\'"),
                     Toast.LENGTH_SHORT).show();
             isSongEdited = false;
-            mode = SongEditMode.READ_ONLY;
         }
     }
 
@@ -458,7 +458,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             // Calculating recyclerView height from listItemHeight
             // we are using in our recyclerView list item.
             recyclerViewHeight = maxItems * TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
-            Log.d("PICKER","it went in here");
         }
 
         final ChordPickerAdapter adapter = new ChordPickerAdapter(getContext(),items,displayChord, ChordPickerAdapter.PickerType.TYPE_PICKER_SELECTOR);
@@ -507,7 +506,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             @Override
             public boolean onLongClick(View v) {
                 recyclerView.scrollToPosition(0);
-                Log.d("PICKER","naglong click");
                 return true;
             }
         });
@@ -561,6 +559,6 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
     }
 
     public static boolean isSongEditable(){
-        return mode == SongEditMode.EDIT;
+        return mode !=null && mode != SongEditMode.READ_ONLY;
     }
 }

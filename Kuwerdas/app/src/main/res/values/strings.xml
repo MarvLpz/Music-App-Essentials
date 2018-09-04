@@ -5,6 +5,8 @@
     <string name="title_tuner">Tuner</string>
     <string name="chords">Chords</string>
     <string name="transpose">Transpose</string>
+    <string name="edit_mode_1">lyrics</string>
+    <string name="edit_mode_2">chords</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

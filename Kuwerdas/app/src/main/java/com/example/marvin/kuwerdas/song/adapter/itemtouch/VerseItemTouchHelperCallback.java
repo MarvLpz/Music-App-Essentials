@@ -43,7 +43,7 @@ public class VerseItemTouchHelperCallback{
 
                     @Override
                     public boolean isItemViewSwipeEnabled() {
-                        return SongFragment.mode == SongFragment.SongEditMode.EDIT;
+                        return SongFragment.isSongEditable();
                     }
 
                     @Override
@@ -56,7 +56,7 @@ public class VerseItemTouchHelperCallback{
                             return makeMovementFlags(0,0);
                         }
 
-                        else if (SongFragment.mode2 == SongFragment.SongEditMode2.MUSIC){
+                        else if (SongFragment.isSongInChordMode()){
                             return makeMovementFlags(0,0);
                         }
                         else {

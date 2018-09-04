@@ -29,8 +29,7 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
     }
 
     public void setFocusable(boolean val, boolean val2){
-        if(val)
-        {
+        if(val) {
             if (val2){
                 dragVerse.setVisibility(View.VISIBLE);
                 textView.setFocusableInTouchMode(true);
@@ -40,14 +39,12 @@ public class VerseItemViewHolder extends RecyclerView.ViewHolder implements Item
             else {
                 textView.setFocusable(false);
                 dragVerse.setVisibility(View.INVISIBLE);
-
             }
 
         }
         else {
             textView.setFocusable(false);
             dragVerse.setVisibility(View.INVISIBLE);
-
         }
     }
 

@@ -82,7 +82,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof VerseItemViewHolder) {
             ((VerseItemViewHolder) holder).setVerseLinesData(mVerses.get(position-1));
-            ((VerseItemViewHolder) holder).setFocusable(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT),SongFragment.mode2.equals(SongFragment.SongEditMode2.LYRICS));
+            ((VerseItemViewHolder) holder).setFocusable(SongFragment.isSongEditable(),SongFragment.mode.equals(SongFragment.SongEditMode.EDIT_MODE_LYRICS));
             ((VerseItemViewHolder) holder).dragVerse.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -95,23 +95,19 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
         else if(holder instanceof TitleViewHolder) {
             ((TitleViewHolder) holder).setSongDetails(songDetails);
-            ((TitleViewHolder) holder).setFocusableTitle(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT),
-                    SongFragment.mode2.equals(SongFragment.SongEditMode2.LYRICS));
-            ((TitleViewHolder) holder).setFocusableArtist(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT),
-                    SongFragment.mode2.equals(SongFragment.SongEditMode2.LYRICS));
-            ((TitleViewHolder) holder).setFocusableTempoAndKey(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT),
-                    SongFragment.mode2.equals(SongFragment.SongEditMode2.LYRICS));
-            Log.d("TitleHolder", String.valueOf(SongFragment.mode2));
+            ((TitleViewHolder) holder).setFocusableTitle(SongFragment.isSongEditable(),SongFragment.mode.equals(SongFragment.SongEditMode.EDIT_MODE_LYRICS));
+            ((TitleViewHolder) holder).setFocusableArtist(SongFragment.isSongEditable(),SongFragment.mode.equals(SongFragment.SongEditMode.EDIT_MODE_LYRICS));
+            ((TitleViewHolder) holder).setFocusableTempoAndKey(SongFragment.isSongEditable(),SongFragment.mode.equals(SongFragment.SongEditMode.EDIT_MODE_LYRICS));
         }
 
         else if (holder instanceof HeaderViewHolder){
             HeaderViewHolder h = (HeaderViewHolder) holder;
 
-            h.getTextView().setVisibility(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT) ? View.VISIBLE: View.GONE);
-            if(SongFragment.mode.equals(SongFragment.SongEditMode.EDIT)) {
+            h.getTextView().setVisibility(SongFragment.isSongEditable() ? View.VISIBLE: View.GONE);
+            if(SongFragment.isSongEditable()) {
                 h.getTextView().setPadding(30, 30, 0, 150);
                 h.setText("CREATE NEW STANZA");
-                h.setClickable(!SongFragment.mode.equals(SongFragment.SongEditMode.EDIT));
+                h.setClickable(!SongFragment.isSongEditable());
                 h.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -221,9 +217,9 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             mVerses.remove(oldPos - 1);
             mVerses.add(newPos - 1,item);
             notifyItemMoved(oldPos,newPos);
+            SongFragment.isSongEdited = true;
         }
 
-        SongFragment.isSongEdited = true;
         return true;
     }
 

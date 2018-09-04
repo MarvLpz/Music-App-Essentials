@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
         Log.d("PRESSED", "Pressed back");
         if(currentFragment.equals(Frags.SONG)){
             if(SongFragment.isSongEditable()){
-                if(SongFragment.mode3 == SongFragment.SongEditMode3.CHORD_DRAWER_UP)
+                if(SongFragment.mode == SongFragment.SongEditMode.EDIT_MODE_CHORD_PICKER)
                     SongFragment.getInstance().initializeChordMenuToolbar();
                 else
                     SongFragment.getInstance().setEditMode(false);

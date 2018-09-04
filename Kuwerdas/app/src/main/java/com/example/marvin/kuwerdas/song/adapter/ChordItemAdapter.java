@@ -130,7 +130,7 @@ public class ChordItemAdapter extends RecyclerView.Adapter<ChordItemViewHolder>{
             if (SongFragment.isInDeleteMode) {
                 holder.setColor(Color.RED);
             }
-            else if (SongFragment.mode2 == SongFragment.SongEditMode2.MUSIC){
+            else if (SongFragment.isSongInChordMode()){
                 holder.setColor(Color.DKGRAY);
             }
             else{

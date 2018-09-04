@@ -116,6 +116,8 @@ public abstract class SongDao {
     @Query("SELECT * FROM chord")
     public abstract List<Chord> getAllChords();
 
+    @Query("UPDATE song SET tempo = :tempo WHERE uid = :id")
+    public abstract void updateTempo(int id, int tempo);
 
     public void updateSong(Song song){
         int songId = upsertSong(song).intValue();//Update song title, artist, and date modified
