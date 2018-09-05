@@ -82,7 +82,6 @@ implements ItemTouchHelperAdapter {
                     }
                 })
                 .show();
-
     }
 
     public interface RecyclerViewItemClickListener {

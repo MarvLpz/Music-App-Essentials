@@ -146,7 +146,7 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
         });
 
         //TEMPO
-        Spannable word = new SpannableString("Tempo: " + song.getTempo() + " bpm");
+        Spannable word = new SpannableString("Tempo: " + song.getTempo() + " bpm  " + (song.getTimesig() == null ? "" : song.getTimesig() ));
         word.setSpan(new ForegroundColorSpan(SongFragment.isSongEditable() ? (SongFragment.isSongInChordMode() ? Color.BLACK : Color.LTGRAY) : Color.BLACK),
                 6, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tempo.setText(word);

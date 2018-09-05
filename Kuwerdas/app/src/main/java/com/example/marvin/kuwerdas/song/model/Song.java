@@ -31,6 +31,9 @@ public class Song implements Serializable{
     @ColumnInfo(name = "tempo")
     private int tempo;
 
+    @ColumnInfo(name = "timesig")
+    private String timesig;
+
     public int getUid() {
         return uid;
     }
@@ -74,10 +77,19 @@ public class Song implements Serializable{
     public int getTempo() {
         return tempo;
     }
-
     public void setTempo(int tempo) {
         this.tempo = tempo;
     }
+
+    public void setTimesig(String timesig) {
+        this.timesig = timesig;
+    }
+
+    public String getTimesig() {
+        return timesig;
+    }
+
+
 
     @Override
     public String toString(){

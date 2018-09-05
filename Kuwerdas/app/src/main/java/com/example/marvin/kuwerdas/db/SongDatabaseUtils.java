@@ -113,11 +113,9 @@ public class SongDatabaseUtils {
             this.song = song;
         }
 
-
         @Override
         protected Void doInBackground(Void... voids) {
-            database.songDao().updateTempo(song.getUid(),song.getTempo());
-
+            database.songDao().updateTempo(song.getUid(),song.getTempo(),song.getTimesig());
             return null;
         }
 
@@ -125,7 +123,6 @@ public class SongDatabaseUtils {
         protected void onPostExecute(Void v) {
         }
     }
-
 
     public static class DeleteSongsDatabaseTask extends AsyncTask<Void,Void,Void> {
         @Override

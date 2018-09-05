@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,8 @@ public class TempoFragment extends Fragment implements BeatListener{
     private RecyclerView mPicker;
 
     private int lastTempo = 0;
+     String timeSig = "";
+    private int timeSigVal;
     private int crollerPreviousValue = 0;
 
     @Nullable
@@ -153,6 +156,7 @@ public class TempoFragment extends Fragment implements BeatListener{
         if(SongFragment.song!=null) {
 
             mTitle.setVisibility(View.VISIBLE);
+
             mTitle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -221,7 +225,32 @@ public class TempoFragment extends Fragment implements BeatListener{
     private boolean changeSongTempoValue(){
         if(SongFragment.song!=null)
         {
+            switch(timeSigVal){
+            case 0:
+                Log.d("recyCLER",String.valueOf(timeSigVal));
+                timeSig = "4/4";
+                break;
+                case 1:
+                    Log.d("recyCLER",String.valueOf(timeSigVal));
+                    Log.d("recyCLER",timeSig);
+                timeSig = "2/4";
+                    break;
+                case 2:
+                    Log.d("recyCLER",String.valueOf(timeSigVal));
+                timeSig = "3/4";
+                    break;
+                case 3:
+                    Log.d("recyCLER",String.valueOf(timeSigVal));
+                timeSig = "6/8";
+                    break;
+                default:
+                    break;
+        }
+
+            Log.d("recyclerview22",String.valueOf(timeSigVal));
+            Log.d("recyclerview23",timeSig);
             SongFragment.song.setTempo(lastTempo);
+            SongFragment.song.setTimesig(timeSig);
             (new SongDatabaseUtils.UpdateTempoDatabaseTask(SongFragment.song)).execute();
             return true;
         }
@@ -273,9 +302,10 @@ public class TempoFragment extends Fragment implements BeatListener{
                     View centerView = snapHelper.findSnapView(manager);
                     // Getting position of the center/snapped item.
                     int pos = manager.getPosition(centerView);
+                    timeSigVal = pos;
                     mMetronome.setTimeSignature(pos);
                     Log.d("SCROLL","MADE");
-                    Log.d("recyclerview Value",String.valueOf(pos));
+                    Log.d("recyclerview Value",String.valueOf(timeSigVal));
                 }
             }
         });
