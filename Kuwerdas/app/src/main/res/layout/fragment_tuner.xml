@@ -14,7 +14,6 @@
         android:fontFamily="monospace"
         android:gravity="center"
         android:paddingBottom="100dp"
-        android:text="E"
         android:textColor="#FFB2B0B0"
         android:textSize="200sp"
         tools:layout_editor_absoluteX="131dp"
