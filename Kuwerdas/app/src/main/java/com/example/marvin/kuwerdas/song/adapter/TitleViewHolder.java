@@ -150,7 +150,6 @@ public class TitleViewHolder extends RecyclerView.ViewHolder {
         word.setSpan(new ForegroundColorSpan(SongFragment.isSongEditable() ? (SongFragment.isSongInChordMode() ? Color.BLACK : Color.LTGRAY) : Color.BLACK),
                 6, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tempo.setText(word);
-
             tempoClick.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
