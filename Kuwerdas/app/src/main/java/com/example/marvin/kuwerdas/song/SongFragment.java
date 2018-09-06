@@ -423,7 +423,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
         }
     }
 
-    private void saveSongToDatabase() {
+    public void saveSongToDatabase() {
         if (song != null && isSongEdited) {
 //            song.setSongTitle(adapter.getSongTitle());
 //            song.setArtist(adapter.getSongArtist());
