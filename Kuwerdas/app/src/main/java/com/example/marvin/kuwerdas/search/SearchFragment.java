@@ -39,6 +39,7 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
 
     public static OnChangeSong SongLoader;
     private static final String DATABASE_NAME = "SONG_DATABASE";
+    private static SearchFragment single_instance = null;
 
     private RecyclerView rvSearchResults;
     private SongItemAdapter adapter;
@@ -46,6 +47,21 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
     private View view;
 
     private List<Song> mSongsToDelete = new ArrayList<>();
+
+    public SearchFragment(){
+        single_instance = this;
+        MainActivity.SearchResultListener = this;
+        SongFragment.song = null;
+    }
+
+    public static SearchFragment getInstance()
+    {
+        if (single_instance == null)
+            single_instance = new SearchFragment();
+
+        return single_instance;
+    }
+
 
     @Override
     public boolean onNewSearchResult(List<Song> songs) {
@@ -66,10 +82,6 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
     }
 
 
-    public SearchFragment(){
-        MainActivity.SearchResultListener = this;
-        SongFragment.song = null;
-    }
 
     private void deleteSongs(){
         new DeleteSongsFromDatabaseTask(mSongsToDelete).execute();
@@ -334,5 +346,9 @@ public class SearchFragment extends Fragment implements SongItemAdapter.Recycler
 
             onNewSearchResult(songs);
         }
+    }
+
+    public void showInsertNewSongView(boolean cond){
+        adapter.showInsertNewSongView(cond);
     }
 }

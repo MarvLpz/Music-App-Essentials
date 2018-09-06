@@ -169,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
             }
         });*/
 
+
         loadFragment(songFragment);
         loadFragment(new SearchFragment());
         currentFragment = Frags.SEARCH;
@@ -223,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
     private void clearSearch(){
         searchViewAndroidActionBar.setQuery("",false);
         searchViewAndroidActionBar.clearFocus();
+        SearchFragment.getInstance().showInsertNewSongView(true);
     }
 
 
@@ -275,19 +277,19 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
                 loadFragment(new SearchFragment());
                 currentFragment = Frags.SEARCH;
                 (new SearchSongDatabaseTask(query)).execute();
+                SearchFragment.getInstance().showInsertNewSongView(true);
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 (new SearchSongDatabaseTask(newText)).execute();
+                SearchFragment.getInstance().showInsertNewSongView(newText.isEmpty());
                 return true;
             }
         });
         return super.onCreateOptionsMenu(menu);
     }
-
-
 
     private class SearchSongDatabaseTask extends AsyncTask<Void,Void,List<Song>> {
         String search;

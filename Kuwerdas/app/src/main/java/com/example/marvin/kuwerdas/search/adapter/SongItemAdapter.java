@@ -38,8 +38,15 @@ implements ItemTouchHelperAdapter {
     private Context context;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
+    private boolean showFirstItem = true;
 
     static RecyclerViewItemClickListener clickListener;
+
+
+    public void showInsertNewSongView(boolean cond){
+        notifyItemChanged(0);
+        showFirstItem = cond;
+    }
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
@@ -132,6 +139,7 @@ implements ItemTouchHelperAdapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HeaderViewHolder) {
             HeaderViewHolder h = (HeaderViewHolder) holder;
+            h.getItemView().setVisibility(showFirstItem ? View.VISIBLE : View.GONE);
             h.setText("INSERT NEW SONG");
             h.setOnClickListener(new View.OnClickListener() {
                 @Override
