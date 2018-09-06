@@ -320,8 +320,10 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
             if(SongFragment.isSongEditable()){
                 if(SongFragment.mode == SongFragment.SongEditMode.EDIT_MODE_CHORD_PICKER)
                     SongFragment.getInstance().initializeChordMenuToolbar();
-                else
+                else{
+                    SongFragment.getInstance().saveSongToDatabase();
                     SongFragment.getInstance().setEditMode(false);
+                }
             } else
                 FragmentSwitcher.change(Frags.SEARCH);
         }
@@ -329,9 +331,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
             FragmentSwitcher.change(Frags.SONG);
             return;
         }
-//        super.onBackPressed();
     }
-
 
     public interface OnNewSearchResult {
         public boolean onNewSearchResult(List<Song> songs);

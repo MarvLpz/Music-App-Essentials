@@ -18,6 +18,7 @@ import com.example.marvin.kuwerdas.OnChangeFragment;
 import com.example.marvin.kuwerdas.R;
 import com.example.marvin.kuwerdas.db.SongDatabaseUtils;
 import com.example.marvin.kuwerdas.search.SearchFragment;
+import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.adapter.itemtouch.ItemTouchHelperAdapter;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
@@ -164,6 +165,7 @@ implements ItemTouchHelperAdapter {
             public void onClick(DialogInterface dialog, int which) {
                 String lyrics = ((ClipboardManager) c.getSystemService(CLIPBOARD_SERVICE)).getText().toString() ;
                 SongLoader.onChangeSong(SongUtil.asSong("","",lyrics));
+                SongFragment.isSongEdited = true;
                 MainActivity.FragmentSwitcher.change(OnChangeFragment.Frags.SONG);
             }
         });
