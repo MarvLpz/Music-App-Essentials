@@ -2,6 +2,7 @@ package com.example.marvin.kuwerdas.db;
 
 import android.os.AsyncTask;
 
+import com.example.marvin.kuwerdas.song.SongFragment;
 import com.example.marvin.kuwerdas.song.model.Line;
 import com.example.marvin.kuwerdas.song.model.Song;
 import com.example.marvin.kuwerdas.song.model.Verse;
@@ -14,7 +15,7 @@ public class SongDatabaseUtils {
         database = db;
     }
 
-    public static class InsertSongDatabaseTask extends AsyncTask<Void,Void,Integer> {
+    public static class InsertSongDatabaseTask extends AsyncTask<Void, Void, Song> {
         Song song;
 
         public InsertSongDatabaseTask(Song song){
@@ -23,15 +24,19 @@ public class SongDatabaseUtils {
 
 
         @Override
-        protected Integer doInBackground(Void... voids) {
-            if(database!=null)
-                return database.songDao().insertSong(song);
-
+        protected Song doInBackground(Void... voids) {
+            if(database!=null) {
+                return database.songDao().getSongWithVerses(database.songDao().insertSong(song));
+            }
             return null;
         }
 
         @Override
-        protected void onPostExecute(Integer id) {
+        protected void onPostExecute(Song s) {
+            if(SongFragment.song!=null) {
+                SongFragment.song = s;
+                SongFragment.getInstance().notifyDataSetChanged();
+            }
         }
     }
 

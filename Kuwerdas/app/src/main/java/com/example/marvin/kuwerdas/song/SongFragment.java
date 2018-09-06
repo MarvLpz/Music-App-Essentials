@@ -434,6 +434,7 @@ public class SongFragment extends Fragment implements OnStartDragListener, Searc
             if (!isLoadedFromDB) {
                 (new SongDatabaseUtils.InsertSongDatabaseTask(song)).execute();
                 isLoadedFromDB = true;
+
             }
             else {
                 (new SongDatabaseUtils.UpdateSongDatabaseTask(song)).execute();
