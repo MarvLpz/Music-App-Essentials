@@ -7,6 +7,7 @@ public interface OnChangeFragment {
         TEMPO,
         TUNER,
         SONG,
+        MANUAL,
         SEARCH
     }
     public void change(Frags frag);

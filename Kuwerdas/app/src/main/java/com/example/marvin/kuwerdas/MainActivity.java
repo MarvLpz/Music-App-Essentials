@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
     TempoFragment tempoFragment;
     SongFragment songFragment;
     TunerFragment tunerFragment;
+    ManualFragment manualFragment;
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
         tempoFragment = new TempoFragment();
         songFragment = new SongFragment();
         tunerFragment = new TunerFragment();
+        manualFragment = new ManualFragment();
 
         init();
 
@@ -118,6 +120,11 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
                 searchViewItem.setVisible(false);
                 FragmentSwitcher.change(Frags.TUNER);
                 fragmentClass = TunerFragment.class;
+                break;
+            case R.id.nav_fourth_fragment:
+                searchViewItem.setVisible(false);
+                FragmentSwitcher.change(Frags.MANUAL);
+                fragmentClass = ManualFragment.class;
                 break;
             default:
                 searchViewItem.setVisible(true);
@@ -197,6 +204,11 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
             case TUNER:
                 currentFragment = Frags.TUNER;
                 loadFragment(tunerFragment);
+                clearSearch();
+                break;
+            case MANUAL:
+                currentFragment = Frags.TUNER;
+                loadFragment(manualFragment);
                 clearSearch();
                 break;
             case SEARCH:

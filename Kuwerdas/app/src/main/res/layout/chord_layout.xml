@@ -12,5 +12,6 @@
         android:layout_weight="1"
         android:paddingLeft="3dp"
         android:paddingRight="3dp"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
+
 </LinearLayout>
