@@ -1,5 +1,6 @@
 package com.example.marvin.kuwerdas;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -122,9 +123,11 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
                 fragmentClass = TunerFragment.class;
                 break;
             case R.id.nav_fourth_fragment:
-                searchViewItem.setVisible(false);
+                Intent myIntent = new Intent(getBaseContext(),   ManualActivity.class);
+                startActivity(myIntent);
+                /*searchViewItem.setVisible(false);
                 FragmentSwitcher.change(Frags.MANUAL);
-                fragmentClass = ManualFragment.class;
+                fragmentClass = ManualFragment.class;*/
                 break;
             default:
                 searchViewItem.setVisible(true);
@@ -205,11 +208,6 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
             case TUNER:
                 currentFragment = Frags.TUNER;
                 loadFragment(tunerFragment);
-                clearSearch();
-                break;
-            case MANUAL:
-                currentFragment = Frags.TUNER;
-                loadFragment(manualFragment);
                 clearSearch();
                 break;
             case SEARCH:
