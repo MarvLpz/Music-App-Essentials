@@ -73,7 +73,7 @@ implements ItemTouchHelperAdapter {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with delete
-                        Snackbar snackbar = Snackbar.make(viewHolder.itemView.getRootView().findViewById(R.id.id_searchFragment), "Verse Deleted", Snackbar.LENGTH_LONG);
+                        Snackbar snackbar = Snackbar.make(viewHolder.itemView.getRootView().findViewById(R.id.id_searchFragment), "Song Deleted", Snackbar.LENGTH_LONG);
                         snackbar.setActionTextColor(Color.WHITE);
                         snackbar.show();
                         (new SongDatabaseUtils.DeleteSongFromDatabaseTask(mSong)).execute();
