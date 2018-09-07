@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeFragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
         if (drawerToggle.onOptionsItemSelected(item)){
-            Toast.makeText( MainActivity.this, "Clicked menu", Toast.LENGTH_SHORT ).show();
+//            Toast.makeText( MainActivity.this, "Clicked menu", Toast.LENGTH_SHORT ).show();;
 //            mDrawer.openDrawer(GravityCompat.START);
             return true;
         }

@@ -227,7 +227,7 @@ public class VerseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onItemDismiss(RecyclerView.ViewHolder viewHolder) {
         final int position = viewHolder.getAdapterPosition();
         final Verse mVerse =mVerses.get(position-1);
-        Snackbar snackbar = Snackbar.make(viewHolder.itemView.getRootView().getRootView().findViewById(R.id.songContainer), "Verse Deleted", Snackbar.LENGTH_LONG)
+        Snackbar snackbar = Snackbar.make(viewHolder.itemView.getRootView().getRootView().findViewById(R.id.songContainer), "Song Deleted", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
